@@ -1,17 +1,17 @@
 case_id,prompt_arm,rater,step,presence,correctness,note
-toy_001,A,rater_a,step_check_config,1,1,
-toy_001,A,rater_a,step_validate_input,1,1,
-toy_001,A,rater_b,step_check_config,1,1,
-toy_001,A,rater_b,step_validate_input,1,0,"rater_b disagreed"
-toy_001,B,rater_a,step_check_config,1,1,
-toy_001,B,rater_a,step_validate_input,1,1,
-toy_001,B,rater_b,step_check_config,1,1,
-toy_001,B,rater_b,step_validate_input,1,1,
-toy_002,A,rater_a,step_check_config,0,0,"missed entirely"
-toy_002,A,rater_a,step_validate_input,1,1,
-toy_002,A,rater_b,step_check_config,1,1,
-toy_002,A,rater_b,step_validate_input,1,1,
-toy_002,B,rater_a,step_check_config,1,1,
-toy_002,B,rater_a,step_validate_input,1,0,
-toy_002,B,rater_b,step_check_config,1,1,
-toy_002,B,rater_b,step_validate_input,1,1,
+toy_001,A,rater_human,step_check_config,1,1,
+toy_001,A,rater_human,step_validate_input,1,1,
+toy_001,A,rater_codex,step_check_config,1,1,
+toy_001,A,rater_codex,step_validate_input,1,0,"rater_codex disagreed"
+toy_001,B,rater_human,step_check_config,1,1,
+toy_001,B,rater_human,step_validate_input,1,1,
+toy_001,B,rater_codex,step_check_config,1,1,
+toy_001,B,rater_codex,step_validate_input,1,1,
+toy_002,A,rater_human,step_check_config,0,0,"missed entirely"
+toy_002,A,rater_human,step_validate_input,1,1,
+toy_002,A,rater_codex,step_check_config,1,1,
+toy_002,A,rater_codex,step_validate_input,1,1,
+toy_002,B,rater_human,step_check_config,1,1,
+toy_002,B,rater_human,step_validate_input,1,0,
+toy_002,B,rater_codex,step_check_config,1,1,
+toy_002,B,rater_codex,step_validate_input,1,1,

@@ -33,11 +33,14 @@
 
 ### 科学门: FAIL ❌
 
+> **注**：以下数字均为 test-set-only（n_test=12/臂）。源实验使用 train/test 分层分割，train 仅用于 prompt 迭代，test 用于假设检验。
+
 | 门 | 结果 |
 |----|------|
 | 统计显著 | FAIL（n_nonzero=4 < 5，Wilcoxon 功效不足） |
 | 效应量 | Δ=0.019（远低于最小兴趣阈值） |
 | 方向一致 | FAIL（A=0.954 > B=0.935，方向与 H1 相反） |
+| 评分者一致性 | FAIL（κ 未达阈值，exec_severity 维度不一致率 37.5%） |
 
 **整体**: 格式效应在 GPT-5.5 temp=0 代码审查域不可检测。成熟度 [E-] ceiling-limited。
 
