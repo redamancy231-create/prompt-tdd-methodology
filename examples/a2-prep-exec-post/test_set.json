@@ -1,0 +1,742 @@
+{
+  "meta": {
+    "task_name": "A2 代码审查 — prep/exec/post 分段 vs 一体式 prompt 对照实验",
+    "description": "Tier 1: 24条配对测试用例，train/test分层分割，候选prompt筛选+推断统计分析",
+    "model": "gpt-5.5",
+    "api_provider": "openai",
+    "version": "1.0.0-tier1",
+    "design_ref": "a2_revised_experiment_design_v2.md §4.1",
+    "_tier1_changes": "2026-06-19: 增加 expected_severity 字段解决 Tier 0 发现的 severity rubric 模糊问题。difficulty 标签保留用于分层分析。",
+    "generated_by": {
+      "model": "DeepSeek-V4-Pro",
+      "via": "Claude Code CLI",
+      "date": "2026-06-19"
+    }
+  },
+  "config": {
+    "temperature": 0.0,
+    "max_tokens": 800
+  },
+  "tests": [
+    {
+      "id": "review_001",
+      "category": "off_by_one",
+      "difficulty": "low",
+      "split": "test",
+      "code": "def sum_to_n(n):\n    \"\"\"计算 1+2+...+n 的和。\"\"\"\n    total = 0\n    for i in range(1, n):\n        total += i\n    return total\n\n# 示例: sum_to_n(5) 应返回 15 (1+2+3+4+5)\nprint(sum_to_n(5))  # 实际输出 10，漏了 n=5",
+      "bug_truth": {
+        "location": "第 4 行 `for i in range(1, n):`，Python 的 range(start, stop) 不包含 stop，因此循环只迭代到 n-1。应改为 `range(1, n + 1)`",
+        "type": "bug (off-by-one / 循环边界)",
+        "fix_expected": "将 `range(1, n)` 改为 `range(1, n + 1)`",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（求和 1 到 n）",
+          "列举关键函数 sum_to_n",
+          "描述数据流：n → range → total → return"
+        ],
+        "exec": [
+          "定位 range(1, n) 边界错误的具体行号",
+          "标注类型为 bug/off-by-one",
+          "判断严重程度（低——经典入门错误，但生产环境中可能导致计算结果差 1）"
+        ],
+        "post": [
+          "给出 `range(1, n + 1)` 修复代码",
+          "解释 Python range() 的 stop 参数是 exclusive 的",
+          "验证：sum_to_n(5) 应返回 15，sum_to_n(1) 应返回 1（边界：n=1 时 range(1,1) 为空，修复后 range(1,2) 正确）"
+        ]
+      }
+    },
+    {
+      "id": "review_002",
+      "category": "off_by_one",
+      "difficulty": "low",
+      "split": "train",
+      "code": "def binary_search(arr, target):\n    \"\"\"在已排序数组 arr 中二分查找 target，返回索引或 -1。\"\"\"\n    left, right = 0, len(arr) - 1\n    while left < right:\n        mid = (left + right) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            left = mid + 1\n        else:\n            right = mid - 1\n    return -1\n\n# 示例：在 [1,3,5,7,9] 中找 9（最后一个元素）\ntest_arr = [1, 3, 5, 7, 9]\nprint(binary_search(test_arr, 9))  # 应输出 4，实际输出 -1",
+      "bug_truth": {
+        "location": "第 4 行 while 条件 `left < right`，应改为 `left <= right`；当 target 是最后一个元素时，left 和 right 最终都指向该元素，但 < 条件导致循环提前退出，跳过检查",
+        "type": "bug (off-by-one / 循环边界)",
+        "fix_expected": "将 `while left < right` 改为 `while left <= right`",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（二分查找）",
+          "列举关键函数 binary_search",
+          "描述数据流：arr → 二分迭代 → 索引或 -1"
+        ],
+        "exec": [
+          "定位 while 循环条件错误",
+          "标注类型为 bug/off-by-one",
+          "判断严重程度（中——常见二分实现错误，导致漏查边界元素）"
+        ],
+        "post": [
+          "给出 `left <= right` 修复",
+          "解释为什么 <= 保证不跳过最后一个候选元素",
+          "验证：target=9 在 [1,3,5,7,9] 应返回 4"
+        ]
+      }
+    },
+    {
+      "id": "review_003",
+      "category": "null_pointer",
+      "difficulty": "low",
+      "split": "test",
+      "code": "def get_user_email(user_record):\n    \"\"\"从用户记录中提取邮箱地址。user_record 是 dict 或 None。\"\"\"\n    contact = user_record.get(\"contact\")\n    return contact[\"email\"]\n\n# 示例：用户记录中 contact 字段可能不存在\ntest_user = {\"name\": \"Alice\", \"contact\": None}\nprint(get_user_email(test_user))",
+      "bug_truth": {
+        "location": "第 4 行 `return contact[\"email\"]`；当 `user_record.get(\"contact\")` 返回 None 时，对 None 做下标访问 `[\"email\"]` 会抛出 TypeError: 'NoneType' object is not subscriptable",
+        "type": "bug (空指针 / 空值引用)",
+        "fix_expected": "在访问 contact[\"email\"] 前检查 contact 是否为 None 或 dict：`if contact is None: return None` 或 `return contact.get(\"email\") if isinstance(contact, dict) else None`",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（提取邮箱）",
+          "列举关键函数 get_user_email",
+          "描述数据流：user_record → contact → email"
+        ],
+        "exec": [
+          "定位第 4 行 contact 可能为 None",
+          "标注类型为 bug/null-pointer",
+          "判断严重程度（中高——生产环境中未处理的 None 会导致 500 错误）"
+        ],
+        "post": [
+          "给出 None 检查的修复代码",
+          "解释为什么需要防御性检查",
+          "验证：contact=None 时不应崩溃"
+        ]
+      }
+    },
+    {
+      "id": "review_004",
+      "category": "null_pointer",
+      "difficulty": "medium",
+      "split": "test",
+      "code": "def calculate_average_score(grades_dict, student_id):\n    \"\"\"计算指定学生的平均成绩。grades_dict 的 key 是 student_id，value 是分数列表。\"\"\"\n    scores = grades_dict[student_id]\n    total = sum(scores)\n    count = len(scores)\n    if count == 0:\n        return 0\n    return total / count\n\n# 示例：查询不存在的学生\ngrades = {\"s001\": [85, 90, 78], \"s002\": [92, 88]}\nprint(calculate_average_score(grades, \"s003\"))",
+      "bug_truth": {
+        "location": "第 3 行 `scores = grades_dict[student_id]`；当 student_id 不在 dict 中时抛出 KeyError。应使用 .get() 并处理 None 返回值",
+        "type": "bug (空指针 / KeyError)",
+        "fix_expected": "将 `grades_dict[student_id]` 改为 `grades_dict.get(student_id)`，并检查返回值是否为 None/空列表：`if not scores: return None` 或 `return 0`",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（计算平均分）",
+          "列举关键函数 calculate_average_score",
+          "描述数据流：grades_dict → scores → total/count → average"
+        ],
+        "exec": [
+          "定位第 3 行直接下标访问可能 KeyError",
+          "标注类型为 bug/null-pointer（KeyError 等价于空值引用）",
+          "判断严重程度（中——缺失的学生 ID 是常见场景）"
+        ],
+        "post": [
+          "给出 .get() + None 检查修复代码",
+          "解释为什么 .get() 比 [] 更安全",
+          "验证：student_id='s003' 时应优雅返回 None/0 而非崩溃"
+        ]
+      }
+    },
+    {
+      "id": "review_005",
+      "category": "sql_injection",
+      "difficulty": "medium",
+      "split": "test",
+      "code": "import sqlite3\n\ndef search_users(db_path, username):\n    \"\"\"在 users 表中按用户名搜索。\"\"\"\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    query = f\"SELECT id, username, email FROM users WHERE username = '{username}'\"\n    cursor.execute(query)\n    results = cursor.fetchall()\n    conn.close()\n    return results\n\n# 示例：正常查询\nresults = search_users(\"test.db\", \"alice\")\nprint(results)",
+      "bug_truth": {
+        "location": "第 7 行 f-string 拼接 SQL；用户输入直接插入查询字符串，可通过输入 `' OR '1'='1' --` 绕过认证或提取全表数据",
+        "type": "bug (SQL 注入 / 输入校验缺失)",
+        "fix_expected": "使用参数化查询：`cursor.execute(\"SELECT id, username, email FROM users WHERE username = ?\", (username,))`；不要用 f-string 或 % 拼接用户输入",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（数据库搜索）",
+          "列举关键函数 search_users + sqlite3 调用",
+          "描述数据流：username → SQL query → cursor → results"
+        ],
+        "exec": [
+          "定位第 7 行 f-string SQL 拼接",
+          "标注类型为 bug/SQL-injection",
+          "判断严重程度（高——SQL 注入是 OWASP Top 10，可导致数据泄露）"
+        ],
+        "post": [
+          "给出参数化查询修复代码（使用 ? 占位符）",
+          "解释为什么参数化查询能防止注入（参数与 SQL 结构分离）",
+          "验证：恶意输入 `' OR '1'='1` 不会改变查询语义"
+        ]
+      }
+    },
+    {
+      "id": "review_006",
+      "category": "race_condition",
+      "difficulty": "high",
+      "split": "test",
+      "code": "import threading\n\ncounter = 0\n\ndef increment():\n    global counter\n    for _ in range(100000):\n        counter = counter + 1\n\ndef decrement():\n    global counter\n    for _ in range(100000):\n        counter = counter - 1\n\n# 启动两个线程同时修改 counter\nt1 = threading.Thread(target=increment)\nt2 = threading.Thread(target=decrement)\nt1.start()\nt2.start()\nt1.join()\nt2.join()\n\nprint(f\"Expected: 0, Actual: {counter}\")",
+      "bug_truth": {
+        "location": "第 8 行 `counter = counter + 1` 和第 12 行 `counter = counter - 1`；在 CPython 中 `counter += 1` 涉及读-改-写三步，GIL 不保证复合操作的原子性。两线程交错执行会导致丢失更新，最终 counter ≠ 0",
+        "type": "bug (竞态条件 / 并发)",
+        "fix_expected": "使用 threading.Lock() 保护临界区：`with lock: counter += 1`；或用原子操作（如 `threading.atomic` 不存在 → 用锁）",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别代码作用（多线程计数器测试）",
+          "列举关键：counter 全局变量 + increment/decrement + threading",
+          "描述数据流：两线程并发读写 counter → 竞态"
+        ],
+        "exec": [
+          "定位第 8/12 行非原子操作",
+          "标注类型为 bug/race-condition",
+          "判断严重程度（高——并发 bug 难以复现和调试）"
+        ],
+        "post": [
+          "给出 threading.Lock 修复代码",
+          "解释为什么 GIL 不保证复合操作原子性",
+          "验证：加锁后 counter 始终为 0"
+        ]
+      }
+    },
+    {
+      "id": "review_007",
+      "category": "resource_leak",
+      "difficulty": "medium",
+      "split": "test",
+      "code": "import json\n\ndef load_config(filepath):\n    \"\"\"加载 JSON 配置文件，如果失败返回默认配置。\"\"\"\n    f = open(filepath, 'r', encoding='utf-8')\n    data = json.load(f)\n    if not isinstance(data, dict):\n        raise ValueError(\"Config must be a JSON object\")\n    f.close()\n    return data\n\n# 示例：加载配置文件\nconfig = load_config(\"config.json\")\nprint(config.get(\"debug\", False))",
+      "bug_truth": {
+        "location": "第 4 行 open() 无异常保护——若 json.load(f) 抛出 JSONDecodeError 或 isinstance 检查抛出 ValueError，第 8 行的 f.close() 不会执行，导致文件句柄泄漏。另外 docstring 声称\"失败返回默认配置\"但未实现默认配置逻辑",
+        "type": "bug (资源泄漏 / 异常路径)",
+        "fix_expected": "使用 with open(...) as f: 上下文管理器确保异常时自动关闭文件；可选：实现 docstring 承诺的默认配置回退（捕获异常返回默认值）",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（加载配置）",
+          "列举关键函数 load_config",
+          "描述数据流：filepath → open → json.load → data"
+        ],
+        "exec": [
+          "定位 open() 无异常保护，f.close() 在异常路径不执行",
+          "标注类型为 bug/resource-leak",
+          "判断严重程度（中——长期运行会耗尽文件句柄）"
+        ],
+        "post": [
+          "给出 with 语句修复代码",
+          "解释上下文管理器如何保证 finally 中的 close()",
+          "验证：JSON 解析失败时文件仍被关闭"
+        ]
+      }
+    },
+    {
+      "id": "review_008",
+      "category": "no_bug",
+      "difficulty": "medium",
+      "split": "test",
+      "code": "from typing import Optional\n\ndef format_price(amount: float, currency: str = \"CNY\", decimal_places: int = 2) -> str:\n    \"\"\"将金额格式化为带货币符号的字符串。\n    \n    Args:\n        amount: 金额数值\n        currency: 货币代码 (CNY/USD/EUR)\n        decimal_places: 小数位数\n    \n    Returns:\n        格式化后的价格字符串，如 '¥12.50'\n    \n    Raises:\n        ValueError: 如果金额为负数\n    \"\"\"\n    if amount < 0:\n        raise ValueError(f\"Amount cannot be negative: {amount}\")\n    \n    symbols = {\"CNY\": \"¥\", \"USD\": \"$\", \"EUR\": \"€\"}\n    symbol = symbols.get(currency, currency)\n    formatted = f\"{symbol}{amount:.{decimal_places}f}\"\n    return formatted\n\n# 示例\nprint(format_price(12.5))            # ¥12.50\nprint(format_price(99.99, \"USD\"))    # $99.99\nprint(format_price(0.0))             # ¥0.00\nprint(format_price(1234.567, \"EUR\", 1))  # €1234.6",
+      "bug_truth": {
+        "location": "无功能 bug。代码正确实现了价格格式化，包括输入校验（负数检查）、类型注解、文档字符串。存在风格问题：(1) 第 8 行类型注解 `Optional` 导入但未使用；(2) 可使用 enum 替代货币代码字符串常量以提高类型安全",
+        "type": "style (无 bug / 反编造测试)",
+        "fix_expected": "审查输出应明确指出\"没有发现 bug\"。可提及风格改进建议（移除未使用的 Optional 导入），但不得编造不存在的 bug。此用例专门测试模型是否会编造问题",
+        "expected_severity": "N/A"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（价格格式化）",
+          "列举关键函数 format_price",
+          "描述数据流：amount/currency → symbols lookup → formatted string"
+        ],
+        "exec": [
+          "正确判断无 bug",
+          "若提及风格问题，标注为 style 而非 bug",
+          "不编造不存在的 bug 或安全问题"
+        ],
+        "post": [
+          "若无 bug：明确说'没有发现 bug'",
+          "可选：建议移除未使用的 Optional 导入（风格改进）",
+          "可选：建议使用 Enum 替代字符串常量（设计改进）"
+        ]
+      }
+    },
+    {
+      "id": "review_009",
+      "category": "off_by_one",
+      "difficulty": "low",
+      "code": "def first_n_fibonacci(n):\n    \"\"\"返回前 n 个斐波那契数。\"\"\"\n    if n <= 0:\n        return []\n    fib = [0, 1]\n    for i in range(2, n - 1):\n        fib.append(fib[-1] + fib[-2])\n    return fib[:n]\n\nprint(first_n_fibonacci(5))  # 应输出 [0,1,1,2,3]，实际输出 [0,1,1,2]",
+      "bug_truth": {
+        "location": "第 6 行 range(2, n-1)，应为 range(2, n)。当 n=5 时 range(2,4) 只迭代 2 次，漏掉第 5 个斐波那契数",
+        "type": "bug (off-by-one / 循环边界)",
+        "fix_expected": "将 range(2, n-1) 改为 range(2, n)",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（生成斐波那契数列）",
+          "列举关键函数 first_n_fibonacci",
+          "描述数据流：n → 初始列表 → 循环追加 → 切片返回"
+        ],
+        "exec": [
+          "定位 range(2, n-1) 边界错误",
+          "标注类型为 bug/off-by-one",
+          "判断严重程度（中——边界错误导致输出不完整）"
+        ],
+        "post": [
+          "给出 range(2, n) 修复",
+          "解释 range stop 参数语义",
+          "验证 n=5 输出 5 个元素"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_010",
+      "category": "off_by_one",
+      "difficulty": "low",
+      "code": "def count_vowels(s):\n    \"\"\"统计字符串中元音字母的数量。\"\"\"\n    vowels = \"aeiouAEIOU\"\n    count = 0\n    for i in range(len(s)):\n        if s[i] in vowels:\n            count += 1\n    return count\n\nprint(count_vowels(\"Hello\"))  # 输出 2",
+      "bug_truth": {
+        "location": "无功能性 bug。代码正确统计了元音数量。存在风格问题：可用 for ch in s 替代 range(len(s))。此用例测试模型是否会编造 off-by-one bug",
+        "type": "style (无 bug —— off-by-one 类别中的干净代码，反编造测试)",
+        "fix_expected": "审查输出应指出代码功能正确但风格可优化。不得编造不存在的 off-by-one 或边界错误",
+        "expected_severity": "N/A"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（统计元音）",
+          "列举关键函数 count_vowels",
+          "描述数据流：字符串 → 逐字符检查 → 计数"
+        ],
+        "exec": [
+          "正确识别无 bug",
+          "若提及风格问题标注为 style 而非 bug",
+          "不编造不存在的 off-by-one 或边界错误"
+        ],
+        "post": [
+          "若无 bug：明确说没有发现 bug",
+          "可选：建议用 for ch in s 简化",
+          "可选：建议 sum+generator 简化"
+        ]
+      },
+      "split": "test"
+    },
+    {
+      "id": "review_011",
+      "category": "null_pointer",
+      "difficulty": "medium",
+      "code": "def get_city_from_address(address):\n    \"\"\"从地址字典中提取城市名。address 格式: {street, city, zip}\"\"\"\n    return address[\"city\"].upper()\n\nprint(get_city_from_address({\"street\": \"123 Main St\", \"zip\": \"90210\"}))",
+      "bug_truth": {
+        "location": "第 3 行 address[\"city\"] 当 key 不存在时抛出 KeyError；即使存在，.upper() 假设返回值是 str，若 city 为 None 则抛出 AttributeError",
+        "type": "bug (空指针 / 缺失 key + None 引用)",
+        "fix_expected": "使用 address.get(\"city\") 安全访问，并检查返回值是否为 str：city = address.get(\"city\"); return city.upper() if isinstance(city, str) else None",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（提取城市名并大写）",
+          "列举关键函数 get_city_from_address",
+          "描述数据流：address → [city] → .upper() → return"
+        ],
+        "exec": [
+          "定位 KeyError 和 AttributeError 双重风险",
+          "标注类型为 bug/null-pointer",
+          "判断严重程度（中——缺失字段导致崩溃）"
+        ],
+        "post": [
+          "给出 .get() + isinstance 检查修复",
+          "解释 .get() 与 [] 的区别",
+          "验证缺失 city 时不崩溃"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_012",
+      "category": "null_pointer",
+      "difficulty": "low",
+      "code": "def safe_divide(a, b):\n    \"\"\"安全除法，b=0 时返回 None。\"\"\"\n    if b == 0:\n        return None\n    return a / b\n\nresult = safe_divide(10, 0)\nprint(f\"Result: {result:.2f}\")",
+      "bug_truth": {
+        "location": "第 8 行 f\"Result: {result:.2f}\"——safe_divide(10,0) 返回 None，对 None 做 .2f 格式化抛出 TypeError",
+        "type": "bug (空值引用——None 被当作数值使用)",
+        "fix_expected": "在使用 result 前检查 None：if result is None: print(\"Division by zero\") else: print(f\"Result: {result:.2f}\")",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（安全除法）",
+          "列举 safe_divide",
+          "描述数据流：a,b → 除零检查 → 除法或 None → print 格式化"
+        ],
+        "exec": [
+          "定位 None 被 .2f 格式化",
+          "标注类型为 bug/null-pointer",
+          "判断严重程度（中——除零后崩溃而非优雅处理）"
+        ],
+        "post": [
+          "给出 None 检查修复",
+          "解释为什么 None 不能格式化",
+          "验证 b=0 时不崩溃"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_013",
+      "category": "sql_injection",
+      "difficulty": "medium",
+      "code": "import sqlite3\n\ndef update_email(db_path, user_id, new_email):\n    \"\"\"更新用户邮箱。\"\"\"\n    conn = sqlite3.connect(db_path)\n    query = f\"UPDATE users SET email = '{new_email}' WHERE id = {user_id}\"\n    conn.execute(query)\n    conn.commit()\n    conn.close()",
+      "bug_truth": {
+        "location": "第 6 行 f-string 拼接 UPDATE SQL——new_email 未经转义直接插入，user_id 同样直接拼接",
+        "type": "bug (SQL 注入 / UPDATE 语句)",
+        "fix_expected": "参数化查询：conn.execute(\"UPDATE users SET email = ? WHERE id = ?\", (new_email, user_id))",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（更新邮箱）",
+          "列举 update_email + sqlite3",
+          "描述数据流：输入 → SQL UPDATE → commit → close"
+        ],
+        "exec": [
+          "定位 f-string SQL 拼接",
+          "标注类型为 bug/SQL-injection",
+          "判断严重程度（高——UPDATE 注入可导致数据篡改）"
+        ],
+        "post": [
+          "给出参数化查询修复",
+          "解释占位符如何防止注入",
+          "验证恶意输入安全"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_014",
+      "category": "sql_injection",
+      "difficulty": "medium",
+      "code": "import os\n\ndef ping_host(hostname):\n    \"\"\"Ping 指定的主机名。\"\"\"\n    os.system(f\"ping -c 1 {hostname}\")\n\nping_host(\"google.com\")",
+      "bug_truth": {
+        "location": "第 5 行 os.system(f\"ping -c 1 {hostname}\")——用户输入直接拼入 shell 命令，可注入任意命令",
+        "type": "bug (命令注入 / command injection / 输入校验缺失)",
+        "fix_expected": "使用 subprocess.run([\"ping\", \"-c\", \"1\", hostname], shell=False) 避免 shell 解析",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（ping 主机）",
+          "列举 ping_host + os.system",
+          "描述数据流：hostname → f-string → os.system → shell 执行"
+        ],
+        "exec": [
+          "定位 os.system shell 注入",
+          "标注类型为 bug/command-injection",
+          "判断严重程度（高——命令注入可导致任意代码执行）"
+        ],
+        "post": [
+          "给出 subprocess.run(shell=False) 修复",
+          "解释 shell=False 如何防止注入",
+          "验证恶意 hostname 不执行额外命令"
+        ]
+      },
+      "split": "test"
+    },
+    {
+      "id": "review_015",
+      "category": "sql_injection",
+      "difficulty": "medium",
+      "code": "import sqlite3\n\ndef delete_user(db_path, username):\n    \"\"\"删除指定用户名的用户。\"\"\"\n    conn = sqlite3.connect(db_path)\n    query = \"DELETE FROM users WHERE username = '%s'\" % username\n    conn.execute(query)\n    conn.commit()\n    conn.close()",
+      "bug_truth": {
+        "location": "第 6 行 %-formatting 拼接 SQL——username 直接插入 DELETE 语句，可注入恶意 SQL",
+        "type": "bug (SQL 注入 / DELETE 语句, %-formatting)",
+        "fix_expected": "参数化查询：conn.execute(\"DELETE FROM users WHERE username = ?\", (username,))",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（删除用户）",
+          "列举 delete_user + sqlite3",
+          "描述数据流：username → %-format → DELETE → commit"
+        ],
+        "exec": [
+          "定位 %-formatting SQL 拼接",
+          "标注类型为 bug/SQL-injection",
+          "判断严重程度（高——DELETE 注入可批量删除数据）"
+        ],
+        "post": [
+          "给出参数化查询修复",
+          "解释占位符原理",
+          "验证恶意输入安全"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_016",
+      "category": "race_condition",
+      "difficulty": "high",
+      "code": "import threading, time\n\nclass LazyInit:\n    def __init__(self):\n        self._data = None\n        self._init_count = 0\n\n    def get_data(self):\n        if self._data is None:\n            self._init_count += 1\n            time.sleep(0.001)\n            self._data = self._expensive_init()\n        return self._data\n\n    def _expensive_init(self):\n        return {\"loaded\": True, \"init_count\": self._init_count}\n\nobj = LazyInit()\nthreads = [threading.Thread(target=obj.get_data) for _ in range(10)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(obj.get_data())  # init_count 可能 >1",
+      "bug_truth": {
+        "location": "第 11-14 行 check-then-act 竞态——多线程可能同时看到 _data is None，都进入初始化。_init_count 和 time.sleep 使重复初始化可观察",
+        "type": "bug (竞态条件 / check-then-act 惰性初始化)",
+        "fix_expected": "使用 threading.Lock() 保护初始化临界区",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别代码作用（惰性初始化）",
+          "列举 LazyInit + get_data + 多线程",
+          "描述数据流：多线程 → check None → 可能重复 init → 返回 _data"
+        ],
+        "exec": [
+          "定位 check-then-act 竞态条件（第 11-14 行）",
+          "标注类型为 bug/race-condition",
+          "判断严重程度（中——重复初始化浪费资源但不导致数据损坏）"
+        ],
+        "post": [
+          "给出 Lock 保护修复",
+          "解释 check-then-act 为什么不是原子的",
+          "验证加锁后不会重复初始化"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_017",
+      "category": "race_condition",
+      "difficulty": "high",
+      "code": "import threading\n\ncounter = 0\n\ndef increment():\n    global counter\n    for _ in range(100000):\n        temp = counter\n        temp += 1\n        counter = temp\n\nthreads = [threading.Thread(target=increment) for _ in range(10)]\nfor t in threads: t.start()\nfor t in threads: t.join()\nprint(f\"Expected: 1000000, Actual: {counter}\")",
+      "bug_truth": {
+        "location": "第 9-11 行 read-modify-write 竞态——temp=counter; temp+=1; counter=temp 三步非原子，两线程可能读到相同 counter 值，导致丢失递增",
+        "type": "bug (竞态条件 / read-modify-write 非原子)",
+        "fix_expected": "使用 threading.Lock() 保护临界区：with lock: counter += 1",
+        "expected_severity": "高"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别代码作用（多线程递增共享计数器）",
+          "列举 increment + threading + counter",
+          "描述数据流：多线程 → RMW → counter → 可能丢失更新"
+        ],
+        "exec": [
+          "定位 read-modify-write 非原子竞态",
+          "标注类型为 bug/race-condition",
+          "判断严重程度（高——非确定性错误结果，难以复现调试）"
+        ],
+        "post": [
+          "给出 Lock 保护修复",
+          "解释 RMW 三步为什么不是原子的",
+          "验证加锁后 counter=1000000"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_018",
+      "category": "race_condition",
+      "difficulty": "high",
+      "code": "import os\n\ndef safe_write(filepath, content):\n    \"\"\"仅在文件不存在时写入。\"\"\"\n    if not os.path.exists(filepath):\n        with open(filepath, \"w\") as f:\n            f.write(content)\n            return True\n    return False",
+      "bug_truth": {
+        "location": "第 5-8 行 TOCTOU——os.path.exists 检查和 open 写入之间存在时间窗口，另一个进程可能在此期间创建文件",
+        "type": "bug (竞态条件 / TOCTOU)",
+        "fix_expected": "使用 open(filepath, \"x\") 独占创建模式（Python 3.3+），原子性处理不存在则创建",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（安全写入——不存在才写）",
+          "列举 safe_write + os.path.exists",
+          "描述数据流：check exists → time gap → open write → return"
+        ],
+        "exec": [
+          "定位 TOCTOU 竞态窗口",
+          "标注类型为 bug/race-condition(TOCTOU)",
+          "判断严重程度（中——时间窗口短但可被利用）"
+        ],
+        "post": [
+          "给出 open(filepath, 'x') 修复",
+          "解释 'x' 模式原子性",
+          "验证并发安全"
+        ]
+      },
+      "split": "test"
+    },
+    {
+      "id": "review_019",
+      "category": "resource_leak",
+      "difficulty": "medium",
+      "code": "import socket\n\ndef fetch_url(host, port=80):\n    \"\"\"获取 URL 内容。\"\"\"\n    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)\n    sock.connect((host, port))\n    request = f\"GET / HTTP/1.0\\r\\nHost: {host}\\r\\n\\r\\n\"\n    sock.send(request.encode())\n    response = sock.recv(4096)\n    return response.decode()",
+      "bug_truth": {
+        "location": "socket 创建后未关闭——正常返回和异常路径均存在 socket 泄漏",
+        "type": "bug (资源泄漏 / socket 未关闭)",
+        "fix_expected": "使用 with socket.socket(...) as sock: 上下文管理器",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（HTTP 请求）",
+          "列举 fetch_url + socket",
+          "描述数据流：socket → connect → send → recv → return（sock 未关闭）"
+        ],
+        "exec": [
+          "定位 socket 未关闭",
+          "标注类型为 bug/resource-leak",
+          "判断严重程度（中——socket 泄漏耗尽文件描述符）"
+        ],
+        "post": [
+          "给出 with socket 修复",
+          "解释上下文管理器保证 close()",
+          "验证异常时 socket 也被关闭"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_020",
+      "category": "resource_leak",
+      "difficulty": "medium",
+      "code": "import sqlite3\n\ndef query_all_users(db_path):\n    \"\"\"查询所有用户。\"\"\"\n    conn = sqlite3.connect(db_path)\n    cursor = conn.cursor()\n    cursor.execute(\"SELECT * FROM users\")\n    return cursor.fetchall()",
+      "bug_truth": {
+        "location": "conn 和 cursor 均未关闭——函数直接 return，数据库连接永久泄漏",
+        "type": "bug (资源泄漏 / 数据库连接未关闭)",
+        "fix_expected": "使用 try/finally 确保 conn.close()：conn = sqlite3.connect(db_path); try: ... finally: conn.close()。或使用 contextlib.closing(sqlite3.connect(db_path))",
+        "expected_severity": "中"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（查询用户）",
+          "列举 query_all_users + sqlite3",
+          "描述数据流：connect → cursor → execute → return（连接泄漏）"
+        ],
+        "exec": [
+          "定位 conn 和 cursor 未关闭",
+          "标注类型为 bug/resource-leak",
+          "判断严重程度（高——数据库连接泄漏比文件泄漏更严重）"
+        ],
+        "post": [
+          "给出 try/finally conn.close() 或 contextlib.closing 修复",
+          "解释 sqlite3.connect 的 context manager 只做 commit/rollback，不自动 close()",
+          "验证修复后连接在正常和异常路径均被释放"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_021",
+      "category": "resource_leak",
+      "difficulty": "low",
+      "code": "import tempfile, os\n\ndef process_temp():\n    \"\"\"创建临时文件处理数据。\"\"\"\n    fd, path = tempfile.mkstemp(suffix=\".txt\")\n    os.write(fd, b\"data\")\n    os.close(fd)\n    return path",
+      "bug_truth": {
+        "location": "临时文件创建后未删除——fd 正确关闭但 path 指向的临时文件残留磁盘",
+        "type": "bug (资源泄漏 / 临时文件残留)",
+        "fix_expected": "明确调用方负责清理：在文档中说明返回的路径需要调用方 os.unlink()。或改为函数内部完成处理后 os.unlink(path) 再返回结果而非路径。使用 tempfile.TemporaryDirectory() 上下文管理器可自动清理整个目录",
+        "expected_severity": "低"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（创建临时文件）",
+          "列举 process_temp + tempfile",
+          "描述数据流：mkstemp → write → close → return path（文件残留）"
+        ],
+        "exec": [
+          "定位临时文件未删除",
+          "标注类型为 bug/resource-leak",
+          "判断严重程度（低——临时文件残留逐步消耗磁盘）"
+        ],
+        "post": [
+          "给出 NamedTemporaryFile 修复",
+          "解释 delete=True 自动清理",
+          "验证 with 块结束后文件被删除"
+        ]
+      },
+      "split": "test"
+    },
+    {
+      "id": "review_022",
+      "category": "no_bug",
+      "difficulty": "medium",
+      "code": "from pathlib import Path\n\ndef read_file_lines(filepath: str) -> list[str]:\n    \"\"\"读取文件所有行，去除空白。文件不存在返回空列表。\"\"\"\n    path = Path(filepath)\n    if not path.is_file():\n        return []\n    try:\n        with open(path, \"r\", encoding=\"utf-8\") as f:\n            return [line.strip() for line in f if line.strip()]\n    except (OSError, UnicodeDecodeError):\n        return []",
+      "bug_truth": {
+        "location": "无功能 bug。正确使用 Path、with 语句、异常处理、列表推导式。边界处理（文件不存在、编码错误）均有覆盖",
+        "type": "no bug (风格良好——反编造测试)",
+        "fix_expected": "审查输出应明确指出没有发现 bug。可提及微小改进建议但不得编造问题",
+        "expected_severity": "N/A"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（安全读取文件行）",
+          "列举 read_file_lines + Path + with",
+          "描述数据流：filepath → Path → 检查存在 → with open → strip 过滤 → return"
+        ],
+        "exec": [
+          "正确识别无 bug",
+          "若提及改进标注为 style 而非 bug",
+          "不编造安全/性能/资源问题"
+        ],
+        "post": [
+          "明确说没有发现 bug",
+          "可选微小优化建议",
+          "不可编造修复代码"
+        ]
+      },
+      "split": "train"
+    },
+    {
+      "id": "review_023",
+      "category": "no_bug",
+      "difficulty": "medium",
+      "code": "import json\nfrom typing import Any\n\ndef merge_configs(base: dict, override: dict) -> dict:\n    \"\"\"深度合并两个配置字典。override 覆盖 base。\"\"\"\n    result = base.copy()\n    for key, value in override.items():\n        if key in result and isinstance(result[key], dict) and isinstance(value, dict):\n            result[key] = merge_configs(result[key], value)\n        else:\n            result[key] = value\n    return result",
+      "bug_truth": {
+        "location": "无功能 bug。正确实现递归字典合并，.copy() 避免修改原始 base。类型注解和文档字符串完整",
+        "type": "no bug (实现正确——反编造测试)",
+        "fix_expected": "审查输出应指出没有发现 bug。copy() 是浅拷贝但嵌套字典通过递归已正确处理",
+        "expected_severity": "N/A"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（深度合并配置）",
+          "列举 merge_configs 递归实现",
+          "描述数据流：base+override → copy → 递归合并 → result"
+        ],
+        "exec": [
+          "正确识别无 bug",
+          "不将 copy() 浅拷贝误判为 bug",
+          "不编造递归深度/类型安全问题"
+        ],
+        "post": [
+          "明确说没有发现 bug",
+          "可选讨论 copy() 浅拷贝特性（不影响正确性）",
+          "不可编造修复"
+        ]
+      },
+      "split": "test"
+    },
+    {
+      "id": "review_024",
+      "category": "no_bug",
+      "difficulty": "medium",
+      "code": "from collections import defaultdict\n\ndef group_by_key(records: list[dict], key: str) -> dict[str, list[dict]]:\n    \"\"\"按指定 key 对记录分组。缺失 key 归入 None 组。\"\"\"\n    groups = defaultdict(list)\n    for record in records:\n        groups[record.get(key)].append(record)\n    return dict(groups)",
+      "bug_truth": {
+        "location": "无功能 bug。正确使用 defaultdict 和 dict.get() 处理缺失 key。dict(groups) 转换移除了 defaultdict 的默认工厂行为（避免后续访问不存在的 key 时意外创建空列表）",
+        "type": "no bug (简洁正确——反编造测试)",
+        "fix_expected": "审查输出应指出没有发现 bug。代码简洁、正确、安全",
+        "expected_severity": "N/A"
+      },
+      "expected_steps": {
+        "prep": [
+          "识别函数作用（按 key 分组）",
+          "列举 group_by_key + defaultdict",
+          "描述数据流：records → 按 key.get() 分组 → defaultdict → dict 返回"
+        ],
+        "exec": [
+          "正确识别无 bug",
+          "不编造 edge case（None key、空列表等已正确覆盖）",
+          "不将简洁性误判为不完整"
+        ],
+        "post": [
+          "明确说没有发现 bug",
+          "代码无需修复",
+          "不可编造修复代码"
+        ]
+      },
+      "split": "train"
+    }
+  ]
+}
