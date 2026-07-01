@@ -2129,9 +2129,9 @@ FullName                                                                        
 codex
 找到源文件：`<source-repo>\methodology_extraction\retrospect_a2_a3_combined.md`。我会读取它的 §4.3，直接对照当前 PM-1~PM-6。
 exec
-"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; rg -n "''^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3|PM-1|PM-2|PM-3|PM-4|PM-5|PM-6|缺失模式|对抗验证\" 'E:\\workspace\\projects\\prompt-tdd\\methodology_extraction\\retrospect_a2_a3_combined.md'" in <project>
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; rg -n "''^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3|PM-1|PM-2|PM-3|PM-4|PM-5|PM-6|缺失模式|对抗验证\" '<source-repo>\\methodology_extraction\\retrospect_a2_a3_combined.md'" in <project>
 exec
-"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Select-String -Path 'E:\\workspace\\projects\\prompt-tdd\\methodology_extraction\\retrospect_a2_a3_combined.md' -Pattern '"'^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3' -Context 0,80" in <project>
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Select-String -Path '<source-repo>\\methodology_extraction\\retrospect_a2_a3_combined.md' -Pattern '"'^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3' -Context 0,80" in <project>
  succeeded in 131ms:
 14:| **对抗验证状态** | 已完成——10个跨实验模式经魔鬼代言人式逐条审查，PX-4和PX-10被推翻，其余8个强度修订（多数降级），6个缺失模式被识别（PM-1至PM-6）。**Codex GPT-5.5异后端独立审查已完成**（2026-06-20，判词FAIL_WITH_CAVEATS，7M+5m发现已修正）。**Qwen跨模型复现证据已写入v1.2**（2026-06-21——PM-1部分缓解，PX-10强度C→C+，§7.6 P1→P0，§9.1重写） |
 44:- 10个跨实验涌现模式（经对抗验证，2个被推翻，8个修订保留）
