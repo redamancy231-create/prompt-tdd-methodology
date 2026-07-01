@@ -1,0 +1,2430 @@
+Reading prompt from stdin...
+OpenAI Codex v0.142.2
+--------
+workdir: <project>
+model: gpt-5.5
+provider: packycode
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019f1ced-9191-7551-a298-4a9505e567d1
+--------
+user
+你是独立审查者，对以下修复进行 R2 重审。
+
+## R1 回顾
+
+Qwen3-Max 审查 prompt-tdd-methodology v0.1-methodology。终判 Major。发现 5 项（CRITICAL×2, MAJOR×3）。
+
+## R2 任务
+
+验证以下 5 项是否已修复。每项只判：已修复/未修复/部分修复。给具体证据。
+
+CRITICAL:
+- C1: `python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0` 是否不再崩溃？minimal CSV 的 rater 名是否匹配脚本默认值（rater_human/rater_codex）？
+- C2: methodology/lessons-learned.md 的 PM-1~PM-6 是否与源报告 retrospect_a2_a3_combined.md §4.3 一致（不再是用错的编号定义）？
+
+MAJOR:
+- M1: A2 案例 README 结果数字是否标注了 test-set-only scope？
+- M2: sop.md 科学门是否从"三项"改为"四项"（加了 κ）？是否新增了 A3v2 四门禁（§8.5）？
+- M3: requirements.txt 是否只声明实际使用的依赖（scipy）？A3 README 是否不再声称有 scoresheet.csv？
+
+## 输出
+
+```
+C1: [已修复/未修复] 证据: ...
+C2: ...
+M1: ...
+M2: ...
+M3: ...
+
+R2 终判: [PASS / FAIL_WITH_CAVEATS / FAIL]
+```
+
+请先读取当前版本的以下文件：
+- examples/minimal/scoresheet.csv
+- methodology/lessons-learned.md
+- examples/a2-prep-exec-post/README.md
+- sop.md
+- requirements.txt
+- examples/a3-action-routing/README.md
+
+独立审查者后端：请自报模型名称。
+
+codex
+我会按你列的文件逐项读取当前工作区内容，然后实际跑一次 `analyze_experiment.py` 的 minimal 命令来验证 C1 行为。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/minimal/scoresheet.csv'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'methodology/lessons-learned.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/a2-prep-exec-post/README.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'sop.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'requirements.txt'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/a3-action-routing/README.md'" in <project>
+ succeeded in 216ms:
+case_id,prompt_arm,rater,step,presence,correctness,note
+toy_001,A,rater_human,step_check_config,1,1,
+toy_001,A,rater_human,step_validate_input,1,1,
+toy_001,A,rater_codex,step_check_config,1,1,
+toy_001,A,rater_codex,step_validate_input,1,0,"rater_codex disagreed"
+toy_001,B,rater_human,step_check_config,1,1,
+toy_001,B,rater_human,step_validate_input,1,1,
+toy_001,B,rater_codex,step_check_config,1,1,
+toy_001,B,rater_codex,step_validate_input,1,1,
+toy_002,A,rater_human,step_check_config,0,0,"missed entirely"
+toy_002,A,rater_human,step_validate_input,1,1,
+toy_002,A,rater_codex,step_check_config,1,1,
+toy_002,A,rater_codex,step_validate_input,1,1,
+toy_002,B,rater_human,step_check_config,1,1,
+toy_002,B,rater_human,step_validate_input,1,0,
+toy_002,B,rater_codex,step_check_config,1,1,
+toy_002,B,rater_codex,step_validate_input,1,1,
+
+ succeeded in 223ms:
+# 鏍稿績鏁欒锛氫袱娆￠槾鎬у疄楠岀殑鏂规硶璁虹Н绱?
+> 鎻愮偧鑷?`retrospect_a2_a3_combined.md`锛?0KB锛?7 鑺傦級鈫?~5KB 鏍稿績鏁欒
+
+---
+
+## 涓変釜璺ㄥ疄楠屾ā寮?
+### P1: 澶╄姳鏉挎晥搴旀槸 prompt 瀹為獙鐨勬矇榛樻潃鎵?
+**瑙傚療**: A2锛堜唬鐮佸鏌ワ級鍜?A3锛堣矾鐢卞喅绛栵級閮藉湪 GPT-5.5 temp=0 涓嬮亣鍒板ぉ鑺辨澘鈥斺€旀ā鍨嬭〃鐜板お濂斤紝鏁堝簲閲忔棤娉曟娴嬨€?
+**鏈哄埗**: 褰?baseline 鍑嗙‘鐜?> 0.9 鏃讹紝螖 鐨勬娴嬬┖闂磋鍘嬬缉鍒?< 0.1銆傞渶瑕佽繙瓒呭父瑙勭殑鏍锋湰閲忔垨鏇寸矖绯欑殑 DV 鎵嶆湁缁熻鏄捐憲鎬р€斺€斾絾鏇寸矖绯欑殑 DV 鏈韩浼氫涪澶变俊鎭€?
+**鍏抽敭鏁版嵁**: A2 correctness_rate A=0.954, B=0.935, 螖=0.019, n_nonzero=4<5锛堢瀛﹂棬 FAIL锛夈€侫3 涓や釜瀹為獙鍧?螖=0, discordant 鐜?0%銆?
+**鏁欒**: 瀹為獙璁捐闃舵蹇呭仛 ceiling probe锛圕K6锛夈€傚鏋滄帰娴嬫樉绀哄ぉ鑺辨澘涓嶅彲鎵撶牬锛岃皟鏁?DV 鎴栦换鍔″煙鈥斺€斾笉瑕佹寚鏈?澶ф牱鏈氨鑳芥娴嬪埌"銆?
+### P2: IV 姹℃煋姣旂粺璁℃柟娉曢敊璇洿鍗遍櫓
+
+**瑙傚療**: 瀵圭収瀹為獙鐨勬牳蹇冨▉鑳佷笉鏄粺璁℃柟娉曢€夋嫨锛圵ilcoxon vs t-test锛夛紝鑰屾槸 IV锛坧rompt 鏍煎紡锛夎淇℃伅閲忓樊寮傛薄鏌撱€?
+**A2 鍏抽敭鍙戠幇**: B 缁勶紙prep/exec/post 鍒嗘锛夊疄闄呭寘鍚簡 A 缁勶紙涓€浣撳紡缂栧彿鍒楄〃锛夋病鏈夌殑妫€鏌ョ淮搴︹€斺€斾笉鏄洜涓烘牸寮忎笉鍚岋紝鑰屾槸鍥犱负淇℃伅閲忎笉绛変环銆?
+**鏁欒**: CK4 INVENTORY 绛変环鍗忚涓嶆槸鍙€夋鏌モ€斺€斿畠鏄槻姝?娴嬮噺浜嗛敊璇殑涓滆タ"鐨勫敮涓€鎵嬫銆傚鏋滀袱缁?prompt 鐨勪骇鍑烘竻鍗曚笉绛変环锛屽疄楠岀粨璁烘棤鏁堬紝鏃犺 p 鍊煎灏戙€?
+### P3: 闃存€х粨鏋?鈮?瀹為獙澶辫触
+
+**瑙傚療**: A2 鍜?A3 绉戝闂ㄥ叏閮?FAIL鈥斺€斾絾浜у嚭浜?21 涓柟娉曡鐗囨銆? 涓疄楠岃璁℃ā鏉裤€佷竴濂楀彲澶嶇敤鐨勫垎鏋愮绾裤€?
+**鏁欒**: 闃存€у疄楠岀殑浠峰€间笉鍦?鏀寔 H1"锛岃€屽湪锛?a) 鎺掗櫎浜嗙壒瀹氭潯浠朵笅鐨勬牸寮忔晥搴斿瓨鍦ㄦ€э紱(b) 鏆撮湶浜嗗疄楠岃璁＄殑绯荤粺鎬х洸鐐癸紙澶╄姳鏉裤€丏V 閫夋嫨銆両V 姹℃煋锛夛紱(c) 绉疮浜?濡備綍涓嶅仛涓€涓敊璇疄楠?鐨勬搷浣滅煡璇嗐€?
+**璇氬疄鏍囨敞**: 涓や釜瀹為獙鎴愮啛搴﹀潎鏍?[E-]锛坈eiling-limited锛夛紝涓嶆槸 [E]鈥斺€斾絾浠嶇劧鏄彲寮曠敤鐨勬湁鏁堣瘉鎹€?
+---
+
+## 鍏釜缂哄け妯″紡锛圥M-1~PM-6锛屾潵鑷簮澶嶇洏 搂4.3 瀵规姉楠岃瘉锛?
+浠ヤ笅缂哄け妯″紡鏄?A2+A3 澶嶇洏缁?Codex GPT-5.5 榄旈浠ｈ█浜哄紡瀵规姉楠岃瘉鍚庤瘑鍒殑鈥斺€斾笉鏄?瀹為獙鍋氶敊浜嗕粈涔?锛岃€屾槸"绯荤粺鎬х洸鐐癸細涓嬩竴娆″疄楠屽簲璇ヨˉ浠€涔?銆?
+| 缂栧彿 | 妯″紡 | 瀹氫箟锛堟簮鎶ュ憡鍘熸枃锛?|
+|------|------|---------|
+| **PM-1** | 妯″瀷-娓╁害缁勫悎浣滀负鏅€傛贩娣嗗彉閲?| 涓や釜瀹為獙鍧囦粎鐢?GPT-5.5 temp=0鈥斺€旀牸寮忔晥搴旂殑闃存€х粨璁轰笉鑳芥帹骞垮埌鍏朵粬妯″瀷/娓╁害銆?*缁?Qwen 璺ㄦā鍨嬪鐜伴儴鍒嗙紦瑙?*锛圓2 鏂瑰悜涓€鑷达紝螖=鈭?.014锛夛紝浣嗗鏌ヨ涓?鏂规硶璁轰紶閫?绛変环鎬ч獙璇佺瓑缁村害浠嶄粎 GPT-5.5 鍗曠偣 |
+| **PM-2** | 瀹為獙鑰呮柟娉曡鎴愮啛搴︿綔涓鸿法瀹為獙鐨勫悜涓婂亸璇?| A2 鍜?A3 鐨勫疄楠岃€咃紙鍚屼竴涓汉/鍥㈤槦锛夊湪涓ゅ疄楠屼腑鏂规硶璁烘垚鐔熷害鎸佺画鎻愬崌鈥斺€擜3 鐨勮璁¤川閲忛珮浜?A2銆傝繖瀵?璺ㄥ疄楠屾ā寮?澹扮О鏋勬垚娣锋穯锛氳瀵熷埌鐨勬敼杩涙槸鏂规硶瀛︽垚鐔熻繕鏄湡鏈夎法鍩熻寰嬶紵 |
+| **PM-3** | 鎺㈢储鎬?vs 纭鎬ф鏋剁殑鎸佺画妯＄硦 | Tier 0 鏈川鏄帰绱㈡€э紙鐢熸垚鍋囪锛夛紝Tier 1 鏄‘璁ゆ€э紙妫€楠屽亣璁撅級鈥斺€斾絾瀹為獙鎶ュ憡鏈槑纭尯鍒嗕袱鑰呯殑鎺ㄦ柇閫昏緫鍜岀粨璁鸿瑷€ |
+| **PM-4** | 娴嬭瘯闆嗚妯∶楁晥搴旈噺妫€娴嬬殑鐏垫晱搴﹀叧绯?| 鏈垎鏋愭祴璇曢泦瑙勬ā鍜岄」鐩尯鍒嗗害瀵圭粺璁″姛鏁堢殑鑱斿悎褰卞搷鈥斺€斿彧鐭ラ亾"n=4 涓嶅"锛屼絾涓嶇煡閬?闇€瑕佸灏? |
+| **PM-5** | 璇勫垎/鍒嗘瀽宸ュ叿鑷韩鐨勫疄鐜版湁鏁堟€ч渶瑕侀瀹?| A3 鐨勮瘎鍒?bug锛坅cceptable_paths 鍙岄噸浣跨敤 + meta action 鎯╃綒锛夊湪鏀堕泦鍚庢墠琚彂鐜扳€斺€旇瘎鍒嗚剼鏈簲璇ュ拰瀹為獙璁捐涓€鏍风粡杩囬瀹?|
+| **PM-6** | 鐙珛瀹℃煡鑷韩鐨勮鍒ら闄╂湭琚厖鍒嗚璁?| 澶嶇洏缁?10 杞紓鍚庣瀹℃煡鈥斺€斾絾瀹℃煡鑰呬箣闂寸殑鍒嗘銆佸鏌ヨ“鍑忋€佸鏌ヨ€呯殑绯荤粺鎬х洸鐐规湰韬湭琚垎鏋愩€傚鏌ヤ笉鏄鐨勮瑙?|
+
+*鏉ユ簮锛歳etrospect_a2_a3_combined.md 搂4.3 + 搂9.1-9.4锛堢粡 Codex GPT-5.5 R1+R2 闂悎楠岃瘉锛?
+
+---
+
+*鏉ユ簮锛歱rompt-tdd A2+A3 娣卞害澶嶇洏鎶ュ憡 v1.2锛堢粡 Codex GPT-5.5 R1+R2 闂悎锛?
+
+ succeeded in 239ms:
+scipy>=1.10
+
+ succeeded in 247ms:
+# A3: 澹版槑寮?vs NL 璺敱鎻忚堪瀵圭収瀹為獙
+
+> **瑙掕壊**: **鍙嶄緥妗堜緥**鈥斺€斿浣曡瘹瀹為棴鍚堜竴涓棤娉曠户缁Θ鍑轰俊鍙风殑瀹為獙  
+> **鐘舵€?*: CLOSED [E-]锛堝疄楠岃璁℃湭鑳芥楠屽亣璁撅紝鑰岄潪鍋囪琚瘉浼級  
+> **瀹℃煡**: 10 杞紙Codex GPT-5.5 脳5 + Qwen3.7-Max 脳3 + 鍚堝苟/瀵归綈 脳1 + 鍜ㄨ 脳1锛夛紝0 鏈棴鍚堝彂鐜?
+---
+
+## 鈿狅笍 璇诲墠椤荤煡
+
+A3 鐨勫案妫€缁撹鏄細**涓嶆槸鍋囪琚瘉浼紝鑰屾槸瀹為獙璁捐鏈兘妫€楠屽亣璁?*銆?
+- 澶╄姳鏉挎晥搴旓紙GPT-5.5 鍦ㄨ矾鐢变换鍔′笂鎺ヨ繎瀹岀編锛?- 鏍锋湰閲忎笉瓒筹紙Pilot 15 cases锛?5% 缃俊涓婄晫 ~18%锛?- GT 瀹氫箟浜夎锛?姝ｇ‘璺敱"鐨勬搷浣滃寲缂轰箯澶栭儴閿氱偣锛?- DV 閫€鍖栵紙浜屽垎绫?accuracy 瀵规牸寮忔晥搴斾笉鏁忔劅锛?
+A3 鐨?*鏁欏浠峰€?*涓嶅湪浜?璇佹槑浜嗕粈涔?锛岃€屽湪浜庡睍绀轰簡涓€涓疄楠屽湪浠€涔堟椂鍊欏簲璇ラ棴鍚堛€佸浣曡瘹瀹炶褰曢棴鍚堝師鍥犮€佷互鍙婂浣曚粠"澶辫触"涓彁鍙栨柟娉曡璧勪骇銆?
+---
+
+## 瀹為獙璁捐
+
+| 鍙傛暟 | 鍊?|
+|------|-----|
+| 浠诲姟鍩?| Agent 璺敱鍐崇瓥 |
+| 鐮旂┒闂 | 澹版槑寮忕粨鏋勫寲璺敱鎻忚堪鏄惁浼樹簬 NL 绱у噾鎻忚堪锛?|
+| A 缁勶紙瀵圭収锛?| NL 绱у噾璺敱鎻忚堪锛堥暱搴︽帶鍒讹級 |
+| B 缁勶紙瀹為獙锛?| 澹版槑寮忕粨鏋勫寲璺敱鎻忚堪 |
+| 涓?DV | strict accuracy锛?/1锛屽惈 meta action 璞佸厤锛?|
+| 妯″瀷 | GPT-5.5 temp=0 (Codex CLI) |
+
+### 瀹為獙鍘嗙▼
+
+| 闃舵 | 鏍锋湰 | 缁撴灉 | 鍐崇瓥 |
+|------|------|------|------|
+| v1 | n=10/鑷傦紝6 actions | 螖=0 | 鍔?Hard Mode锛堝鍔犳涔夛級 |
+| Hard Mode | n=10/鑷?| 螖=0 | Discordant 鐜?= 0% |
+| Pilot | 15 cases锛?5 actions | 螖=0/30 calls | 璇勪及涓夋柟妗堝悗閫夋嫨闂悎 |
+
+### A3 v2 璁捐锛堟湭鎵ц锛?缁?Codex + Qwen 鍙屽悗绔鏌ュ彂鐜?DV 閫€鍖?+ 鏍煎紡脳鏁伴噺娣锋穯锛屼笉鎵ц銆?
+---
+
+## 缁撴灉
+
+### 鏍稿績鏁版嵁
+- 涓変釜闃舵 螖=0锛宒iscordant 鐜?= 0%
+- Pilot 95% 缃俊涓婄晫 ~18%锛圧ule of 3锛?- 璇勫垎 bug锛坅cceptable_paths 鍙岄噸浣跨敤 + meta action 鎯╃綒锛夆啋 淇鍚庝笉褰卞搷缁撹
+
+### 绉戝闂? FAIL
+
+鍘熷洜涓嶆槸"H1 琚瘉浼?锛岃€屾槸"瀹為獙璁捐鏈兘鍒涢€犳娴?H1 鐨勬潯浠?锛?1. 澶╄姳鏉垮お楂樷€斺€擥PT-5.5 鍦ㄨ矾鐢变换鍔′笂鎺ヨ繎瀹岀編
+2. DV 涓嶆晱鎰熲€斺€斾簩鍒嗙被 accuracy 鏃犳硶鍖哄垎鏍煎紡鏁堝簲
+3. GT 鏃犲閮ㄩ敋鐐光€斺€?姝ｇ‘璺敱"鐢卞疄楠岃€呭畾涔夛紝娌℃湁鐙珛楠岃瘉
+
+---
+
+## 鍏抽敭鏁欒
+
+1. **涓嶆槸鎵€鏈夊疄楠岄兘鑳芥楠屽亣璁?*锛氬綋瀹為獙璁捐鏃犳硶鍒涢€犳娴嬬┖闂存椂锛岀户缁拷鍔犳牱鏈槸娴垂鈥斺€旇瘹瀹炲湴闂悎姣?鍋氬嚭鏄捐憲缁撴灉"鏇存湁浠峰€?2. **灏告姣旂粨鏋滄洿閲嶈**锛欰3 鐨勪环鍊间笉鍦?螖=0锛岃€屽湪璇嗗埆鍑?4 涓牴鍥狅紙澶╄姳鏉?/ DV 閫夋嫨 / GT 缂哄け / underpowered锛?3. **Pilot 鐨勬鎹熶环鍊?*锛欰3 v2 璁捐缁忓鏌ュ彂鐜?DV 閫€鍖栤€斺€斿鏋?v2 琚墽琛屼簡锛屾氮璐圭殑鏄?5 鍊嶇殑 API 璋冪敤 + 璇勫垎 + 瀹℃煡鏃堕棿
+
+---
+
+## 鏁版嵁鏂囦欢
+
+Pilot 闃舵璇勫垎鏁版嵁锛?5 cases 脳 2 arms锛変繚鐣欏湪婧愪粨搴?`tests/pocketflow_assets/a3_action_routing/pilot/scores/`銆傚綋鍓嶅叕寮€鐗堟湰涓嶇洿鎺ョ撼鍏モ€斺€擜3 鐨勫畾浣嶆槸鍙嶄緥妗堜緥锛屾暀瀛﹂噸鐐瑰湪灏告鍒嗘瀽鍜岄棴鍚堝喅绛栬繃绋嬶紝鑰岄潪鏁版嵁澶嶇幇銆傚闇€瀹屾暣鏁版嵁鍙煡闃呮簮浠撳簱銆?
+---
+
+*鍘熷瀹為獙鎵ц: 2026-06-19 ~ 2026-06-20 路 婧愪粨搴? prompt-tdd*  
+*A3 灏告鎶ュ憡: `methodology_extraction/autopsy_a3.md`*
+
+ succeeded in 254ms:
+# A2: prep/exec/post 鍒嗘 prompt 瀵圭収瀹為獙
+
+> **瑙掕壊**: **涓绘渚?*鈥斺€斿睍绀哄畬鏁寸殑瀵圭収瀹為獙绠＄嚎  
+> **鐘舵€?*: CLOSED [E-]锛坈eiling-limited锛岀瀛﹂棬 FAIL锛? 
+> **瀹℃煡**: Codex GPT-5.5 脳4 + Qwen3.7-Max 脳3 + Kimi-K2.7 脳1锛? 鏈棴鍚堝彂鐜? 
+> **璺ㄦā鍨嬪鐜?*: Qwen3.7-Max锛?8/48 鏀堕泦锛孋odex 鐩茶瘎 螖=鈭?.014锛屾柟鍚戜竴鑷达級
+
+---
+
+## 瀹為獙璁捐
+
+| 鍙傛暟 | 鍊?|
+|------|-----|
+| 浠诲姟鍩?| 浠ｇ爜瀹℃煡 |
+| 鐮旂┒闂 | prep/exec/post 鍒嗘鏍煎紡鏄惁浼樹簬涓€浣撳紡缂栧彿鍒楄〃锛?|
+| A 缁勶紙瀵圭収锛?| 涓€浣撳紡缂栧彿鍒楄〃 prompt |
+| B 缁勶紙瀹為獙锛?| prep/exec/post 鍒嗘 prompt |
+| 涓?DV | correctness_rate锛?-1 杩炵画姣斾緥锛?|
+| 妯″瀷 | GPT-5.5 temp=0 (Codex CLI) |
+| 鏍锋湰閲?| n=24/鑷傦紙train/test 鍒嗗眰鍒嗗壊锛?|
+
+### 璁捐鏂囨。
+
+- 瀹為獙璁捐: `design/a2_revised_experiment_design_v2.md`锛堟簮浠撳簱锛?- 涓ょ粍 prompt: [`prompt_A.md`](prompt_A.md) / [`prompt_B.md`](prompt_B.md)
+
+---
+
+## 缁撴灉
+
+### 宸ョ▼闂? PASS 鉁?鏁版嵁鏀堕泦姝ｅ父銆佽瘎鍒嗚剼鏈纭€乵anifest 瀹屾暣銆?
+### 绉戝闂? FAIL 鉂?
+> **娉?*锛氫互涓嬫暟瀛楀潎涓?test-set-only锛坣_test=12/鑷傦級銆傛簮瀹為獙浣跨敤 train/test 鍒嗗眰鍒嗗壊锛宼rain 浠呯敤浜?prompt 杩唬锛宼est 鐢ㄤ簬鍋囪妫€楠屻€?
+| 闂?| 缁撴灉 |
+|----|------|
+| 缁熻鏄捐憲 | FAIL锛坣_nonzero=4 < 5锛學ilcoxon 鍔熸晥涓嶈冻锛?|
+| 鏁堝簲閲?| 螖=0.019锛堣繙浣庝簬鏈€灏忓叴瓒ｉ槇鍊硷級 |
+| 鏂瑰悜涓€鑷?| FAIL锛圓=0.954 > B=0.935锛屾柟鍚戜笌 H1 鐩稿弽锛?|
+| 璇勫垎鑰呬竴鑷存€?| FAIL锛埼?鏈揪闃堝€硷紝exec_severity 缁村害涓嶄竴鑷寸巼 37.5%锛?|
+
+**鏁翠綋**: 鏍煎紡鏁堝簲鍦?GPT-5.5 temp=0 浠ｇ爜瀹℃煡鍩熶笉鍙娴嬨€傛垚鐔熷害 [E-] ceiling-limited銆?
+### Qwen 璺ㄦā鍨嬪鐜?- Qwen3.7-Max 澶嶇幇锛欰=0.806, B=0.792, 螖=鈭?.014
+- 鏂瑰悜涓€鑷达紙鍧囦负闃存€э級锛宲resence 澶╄姳鏉垮鐜?
+---
+
+## 鍏抽敭鏁欒
+
+1. **鏍锋湰閲忚鍒掗敊璇?*锛氳瘎鍒嗗垎姝у鑷?n_nonzero < 5锛學ilcoxon 鏃犳硶鎵ц銆傛暀璁細鍔熸晥鍒嗘瀽鐢?n_nonzero_expected 鑰岄潪 n_total
+2. **璇勫垎鑰呭垎姝?*锛歟xec_severity 缁村害涓?GPT-5.5 鍜?DeepSeek-V4-Pro 璇勫垎涓嶄竴鑷寸巼 37.5%
+3. **IV 姹℃煋**锛欱 缁勫疄闄呭寘鍚?A 缁勬病鏈夌殑妫€鏌ョ淮搴︼紙INVENTORY 涓嶇瓑浠凤級
+4. **鍙嶇紪閫犳祴璇曟毚闇叉ā鍨嬪€惧悜**锛欸PT-5.5 鍦ㄦ棤 bug 浠ｇ爜涓紪閫犵己闄?
+---
+
+## 鏁版嵁鏂囦欢
+
+- [`test_set.json`](test_set.json) 鈥?24 鏉℃祴璇曠敤渚嬶紙train/test 鍒嗗眰锛?- [`scoresheet.csv`](scoresheet.csv) 鈥?鍙岃瘎鍒嗚€呰瘎鍒嗘暟鎹?- [`prompt_A.md`](prompt_A.md) / [`prompt_B.md`](prompt_B.md) 鈥?涓ょ粍 prompt
+
+### 澶嶇幇鍛戒护
+
+```bash
+python analyze_experiment.py scoresheet.csv --tier 0
+python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
+```
+
+---
+
+*鍘熷瀹為獙鎵ц: 2026-06-17 ~ 2026-06-20 路 婧愪粨搴? prompt-tdd*
+
+ succeeded in 258ms:
+# 瀵圭収瀹為獙璁捐 SOP (Prompt Experiment Design SOP)
+
+> **鐗堟湰**: v1.0.0锛堜粠 prompt-tdd 椤圭洰鎻愮偧锛屾硾鍖栦负閫氱敤鍗忚锛? 
+> **鏉ユ簮**: A2+A3 瀹為獙鐨勫疄鎴樻柟娉曡锛岀粡 17+ 杞紓鍚庣瀹℃煡楠岃瘉  
+> **鐢熸垚妯″瀷**: DeepSeek-V4-Pro (via Claude Code CLI) 路 2026-07-01
+
+---
+
+## 搂1 瀹為獙鍓嶆鏌ユ竻鍗?(CK1-CK6)
+
+### CK1-CK3: Tier 1 纭棬锛堢己涓€涓嶅彲鎵ц Tier 1锛?
+| 缂栧彿 | 妫€鏌ラ」 | 閫氳繃鏍囧噯 |
+|------|--------|---------|
+| **CK1** | 鍋囪鍙瘉浼?| H0/H1 鏄庣‘闄堣堪 + 鎷掔粷鍩熶簨鍓嶅畾涔?+ 缁熻妫€楠屾柟娉曟寚瀹?|
+| **CK2** | 鍥犲彉閲忓彲鎿嶄綔鍖?| DV 鏈夋槑纭畾涔?+ 娴嬮噺鍗忚鍙鍒?+ 璇勫垎 rubric 鍐荤粨 |
+| **CK3** | 鏍锋湰閲忓厖瓒?| 鍔熸晥鍒嗘瀽瀹屾垚 + 鏈€灏忓叴瓒ｆ晥搴旈噺澹版槑 + n 鈮?min_n_per_arm |
+
+### CK4-CK6: 鏉′欢瑙﹀彂锛堜緷鎹疄楠屽鏉傚害閫夋嫨鎬ф墽琛岋級
+
+| 缂栧彿 | 妫€鏌ラ」 | 瑙﹀彂鏉′欢 | 閫氳繃鏍囧噯 |
+|------|--------|---------|---------|
+| **CK4** | INVENTORY 绛変环鎬?| 鍙岀粍 prompt 鍐呭涓嶅悓鏃?| 涓ょ粍 prompt 浜у嚭娓呭崟閫愰」鏍稿 + hash 鍐荤粨锛岄槻 IV 姹℃煋 |
+| **CK5** | Train/Test 鍒嗙 | 闇€瑕佽凯浠ｆ敼杩?prompt 鏃?| test 闆嗗湪瀹為獙缁撴潫鍓嶄笉琚敤浜?prompt 閫夋嫨鎴栧弬鏁拌皟鏁?|
+| **CK6** | 澶╄姳鏉挎帰娴?| DV 涓?0/1 鎴栨瘮渚嬫寚鏍囨椂 | 宓屽叆鍙嶇紪閫?鏋佺娴嬭瘯鐢ㄤ緥璇勪及妫€娴嬬┖闂?|
+
+---
+
+## 搂2 瀹為獙绠＄嚎锛歍ier 0 鈫?Tier 1
+
+### 2.1 Tier 0: 鎻忚堪鎬х粺璁★紙宸ュ叿閾鹃獙璇侊級
+
+**鐩殑**: 鍦ㄦ姇鍏ュぇ鏍锋湰鍓嶉獙璇佹暟鎹敹闆嗗拰璇勫垎绠＄嚎鍙銆?
+| 姝ラ | 鎿嶄綔 | 鎴愬姛鍒ゆ嵁 |
+|------|------|---------|
+| 1. 灏忔牱鏈敹闆?| n=4-8/鑷傦紝鎵嬪姩瀹℃牳姣忔潯鍘熷杈撳嚭 | 鏃犳暟鎹敹闆嗗紓甯革紙鎴柇/瓒呮椂/鏍煎紡閿欒锛?|
+| 2. 璇勫垎绠＄嚎楠岃瘉 | 杩愯 score 鑴氭湰锛屾鏌?manifest 瀹屾暣鎬?| 璇勫垎鑴氭湰杩愯姝ｇ‘锛屾棤缂哄け鍒?|
+| 3. 鎻忚堪鎬х粺璁?| `analyze_experiment.py --tier 0` | 鏂瑰悜鎬ф弿杩?+ 鏁堝簲閲忕矖鐣ヤ及璁?|
+| 4. 宸ョ▼闂ㄥ垽鍐?| 鍒ゆ柇绠＄嚎鏄惁鍙繘鍏?Tier 1 | PASS 鈫?杩涘叆 Tier 1; FAIL 鈫?淇鍚庨噸璺?|
+
+**Tier 0 涓嶅崌绾ф垚鐔熷害**銆傚畠鍙獙璇?绠＄嚎鑳界敤"锛屼笉鎻愪緵鎺ㄦ柇缁撹銆?
+### 2.2 Tier 1: 鎺ㄦ柇缁熻锛堝亣璁炬楠岋級
+
+**鍓嶇疆鏉′欢**: Tier 0 宸ョ▼闂?PASS + CK1-CK3 鍏ㄩ儴閫氳繃銆?
+| 姝ラ | 鎿嶄綔 | 鍏抽敭绾︽潫 |
+|------|------|---------|
+| 1. 澶ф牱鏈敹闆?| n 鈮?鍔熸晥鍒嗘瀽鎸囧畾鍊?| raw_outputs/ 鍙涓嶈鐩?|
+| 2. 鍙?LLM 寮傚悗绔洸璇?| 璇勫垎鑰?A锛堜綔鑰呮ā鍨嬶級+ 璇勫垎鑰?B锛堜笉鍚屽悗绔級 | 璇勫垎鑰?B 涓嶆帴瑙?A 鐨勮瘎鍒嗐€佷綔鑰呰嚜璇勩€佹潗鏂欐潵婧?|
+| 3. 瑙ｇ洸 + 鍚堝苟 | 鍚堝苟 A/B 璇勫垎鑰咃紝瀵归綈 case_id | 璇勫垎鍓嶄笉鍛婄煡鍒嗙粍 |
+| 4. 缁熻鎺ㄦ柇 | `analyze_experiment.py --tier 1 --test-set test_set.json` | Wilcoxon + bootstrap CI + Cohen's 魏 |
+| 5. 绉戝闂ㄥ垽鍐?| 缁熻鏄捐憲 + 鏁堝簲閲?鈮?鏈€灏忓叴瓒ｉ槇鍊?+ 鏂瑰悜涓€鑷?| 涓夐」鍏?PASS 鈫?鏀寔 H1; 浠讳竴 FAIL 鈫?涓嶆敮鎸?|
+
+---
+
+## 搂3 宸ョ▼闂?vs 绉戝闂?
+瀵圭収瀹為獙鏈変袱閬撶嫭绔嬮棬鈥斺€旀贩娣嗕袱鑰呮槸瀹為獙璁捐鏈€甯歌鐨勯敊璇€?
+### 宸ョ▼闂紙Engineering Gate锛?
+**鍒や粈涔?*: 宸ュ叿閾炬槸鍚﹀彲鐢紵  
+**閫氳繃鏍囧噯**: 鏁版嵁鏀堕泦鏃犲紓甯?+ 璇勫垎鑴氭湰杩愯姝ｇ‘ + manifest 瀹屾暣鎬ф牎楠岄€氳繃  
+**澶辫触鍚?*: 淇宸ュ叿閾?鈫?閲嶆柊鏀堕泦锛堝伐绋嬮棬澶辫触涓嶅奖鍝嶇瀛︾粨璁衡€斺€旇繖鏄閬撻棶棰橈紝涓嶆槸鍋囪闂锛?
+### 绉戝闂紙Science Gate锛?
+**鍒や粈涔?*: 鍋囪鏄惁琚敮鎸侊紵  
+**閫氳繃鏍囧噯**: 缁熻鏄捐憲 + 鏁堝簲閲?鈮?鏈€灏忓叴瓒ｉ槇鍊?+ 鏂瑰悜涓€鑷?+ 璇勫垎鑰呬竴鑷存€ц揪鏍囷紙Cohen's 魏 鈮?0.4 鎴?discordant 鐜?< 25%锛夛紙鍥涢」 **鍏ㄩ儴**锛? 
+**澶辫触鍚?*: 璇氬疄璁板綍鈥斺€旈槾鎬х粨鏋?鈮?瀹為獙澶辫触銆侫2/A3 绉戝闂ㄥ叏閮?FAIL锛屼絾浠嶇劧浜у嚭浜嗘湁浠峰€肩殑闃存€ц瘉鎹拰鏂规硶璁鸿祫浜?
+> **鍏抽敭鏁欒**锛?*宸ョ▼闂?PASS + 绉戝闂?FAIL = 鏈夋晥闃存€ц瘉鎹?*銆傛垚鐔熷害鏍囨敞涓?[E-]锛坈eiling-limited锛夎€岄潪 [E]锛屼絾浠嶇劧鏄彲鍙戣〃鐨勮瘹瀹炵粨璁恒€?
+---
+
+## 搂4 棰勬敞鍐岄攣 (.lock)
+
+### 4.1 涓轰粈涔堥渶瑕?
+闃叉浜嬪悗璋冩暣鍋囪锛圚ARKing鈥斺€擧ypothesizing After Results are Known锛夈€?
+### 4.2 閿佸唴瀹?
+```yaml
+hypothesis: "<H0/H1 澹版槑>"
+analysis_plan:
+  test_method: "Wilcoxon signed-rank | sign test | ..."
+  effect_size_threshold: <鏈€灏忓叴瓒ｆ晥搴旈噺>
+  stopping_rule: "<鍋滄瑙勫垯>"
+test_set_sha256: "<SHA256 hash of test_set.json>"
+lock_date: "<ISO 8601>"
+```
+
+### 4.3 鎿嶄綔
+
+1. 鍦ㄥ疄楠屾墽琛屽墠锛屽垱寤?`.lock` 鏂囦欢
+2. `git commit` 鍚庝笉鍙慨鏀癸紙浠讳綍淇敼閮戒細浜х敓鏂?commit hash锛屽彲杩芥函锛?3. 鍒嗘瀽鑴氭湰鑷姩鏍￠獙 test_set SHA256鈥斺€斾笉鍖归厤鍒?hard fail
+
+---
+
+## 搂5 INVENTORY 绛変环鍗忚
+
+### 5.1 闂
+
+瀵圭収瀹為獙鐨勫弻缁?prompt 鍐呭涓嶅悓鈥斺€斾絾濡備綍淇濊瘉**淇℃伅閲忕瓑浠?*鑰岄潪**鏍煎紡鏁堝簲**锛?
+### 5.2 鍗忚
+
+1. 鍒嗗埆杩愯 A 鍜?B 缁?prompt 鍦ㄧ浉鍚岃緭鍏ヤ笂
+2. 鎻愬彇涓ょ粍 prompt 浜у嚭鐨?*妫€鏌ラ」娓呭崟**锛坕nventory锛?3. 閫愰」鏍稿涓ょ粍 inventory 鏄惁瑕嗙洊鐩稿悓鐨勬鏌ラ」
+4. 瀵?inventory 鍋?hash 鍐荤粨
+5. 濡傚彂鐜颁笉绛変环 鈫?淇 prompt 鐩村埌绛変环 鈫?閲嶆柊鍐荤粨
+
+> **A2 鏁欒**锛欼NVENTORY 绛変环鎬у樊寮傚鑷?IV锛坧rompt 鏍煎紡锛変笌"淇℃伅閲忓樊寮?娣锋穯鈥斺€擝 缁勫疄闄呭寘鍚簡 A 缁勬病鏈夌殑妫€鏌ョ淮搴︺€?
+---
+
+## 搂6 鎴愮啛搴︽爣娉ㄤ綋绯?
+| 鏍囩 | 鍚箟 | 鍗囩骇鏉′欢 |
+|------|------|---------|
+| `[Sp]` | Specification 鈥?璁捐鑽夋 | 鍒濆鐘舵€?|
+| `[E]` | Experiment 鈥?瀹為獙鎵ц | Tier 1 瀹屾垚 + 绉戝闂?PASS + 寮傚悗绔鏌ラ棴鍚?|
+| `[E-]` | Experiment 鈥?ceiling-limited | Tier 1 瀹屾垚 + 绉戝闂?FAIL锛堥槾鎬ф垨澶╄姳鏉匡級 |
+| `[F路1鍩焆` | Framework 鈥?鍗曞煙闆嗘垚 | [E] 缁撹鍐欏洖妗嗘灦锛屾爣娉ㄤ换鍔″煙闄愬埗 |
+| `[J]` | Journal 鈥?瀛︽湳鍙戣〃 | 缁忓悓琛岃瘎瀹?|
+
+**绾︽潫**锛氬崟鍩熷疄楠屾渶澶氬崌绾у埌 `[F路1鍩焆`銆傝法鍩熸帹骞块渶 鈮? 鍩熷疄楠屾敮鎸併€?
+---
+
+## 搂7 瀹℃煡闂悎鍗忚
+
+### 7.1 寮哄埗鏉′欢
+
+- 寮傚悗绔嫭绔嬪鏌?鈮? 杞悗鏂瑰彲瀹ｅ竷闂悎
+- 瀹℃煡鑰呬笉寰椾笌瀹為獙鎵ц鑰呭悓鍚庣
+- 瀹℃煡鑰呴』鍦ㄨ８鐜涓闃咃紙涓嶆帴瑙﹀疄楠屾墽琛岃褰曘€佷綔鑰呰嚜璇勩€佷腑闂寸増鏈級
+
+### 7.2 瀹℃煡鐒︾偣
+
+| 瀹℃煡缁村害 | 妫€鏌ュ唴瀹?|
+|---------|---------|
+| 璁捐鍚堢悊 | CK1-CK6 鍏ㄩ儴閫氳繃锛?|
+| 鎵ц姝ｇ‘ | 宸ョ▼闂?PASS锛熼娉ㄥ唽閿佹湁鏁堬紵 |
+| 鍒嗘瀽姝ｇ‘ | 缁熻鏂规硶閫傚綋锛熺粨璁轰笉瓒呭嚭鏁堝簲閲忚寖鍥达紵 |
+| 璇氬疄璁板綍 | 闃存€х粨鏋滃瀹炴姤鍛婏紵灞€闄愬０鏄庡厖鍒嗭紵 |
+
+---
+
+## 搂8 甯歌澶辫触妯″紡
+
+### 8.1 澶╄姳鏉挎晥搴?**鐜拌薄**: 妯″瀷鎺ヨ繎瀹岀編 鈫?鏁堝簲閲忎笉鍙娴? 
+**妫€娴?*: CK6 澶╄姳鏉挎帰娴嬶紙宓屽叆鍙嶇紪閫?鏋佺娴嬭瘯鐢ㄤ緥锛? 
+**澶勭悊**: 璇氬疄鏍囨敞 [E-] ceiling-limited 鈥斺€?杩欐槸鏈夋晥缁撹锛屼笉鏄け璐?
+### 8.2 IV 姹℃煋
+**鐜拌薄**: 瀵圭収缁勭殑 prompt 淇℃伅閲忎笉绛変环 鈫?妫€娴嬪埌鐨勬槸淇℃伅閲忔晥搴旓紝涓嶆槸鏍煎紡鏁堝簲  
+**妫€娴?*: CK4 INVENTORY 绛変环鍗忚  
+**澶勭悊**: 淇 prompt 鐩村埌绛変环 鈫?閲嶆柊鍐荤粨
+
+### 8.3 璇勫垎鑰呭垎姝?**鐜拌薄**: 涓や釜 LLM 璇勫垎鑰呭鍚屼竴 case 缁欏嚭涓嶅悓璇勫垎  
+**妫€娴?*: Cohen's 魏 < 0.4 鎴?discordant 鐜囬珮  
+**澶勭悊**: 閲囩敤淇濆畧璇勫垎绛栫暐锛堝彇杈冧綆鍒嗭級锛涘凡鐭ュ眬闄愨€斺€擫LM-LLM 璇勫垎 鈮?浜虹被璇勫垎鍑嗙‘鎬?
+### 8.4 HARKing
+**鐜拌薄**: 鐪嬪埌缁撴灉鍚庤皟鏁村亣璁? 
+**妫€娴?*: .lock 鏂囦欢鐨?git commit 鏃堕棿鎴冲湪瀹為獙鎵ц涔嬪墠  
+**澶勭悊**: 棰勬敞鍐岄攣 + 绉戝闂ㄥ洓椤瑰叏 PASS 鎵嶈兘澹版槑"鏀寔 H1"
+
+### 8.5 DV 閫€鍖栵紙A3v2 鏁欒锛?**鐜拌薄**: 瀹為獙杩唬涓?DV 閫夋嫨閫愭閫€鍖栤€斺€斾粠鏈€鍒濈殑鏋勯€犳晥搴﹀叧鍒囷紝鍒板悗缁増鏈腑閫€鍖栦负"鑳芥嬁鍒版暟鎹氨琛?  
+**妫€娴?*锛圓3v2 瀹℃煡鍙戠幇鐨勫洓涓璁￠棬绂侊紝Codex + Qwen 鍙屽悗绔叡璇嗭級锛?1. **鏋勯€犳晥搴﹂棬**锛欴V 鏄惁鐪熸娴嬮噺浜嗗亣璁炬寚瀹氱殑鏋勫康锛燂紙A3v2: accuracy 閫€鍖栦负0/1锛屼涪澶变簡璺敱鍐崇瓥鐨?璐ㄩ噺"缁村害锛?2. **鏍煎紡脳鏁伴噺娣锋穯闂?*锛欰/B 缁?prompt 鐨勬牸寮忓樊寮傛槸鍚︿笌淇℃伅閲忓樊寮傛浜わ紵锛圓3v2: 澹版槑寮忔牸寮忓ぉ鐒朵骇鐢熸洿澶氱粨鏋勫寲瀛楁锛屾牸寮忓拰淇℃伅閲忎笉鍙垎锛?3. **澶╄姳鏉块€冭劚闂?*锛氭柊鐨勫疄楠岃璁℃槸鍚﹀垱閫犱簡姣斾笂涓€杞洿澶х殑妫€娴嬬┖闂达紵锛圓3v2: DV 閫€鍖栧悗妫€娴嬬┖闂村弽鑰屾洿灏忥級
+4. **鏁堝簲閲忓彲瑙ｉ噴闂?*锛氬鏋滄娴嬪埌 螖锛屽畠鏄粈涔堟剰鎬濓紵锛圓3v2: 鏃犳硶鍖哄垎"鏍煎紡鏁堝簲"鍜?澹版槑寮忔牸寮忛檮甯︾殑缁撴瀯淇℃伅鏁堝簲"锛?
+**澶勭悊**: 鍥涢」闂ㄧ浠讳竴涓嶉€氳繃鈫掍笉鎵ц瀹為獙銆侫3v2 鍥犲洓闂ㄥ叏 FAIL 琚埅鍋溾€斺€旇繖鏄垚鍔熺殑璁捐瀹℃煡锛屼笉鏄け璐ョ殑瀹為獙銆?
+---
+
+*鐢熸垚妯″瀷锛欴eepSeek-V4-Pro (via Claude Code CLI) 路 2026-07-01*  
+*鏂规硶璁烘潵婧愶細prompt-tdd A2+A3 瀹為獙锛?7+ 杞紓鍚庣瀹℃煡锛?
+
+codex
+第一次读取显示文件本身是中文 UTF-8，但终端输出按错误编码显示。我会用显式 UTF-8 输出和行号再取一遍关键片段，避免证据被乱码污染。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath 'methodology/lessons-learned.md' | Select-Object -First 120" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath 'examples/a2-prep-exec-post/README.md' | Select-Object -First 90" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath 'sop.md' | Select-Object -First 230" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath 'examples/a3-action-routing/README.md' | Select-Object -First 160" in <project>
+ succeeded in 159ms:
+# 核心教训：两次阴性实验的方法论积累
+
+> 提炼自 `retrospect_a2_a3_combined.md`（60KB，17 节）→ ~5KB 核心教训
+
+---
+
+## 三个跨实验模式
+
+### P1: 天花板效应是 prompt 实验的沉默杀手
+
+**观察**: A2（代码审查）和 A3（路由决策）都在 GPT-5.5 temp=0 下遇到天花板——模型表现太好，效应量无法检测。
+
+**机制**: 当 baseline 准确率 > 0.9 时，Δ 的检测空间被压缩到 < 0.1。需要远超常规的样本量或更粗糙的 DV 才有统计显著性——但更粗糙的 DV 本身会丢失信息。
+
+**关键数据**: A2 correctness_rate A=0.954, B=0.935, Δ=0.019, n_nonzero=4<5（科学门 FAIL）。A3 两个实验均 Δ=0, discordant 率=0%。
+
+**教训**: 实验设计阶段必做 ceiling probe（CK6）。如果探测显示天花板不可打破，调整 DV 或任务域——不要指望"大样本就能检测到"。
+
+### P2: IV 污染比统计方法错误更危险
+
+**观察**: 对照实验的核心威胁不是统计方法选择（Wilcoxon vs t-test），而是 IV（prompt 格式）被信息量差异污染。
+
+**A2 关键发现**: B 组（prep/exec/post 分段）实际包含了 A 组（一体式编号列表）没有的检查维度——不是因为格式不同，而是因为信息量不等价。
+
+**教训**: CK4 INVENTORY 等价协议不是可选检查——它是防止"测量了错误的东西"的唯一手段。如果两组 prompt 的产出清单不等价，实验结论无效，无论 p 值多少。
+
+### P3: 阴性结果 ≠ 实验失败
+
+**观察**: A2 和 A3 科学门全部 FAIL——但产出了 21 个方法论片段、3 个实验设计模板、一套可复用的分析管线。
+
+**教训**: 阴性实验的价值不在"支持 H1"，而在：(a) 排除了特定条件下的格式效应存在性；(b) 暴露了实验设计的系统性盲点（天花板、DV 选择、IV 污染）；(c) 积累了"如何不做一个错误实验"的操作知识。
+
+**诚实标注**: 两个实验成熟度均标 [E-]（ceiling-limited），不是 [E]——但仍然是可引用的有效证据。
+
+---
+
+## 六个缺失模式（PM-1~PM-6，来自源复盘 §4.3 对抗验证）
+
+以下缺失模式是 A2+A3 复盘经 Codex GPT-5.5 魔鬼代言人式对抗验证后识别的——不是"实验做错了什么"，而是"系统性盲点：下一次实验应该补什么"。
+
+| 编号 | 模式 | 定义（源报告原文） |
+|------|------|---------|
+| **PM-1** | 模型-温度组合作为普适混淆变量 | 两个实验均仅用 GPT-5.5 temp=0——格式效应的阴性结论不能推广到其他模型/温度。**经 Qwen 跨模型复现部分缓解**（A2 方向一致，Δ=−0.014），但审查行为/方法论传递/等价性验证等维度仍仅 GPT-5.5 单点 |
+| **PM-2** | 实验者方法论成熟度作为跨实验的向上偏误 | A2 和 A3 的实验者（同一个人/团队）在两实验中方法论成熟度持续提升——A3 的设计质量高于 A2。这对"跨实验模式"声称构成混淆：观察到的改进是方法学成熟还是真有跨域规律？ |
+| **PM-3** | 探索性 vs 确认性框架的持续模糊 | Tier 0 本质是探索性（生成假设），Tier 1 是确认性（检验假设）——但实验报告未明确区分两者的推断逻辑和结论语言 |
+| **PM-4** | 测试集规模×效应量检测的灵敏度关系 | 未分析测试集规模和项目区分度对统计功效的联合影响——只知道"n=4 不够"，但不知道"需要多少" |
+| **PM-5** | 评分/分析工具自身的实现有效性需要预审 | A3 的评分 bug（acceptable_paths 双重使用 + meta action 惩罚）在收集后才被发现——评分脚本应该和实验设计一样经过预审 |
+| **PM-6** | 独立审查自身的误判风险未被充分讨论 | 复盘经 10 轮异后端审查——但审查者之间的分歧、审查衰减、审查者的系统性盲点本身未被分析。审查不是神的视角 |
+
+*来源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（经 Codex GPT-5.5 R1+R2 闭合验证）*
+
+---
+
+*来源：prompt-tdd A2+A3 深度复盘报告 v1.2（经 Codex GPT-5.5 R1+R2 闭合）*
+
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Select-String -Path 'analyze_experiment.py' -Pattern 'rater|rater_human|rater_codex|argparse|tier' -Context 2,2" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg --files' in <project>
+ succeeded in 183ms:
+methodology\lessons-learned.md
+methodology\glossary.md
+methodology\checklists.md
+LICENSE
+sop.md
+_workflows\i18n\zh-Hant_batch_prompt.md
+_workflows\i18n\en_batch_prompt.md
+analyze_experiment.py
+README.md
+requirements.txt
+schema\README.md
+zh-Hant\sop.md
+zh-Hant\README.md
+zh-Hant\schema\README.md
+examples\minimal\scoresheet.csv
+appendix\a1-summary.md
+zh-Hant\methodology\checklists.md
+zh-Hant\methodology\lessons-learned.md
+zh-Hant\methodology\glossary.md
+zh-Hant\appendix\a1-summary.md
+_reviews\qwen_crosscheck_v0.1_output.txt
+examples\a2-prep-exec-post\prompt_B.md
+examples\a2-prep-exec-post\prompt_A.md
+examples\a2-prep-exec-post\README.md
+examples\a2-prep-exec-post\test_set.json
+examples\a2-prep-exec-post\scoresheet.csv
+en\README.md
+en\sop.md
+examples\a3-action-routing\README.md
+_reviews\prompts\qwen_crosscheck_v0.1_prompt.md
+_reviews\prompts\codex_r2_prompt.md
+_reviews\codex_r2_output.txt
+zh-Hant\examples\a3-action-routing\README.md
+zh-Hant\examples\a2-prep-exec-post\README.md
+en\appendix\a1-summary.md
+en\schema\README.md
+en\methodology\glossary.md
+en\methodology\lessons-learned.md
+en\methodology\checklists.md
+en\examples\a3-action-routing\README.md
+en\examples\a2-prep-exec-post\README.md
+
+ succeeded in 242ms:
+# A3: 声明式 vs NL 路由描述对照实验
+
+> **角色**: **反例案例**——如何诚实闭合一个无法继续榨出信号的实验  
+> **状态**: CLOSED [E-]（实验设计未能检验假设，而非假设被证伪）  
+> **审查**: 10 轮（Codex GPT-5.5 ×5 + Qwen3.7-Max ×3 + 合并/对齐 ×1 + 咨询 ×1），0 未闭合发现
+
+---
+
+## ⚠️ 读前须知
+
+A3 的尸检结论是：**不是假设被证伪，而是实验设计未能检验假设**。
+
+- 天花板效应（GPT-5.5 在路由任务上接近完美）
+- 样本量不足（Pilot 15 cases，95% 置信上界 ~18%）
+- GT 定义争议（"正确路由"的操作化缺乏外部锚点）
+- DV 退化（二分类 accuracy 对格式效应不敏感）
+
+A3 的**教学价值**不在于"证明了什么"，而在于展示了一个实验在什么时候应该闭合、如何诚实记录闭合原因、以及如何从"失败"中提取方法论资产。
+
+---
+
+## 实验设计
+
+| 参数 | 值 |
+|------|-----|
+| 任务域 | Agent 路由决策 |
+| 研究问题 | 声明式结构化路由描述是否优于 NL 紧凑描述？ |
+| A 组（对照） | NL 紧凑路由描述（长度控制） |
+| B 组（实验） | 声明式结构化路由描述 |
+| 主 DV | strict accuracy（0/1，含 meta action 豁免） |
+| 模型 | GPT-5.5 temp=0 (Codex CLI) |
+
+### 实验历程
+
+| 阶段 | 样本 | 结果 | 决策 |
+|------|------|------|------|
+| v1 | n=10/臂，6 actions | Δ=0 | 加 Hard Mode（增加歧义） |
+| Hard Mode | n=10/臂 | Δ=0 | Discordant 率 = 0% |
+| Pilot | 15 cases，15 actions | Δ=0/30 calls | 评估三方案后选择闭合 |
+
+### A3 v2 设计（未执行）
+经 Codex + Qwen 双后端审查发现 DV 退化 + 格式×数量混淆，不执行。
+
+---
+
+## 结果
+
+### 核心数据
+- 三个阶段 Δ=0，discordant 率 = 0%
+- Pilot 95% 置信上界 ~18%（Rule of 3）
+- 评分 bug（acceptable_paths 双重使用 + meta action 惩罚）→ 修正后不影响结论
+
+### 科学门: FAIL
+
+原因不是"H1 被证伪"，而是"实验设计未能创造检测 H1 的条件"：
+1. 天花板太高——GPT-5.5 在路由任务上接近完美
+2. DV 不敏感——二分类 accuracy 无法区分格式效应
+3. GT 无外部锚点——"正确路由"由实验者定义，没有独立验证
+
+---
+
+## 关键教训
+
+1. **不是所有实验都能检验假设**：当实验设计无法创造检测空间时，继续追加样本是浪费——诚实地闭合比"做出显著结果"更有价值
+2. **尸检比结果更重要**：A3 的价值不在 Δ=0，而在识别出 4 个根因（天花板 / DV 选择 / GT 缺失 / underpowered）
+3. **Pilot 的止损价值**：A3 v2 设计经审查发现 DV 退化——如果 v2 被执行了，浪费的是 5 倍的 API 调用 + 评分 + 审查时间
+
+---
+
+## 数据文件
+
+Pilot 阶段评分数据（15 cases × 2 arms）保留在源仓库 `tests/pocketflow_assets/a3_action_routing/pilot/scores/`。当前公开版本不直接纳入——A3 的定位是反例案例，教学重点在尸检分析和闭合决策过程，而非数据复现。如需完整数据可查阅源仓库。
+
+---
+
+*原始实验执行: 2026-06-19 ~ 2026-06-20 · 源仓库: prompt-tdd*  
+*A3 尸检报告: `methodology_extraction/autopsy_a3.md`*
+
+ succeeded in 252ms:
+# 对照实验设计 SOP (Prompt Experiment Design SOP)
+
+> **版本**: v1.0.0（从 prompt-tdd 项目提炼，泛化为通用协议）  
+> **来源**: A2+A3 实验的实战方法论，经 17+ 轮异后端审查验证  
+> **生成模型**: DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01
+
+---
+
+## §1 实验前检查清单 (CK1-CK6)
+
+### CK1-CK3: Tier 1 硬门（缺一不可执行 Tier 1）
+
+| 编号 | 检查项 | 通过标准 |
+|------|--------|---------|
+| **CK1** | 假设可证伪 | H0/H1 明确陈述 + 拒绝域事前定义 + 统计检验方法指定 |
+| **CK2** | 因变量可操作化 | DV 有明确定义 + 测量协议可复制 + 评分 rubric 冻结 |
+| **CK3** | 样本量充足 | 功效分析完成 + 最小兴趣效应量声明 + n ≥ min_n_per_arm |
+
+### CK4-CK6: 条件触发（依据实验复杂度选择性执行）
+
+| 编号 | 检查项 | 触发条件 | 通过标准 |
+|------|--------|---------|---------|
+| **CK4** | INVENTORY 等价性 | 双组 prompt 内容不同时 | 两组 prompt 产出清单逐项核对 + hash 冻结，防 IV 污染 |
+| **CK5** | Train/Test 分离 | 需要迭代改进 prompt 时 | test 集在实验结束前不被用于 prompt 选择或参数调整 |
+| **CK6** | 天花板探测 | DV 为 0/1 或比例指标时 | 嵌入反编造/极端测试用例评估检测空间 |
+
+---
+
+## §2 实验管线：Tier 0 → Tier 1
+
+### 2.1 Tier 0: 描述性统计（工具链验证）
+
+**目的**: 在投入大样本前验证数据收集和评分管线可行。
+
+| 步骤 | 操作 | 成功判据 |
+|------|------|---------|
+| 1. 小样本收集 | n=4-8/臂，手动审核每条原始输出 | 无数据收集异常（截断/超时/格式错误） |
+| 2. 评分管线验证 | 运行 score 脚本，检查 manifest 完整性 | 评分脚本运行正确，无缺失分 |
+| 3. 描述性统计 | `analyze_experiment.py --tier 0` | 方向性描述 + 效应量粗略估计 |
+| 4. 工程门判决 | 判断管线是否可进入 Tier 1 | PASS → 进入 Tier 1; FAIL → 修复后重跑 |
+
+**Tier 0 不升级成熟度**。它只验证"管线能用"，不提供推断结论。
+
+### 2.2 Tier 1: 推断统计（假设检验）
+
+**前置条件**: Tier 0 工程门 PASS + CK1-CK3 全部通过。
+
+| 步骤 | 操作 | 关键约束 |
+|------|------|---------|
+| 1. 大样本收集 | n ≥ 功效分析指定值 | raw_outputs/ 只增不覆盖 |
+| 2. 双 LLM 异后端盲评 | 评分者 A（作者模型）+ 评分者 B（不同后端） | 评分者 B 不接触 A 的评分、作者自评、材料来源 |
+| 3. 解盲 + 合并 | 合并 A/B 评分者，对齐 case_id | 评分前不告知分组 |
+| 4. 统计推断 | `analyze_experiment.py --tier 1 --test-set test_set.json` | Wilcoxon + bootstrap CI + Cohen's κ |
+| 5. 科学门判决 | 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 | 三项全 PASS → 支持 H1; 任一 FAIL → 不支持 |
+
+---
+
+## §3 工程门 vs 科学门
+
+对照实验有两道独立门——混淆两者是实验设计最常见的错误。
+
+### 工程门（Engineering Gate）
+
+**判什么**: 工具链是否可用？  
+**通过标准**: 数据收集无异常 + 评分脚本运行正确 + manifest 完整性校验通过  
+**失败后**: 修复工具链 → 重新收集（工程门失败不影响科学结论——这是管道问题，不是假设问题）
+
+### 科学门（Science Gate）
+
+**判什么**: 假设是否被支持？  
+**通过标准**: 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 + 评分者一致性达标（Cohen's κ ≥ 0.4 或 discordant 率 < 25%）（四项 **全部**）  
+**失败后**: 诚实记录——阴性结果 ≠ 实验失败。A2/A3 科学门全部 FAIL，但仍然产出了有价值的阴性证据和方法论资产
+
+> **关键教训**：**工程门 PASS + 科学门 FAIL = 有效阴性证据**。成熟度标注为 [E-]（ceiling-limited）而非 [E]，但仍然是可发表的诚实结论。
+
+---
+
+## §4 预注册锁 (.lock)
+
+### 4.1 为什么需要
+
+防止事后调整假设（HARKing——Hypothesizing After Results are Known）。
+
+### 4.2 锁内容
+
+```yaml
+hypothesis: "<H0/H1 声明>"
+analysis_plan:
+  test_method: "Wilcoxon signed-rank | sign test | ..."
+  effect_size_threshold: <最小兴趣效应量>
+  stopping_rule: "<停止规则>"
+test_set_sha256: "<SHA256 hash of test_set.json>"
+lock_date: "<ISO 8601>"
+```
+
+### 4.3 操作
+
+1. 在实验执行前，创建 `.lock` 文件
+2. `git commit` 后不可修改（任何修改都会产生新 commit hash，可追溯）
+3. 分析脚本自动校验 test_set SHA256——不匹配则 hard fail
+
+---
+
+## §5 INVENTORY 等价协议
+
+### 5.1 问题
+
+对照实验的双组 prompt 内容不同——但如何保证**信息量等价**而非**格式效应**？
+
+### 5.2 协议
+
+1. 分别运行 A 和 B 组 prompt 在相同输入上
+2. 提取两组 prompt 产出的**检查项清单**（inventory）
+3. 逐项核对两组 inventory 是否覆盖相同的检查项
+4. 对 inventory 做 hash 冻结
+5. 如发现不等价 → 修正 prompt 直到等价 → 重新冻结
+
+> **A2 教训**：INVENTORY 等价性差异导致 IV（prompt 格式）与"信息量差异"混淆——B 组实际包含了 A 组没有的检查维度。
+
+---
+
+## §6 成熟度标注体系
+
+| 标签 | 含义 | 升级条件 |
+|------|------|---------|
+| `[Sp]` | Specification — 设计草案 | 初始状态 |
+| `[E]` | Experiment — 实验执行 | Tier 1 完成 + 科学门 PASS + 异后端审查闭合 |
+| `[E-]` | Experiment — ceiling-limited | Tier 1 完成 + 科学门 FAIL（阴性或天花板） |
+| `[F·1域]` | Framework — 单域集成 | [E] 结论写回框架，标注任务域限制 |
+| `[J]` | Journal — 学术发表 | 经同行评审 |
+
+**约束**：单域实验最多升级到 `[F·1域]`。跨域推广需 ≥2 域实验支持。
+
+---
+
+## §7 审查闭合协议
+
+### 7.1 强制条件
+
+- 异后端独立审查 ≥1 轮后方可宣布闭合
+- 审查者不得与实验执行者同后端
+- 审查者须在裸环境中审阅（不接触实验执行记录、作者自评、中间版本）
+
+### 7.2 审查焦点
+
+| 审查维度 | 检查内容 |
+|---------|---------|
+| 设计合理 | CK1-CK6 全部通过？ |
+| 执行正确 | 工程门 PASS？预注册锁有效？ |
+| 分析正确 | 统计方法适当？结论不超出效应量范围？ |
+| 诚实记录 | 阴性结果如实报告？局限声明充分？ |
+
+---
+
+## §8 常见失败模式
+
+### 8.1 天花板效应
+**现象**: 模型接近完美 → 效应量不可检测  
+**检测**: CK6 天花板探测（嵌入反编造/极端测试用例）  
+**处理**: 诚实标注 [E-] ceiling-limited —— 这是有效结论，不是失败
+
+### 8.2 IV 污染
+**现象**: 对照组的 prompt 信息量不等价 → 检测到的是信息量效应，不是格式效应  
+**检测**: CK4 INVENTORY 等价协议  
+**处理**: 修正 prompt 直到等价 → 重新冻结
+
+### 8.3 评分者分歧
+**现象**: 两个 LLM 评分者对同一 case 给出不同评分  
+**检测**: Cohen's κ < 0.4 或 discordant 率高  
+**处理**: 采用保守评分策略（取较低分）；已知局限——LLM-LLM 评分 ≠ 人类评分准确性
+
+### 8.4 HARKing
+**现象**: 看到结果后调整假设  
+**检测**: .lock 文件的 git commit 时间戳在实验执行之前  
+**处理**: 预注册锁 + 科学门四项全 PASS 才能声明"支持 H1"
+
+### 8.5 DV 退化（A3v2 教训）
+**现象**: 实验迭代中 DV 选择逐步退化——从最初的构造效度关切，到后续版本中退化为"能拿到数据就行"  
+**检测**（A3v2 审查发现的四个设计门禁，Codex + Qwen 双后端共识）：
+1. **构造效度门**：DV 是否真正测量了假设指定的构念？（A3v2: accuracy 退化为0/1，丢失了路由决策的"质量"维度）
+2. **格式×数量混淆门**：A/B 组 prompt 的格式差异是否与信息量差异正交？（A3v2: 声明式格式天然产生更多结构化字段，格式和信息量不可分）
+3. **天花板逃脱门**：新的实验设计是否创造了比上一轮更大的检测空间？（A3v2: DV 退化后检测空间反而更小）
+4. **效应量可解释门**：如果检测到 Δ，它是什么意思？（A3v2: 无法区分"格式效应"和"声明式格式附带的结构信息效应"）
+
+**处理**: 四项门禁任一不通过→不执行实验。A3v2 因四门全 FAIL 被截停——这是成功的设计审查，不是失败的实验。
+
+---
+
+*生成模型：DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01*  
+*方法论来源：prompt-tdd A2+A3 实验（17+ 轮异后端审查）*
+
+ succeeded in 270ms:
+# A2: prep/exec/post 分段 prompt 对照实验
+
+> **角色**: **主案例**——展示完整的对照实验管线  
+> **状态**: CLOSED [E-]（ceiling-limited，科学门 FAIL）  
+> **审查**: Codex GPT-5.5 ×4 + Qwen3.7-Max ×3 + Kimi-K2.7 ×1，0 未闭合发现  
+> **跨模型复现**: Qwen3.7-Max（48/48 收集，Codex 盲评 Δ=−0.014，方向一致）
+
+---
+
+## 实验设计
+
+| 参数 | 值 |
+|------|-----|
+| 任务域 | 代码审查 |
+| 研究问题 | prep/exec/post 分段格式是否优于一体式编号列表？ |
+| A 组（对照） | 一体式编号列表 prompt |
+| B 组（实验） | prep/exec/post 分段 prompt |
+| 主 DV | correctness_rate（0-1 连续比例） |
+| 模型 | GPT-5.5 temp=0 (Codex CLI) |
+| 样本量 | n=24/臂（train/test 分层分割） |
+
+### 设计文档
+
+- 实验设计: `design/a2_revised_experiment_design_v2.md`（源仓库）
+- 两组 prompt: [`prompt_A.md`](prompt_A.md) / [`prompt_B.md`](prompt_B.md)
+
+---
+
+## 结果
+
+### 工程门: PASS ✅
+数据收集正常、评分脚本正确、manifest 完整。
+
+### 科学门: FAIL ❌
+
+> **注**：以下数字均为 test-set-only（n_test=12/臂）。源实验使用 train/test 分层分割，train 仅用于 prompt 迭代，test 用于假设检验。
+
+| 门 | 结果 |
+|----|------|
+| 统计显著 | FAIL（n_nonzero=4 < 5，Wilcoxon 功效不足） |
+| 效应量 | Δ=0.019（远低于最小兴趣阈值） |
+| 方向一致 | FAIL（A=0.954 > B=0.935，方向与 H1 相反） |
+| 评分者一致性 | FAIL（κ 未达阈值，exec_severity 维度不一致率 37.5%） |
+
+**整体**: 格式效应在 GPT-5.5 temp=0 代码审查域不可检测。成熟度 [E-] ceiling-limited。
+
+### Qwen 跨模型复现
+- Qwen3.7-Max 复现：A=0.806, B=0.792, Δ=−0.014
+- 方向一致（均为阴性），presence 天花板复现
+
+---
+
+## 关键教训
+
+1. **样本量规划错误**：评分分歧导致 n_nonzero < 5，Wilcoxon 无法执行。教训：功效分析用 n_nonzero_expected 而非 n_total
+2. **评分者分歧**：exec_severity 维度上 GPT-5.5 和 DeepSeek-V4-Pro 评分不一致率 37.5%
+3. **IV 污染**：B 组实际包含 A 组没有的检查维度（INVENTORY 不等价）
+4. **反编造测试暴露模型倾向**：GPT-5.5 在无 bug 代码中编造缺陷
+
+---
+
+## 数据文件
+
+- [`test_set.json`](test_set.json) — 24 条测试用例（train/test 分层）
+- [`scoresheet.csv`](scoresheet.csv) — 双评分者评分数据
+- [`prompt_A.md`](prompt_A.md) / [`prompt_B.md`](prompt_B.md) — 两组 prompt
+
+### 复现命令
+
+```bash
+python analyze_experiment.py scoresheet.csv --tier 0
+python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
+```
+
+---
+
+*原始实验执行: 2026-06-17 ~ 2026-06-20 · 源仓库: prompt-tdd*
+
+ succeeded in 289ms:
+
+  analyze_experiment.py:6:
+  analyze_experiment.py:7:用法:
+> analyze_experiment.py:8:    # Tier 0: 仅描述性统计
+> analyze_experiment.py:9:    python analyze_experiment.py scores/scoresheet.csv --tier 0
+  analyze_experiment.py:10:
+> analyze_experiment.py:11:    # Tier 1: 完整分析（含 Wilcoxon + bootstrap CI + κ）
+> analyze_experiment.py:12:    python analyze_experiment.py scores/scoresheet.csv --tier 1
+  analyze_experiment.py:13:
+  analyze_experiment.py:14:    # 指定输出
+> analyze_experiment.py:15:    python analyze_experiment.py scores/scoresheet.csv --tier 1 -o analysis/analysis_output.
+json
+  analyze_experiment.py:16:
+  analyze_experiment.py:17:输入格式 (scoresheet.csv):
+> analyze_experiment.py:18:    case_id, prompt_arm, rater, step, presence, correctness, note
+  analyze_experiment.py:19:
+  analyze_experiment.py:20:输出:
+  analyze_experiment.py:28:"""
+  analyze_experiment.py:29:
+> analyze_experiment.py:30:import argparse
+  analyze_experiment.py:31:import csv
+  analyze_experiment.py:32:import json
+  analyze_experiment.py:64:# ============================================================
+  analyze_experiment.py:65:
+> analyze_experiment.py:66:def compute_presence_coverage(rows: list[dict], arm: str, rater: str) -> dict[str, float]:
+  analyze_experiment.py:67:    """
+  analyze_experiment.py:68:    计算每个 case 的 presence_coverage。
+  analyze_experiment.py:73:    case_steps: dict[str, dict[str, int]] = defaultdict(dict)
+  analyze_experiment.py:74:    for r in rows:
+> analyze_experiment.py:75:        if r["prompt_arm"] != arm or r["rater"] != rater:
+  analyze_experiment.py:76:            continue
+  analyze_experiment.py:77:        case_steps[r["case_id"]][r["step"]] = r["presence"]
+  analyze_experiment.py:85:
+  analyze_experiment.py:86:
+> analyze_experiment.py:87:def compute_correctness_rate(rows: list[dict], arm: str, rater: str) -> dict[str, float]:
+  analyze_experiment.py:88:    """
+  analyze_experiment.py:89:    计算每个 case 的 correctness_rate。
+  analyze_experiment.py:93:    case_steps: dict[str, list[tuple[int, Optional[int]]]] = defaultdict(list)
+  analyze_experiment.py:94:    for r in rows:
+> analyze_experiment.py:95:        if r["prompt_arm"] != arm or r["rater"] != rater:
+  analyze_experiment.py:96:            continue
+  analyze_experiment.py:97:        case_steps[r["case_id"]].append((r["presence"], r["correctness"]))
+  analyze_experiment.py:109:
+  analyze_experiment.py:110:# ============================================================
+> analyze_experiment.py:111:# 描述性统计（Tier 0 和 Tier 1 共用）
+  analyze_experiment.py:112:# ============================================================
+  analyze_experiment.py:113:
+  analyze_experiment.py:116:    arm_a: str = "A",
+  analyze_experiment.py:117:    arm_b: str = "B",
+> analyze_experiment.py:118:    rater: str = "rater_human",
+  analyze_experiment.py:119:) -> dict:
+  analyze_experiment.py:120:    """纯描述性统计，无显著性检验。"""
+> analyze_experiment.py:121:    cov_a = compute_presence_coverage(rows, arm_a, rater)
+> analyze_experiment.py:122:    cov_b = compute_presence_coverage(rows, arm_b, rater)
+  analyze_experiment.py:123:
+  analyze_experiment.py:124:    # 配对 case
+  analyze_experiment.py:144:        "arm_a_label": arm_a,
+  analyze_experiment.py:145:        "arm_b_label": arm_b,
+> analyze_experiment.py:146:        "rater": rater,
+  analyze_experiment.py:147:        "mean_coverage_a": sum(cov_a.values()) / len(cov_a) if cov_a else 0.0,
+  analyze_experiment.py:148:        "mean_coverage_b": sum(cov_b.values()) / len(cov_b) if cov_b else 0.0,
+  analyze_experiment.py:166:
+  analyze_experiment.py:167:# ============================================================
+> analyze_experiment.py:168:# Wilcoxon signed-rank + bootstrap CI（Tier 1）
+  analyze_experiment.py:169:# ============================================================
+  analyze_experiment.py:170:
+  analyze_experiment.py:233:# ============================================================
+  analyze_experiment.py:234:
+> analyze_experiment.py:235:def cohens_kappa(rater1: list[int], rater2: list[int]) -> dict:
+  analyze_experiment.py:236:    """计算二分类 Cohen's κ。"""
+> analyze_experiment.py:237:    n = len(rater1)
+> analyze_experiment.py:238:    if n != len(rater2) or n == 0:
+  analyze_experiment.py:239:        return {"error": "评分者数据长度不匹配或为空"}
+  analyze_experiment.py:240:
+  analyze_experiment.py:241:    # 混淆矩阵
+> analyze_experiment.py:242:    a = sum(1 for i in range(n) if rater1[i] == 1 and rater2[i] == 1)
+> analyze_experiment.py:243:    b = sum(1 for i in range(n) if rater1[i] == 1 and rater2[i] == 0)
+> analyze_experiment.py:244:    c = sum(1 for i in range(n) if rater1[i] == 0 and rater2[i] == 1)
+> analyze_experiment.py:245:    d = sum(1 for i in range(n) if rater1[i] == 0 and rater2[i] == 0)
+  analyze_experiment.py:246:
+  analyze_experiment.py:247:    total = a + b + c + d
+  analyze_experiment.py:289:
+  analyze_experiment.py:290:def compute_all_kappas(rows: list[dict],
+> analyze_experiment.py:291:                       rater_a: str = "rater_human",
+> analyze_experiment.py:292:                       rater_b: str = "rater_codex") -> dict:
+  analyze_experiment.py:293:    """对每个 step 计算评分者间 κ。"""
+  analyze_experiment.py:294:    # 聚合：每个 step 的所有评分
+  analyze_experiment.py:297:    )
+  analyze_experiment.py:298:    for r in rows:
+> analyze_experiment.py:299:        step_ratings[r["step"]][r["rater"]].append((r["case_id"], r["prompt_arm"], r["prese
+nce"]))
+  analyze_experiment.py:300:
+  analyze_experiment.py:301:    results = {}
+> analyze_experiment.py:302:    for step, rater_data in step_ratings.items():
+> analyze_experiment.py:303:        ratings_a = rater_data.get(rater_a, [])
+> analyze_experiment.py:304:        ratings_b = rater_data.get(rater_b, [])
+  analyze_experiment.py:305:
+  analyze_experiment.py:306:        # 按 (case_id, arm) 对齐
+  analyze_experiment.py:367:
+  analyze_experiment.py:368:def validate_grid(rows: list[dict], expected_steps: dict[str, list[str]],
+> analyze_experiment.py:369:                  arms: list[str], raters: list[str]) -> list[str]:
+  analyze_experiment.py:370:    """
+> analyze_experiment.py:371:    校验完整网格: case_id × arm × rater × expected_step。
+  analyze_experiment.py:372:    返回缺失项列表（空列表 = 通过）。
+  analyze_experiment.py:373:    """
+  analyze_experiment.py:374:    missing = []
+  analyze_experiment.py:375:
+> analyze_experiment.py:376:    # 构建已有的 (case_id, arm, rater, step) 集合
+  analyze_experiment.py:377:    existing = set()
+  analyze_experiment.py:378:    for r in rows:
+> analyze_experiment.py:379:        existing.add((r["case_id"], r["prompt_arm"], r["rater"], r["step"]))
+  analyze_experiment.py:380:
+  analyze_experiment.py:381:    cases = sorted(expected_steps.keys())
+  analyze_experiment.py:382:    for case_id in cases:
+  analyze_experiment.py:383:        for arm in arms:
+> analyze_experiment.py:384:            for rater in raters:
+  analyze_experiment.py:385:                for step in expected_steps[case_id]:
+> analyze_experiment.py:386:                    key = (case_id, arm, rater, step)
+  analyze_experiment.py:387:                    if key not in existing:
+> analyze_experiment.py:388:                        missing.append(f"{case_id}/{arm}/{rater}/{step}")
+  analyze_experiment.py:389:
+  analyze_experiment.py:390:    return missing
+  analyze_experiment.py:428:
+  analyze_experiment.py:429:
+> analyze_experiment.py:430:def kappa_bootstrap_ci(rater1: list[int], rater2: list[int],
+  analyze_experiment.py:431:                       n_bootstrap: int = 5000) -> dict:
+  analyze_experiment.py:432:    """Bootstrap 95% CI for Cohen's κ。"""
+  analyze_experiment.py:433:    import random
+  analyze_experiment.py:434:    random.seed(42)
+> analyze_experiment.py:435:    n = len(rater1)
+  analyze_experiment.py:436:    if n < 5:
+  analyze_experiment.py:437:        return {"error": "样本量 < 5"}
+  analyze_experiment.py:440:    for _ in range(n_bootstrap):
+  analyze_experiment.py:441:        idx = [random.randint(0, n - 1) for _ in range(n)]
+> analyze_experiment.py:442:        s1 = [rater1[i] for i in idx]
+> analyze_experiment.py:443:        s2 = [rater2[i] for i in idx]
+  analyze_experiment.py:444:        k = cohens_kappa(s1, s2)
+  analyze_experiment.py:445:        if k.get("kappa") is not None:
+  analyze_experiment.py:463:
+  analyze_experiment.py:464:def compute_all_kappas_with_ci(rows: list[dict],
+> analyze_experiment.py:465:                               rater_a: str = "rater_human",
+> analyze_experiment.py:466:                               rater_b: str = "rater_codex") -> dict:
+  analyze_experiment.py:467:    """对每个 step 计算 κ + bootstrap 95% CI。"""
+  analyze_experiment.py:468:    step_ratings: dict[str, dict[str, list[int]]] = defaultdict(
+  analyze_experiment.py:470:    )
+  analyze_experiment.py:471:    for r in rows:
+> analyze_experiment.py:472:        step_ratings[r["step"]][r["rater"]].append(
+  analyze_experiment.py:473:            (r["case_id"], r["prompt_arm"], r["presence"])
+  analyze_experiment.py:474:        )
+  analyze_experiment.py:475:
+  analyze_experiment.py:476:    results = {}
+> analyze_experiment.py:477:    for step, rater_data in step_ratings.items():
+> analyze_experiment.py:478:        ratings_a = rater_data.get(rater_a, [])
+> analyze_experiment.py:479:        ratings_b = rater_data.get(rater_b, [])
+  analyze_experiment.py:480:
+  analyze_experiment.py:481:        key_to_a = {(c, arm): p for c, arm, p in ratings_a}
+  analyze_experiment.py:498:
+  analyze_experiment.py:499:
+> analyze_experiment.py:500:def analyze(rows: list[dict], tier: int = 0,
+  analyze_experiment.py:501:            arm_a: str = "A", arm_b: str = "B",
+> analyze_experiment.py:502:            rater_primary: str = "rater_human",
+> analyze_experiment.py:503:            rater_secondary: str = "rater_codex",
+  analyze_experiment.py:504:            test_set_path: Optional[str] = None,
+  analyze_experiment.py:505:            categories: Optional[list[str]] = None) -> dict:
+  analyze_experiment.py:508:        "meta": {
+  analyze_experiment.py:509:            "analyzed_at": datetime.now(timezone.utc).isoformat(),
+> analyze_experiment.py:510:            "tier": tier,
+  analyze_experiment.py:511:            "n_rows": len(rows),
+  analyze_experiment.py:512:            "arms": [arm_a, arm_b],
+> analyze_experiment.py:513:            "raters": list(set(r["rater"] for r in rows)),
+  analyze_experiment.py:514:        }
+  analyze_experiment.py:515:    }
+  analyze_experiment.py:517:    # ---- R2_F9: split 过滤 ----
+  analyze_experiment.py:518:    splits = load_test_set_splits(test_set_path)
+> analyze_experiment.py:519:    if tier >= 1:
+  analyze_experiment.py:520:        if not splits:
+  analyze_experiment.py:521:            result["error"] = (
+> analyze_experiment.py:522:                "Tier 1 需要 test_set.json 中的 split 字段来过滤 train/test。"
+  analyze_experiment.py:523:                "请用 --test-set 参数指定 test_set.json 路径。"
+  analyze_experiment.py:524:            )
+  analyze_experiment.py:538:    else:
+  analyze_experiment.py:539:        if splits:
+> analyze_experiment.py:540:            result["meta"]["split_filter"] = "none (Tier 0, all data)"
+  analyze_experiment.py:541:        rows_for_analysis = rows
+  analyze_experiment.py:542:
+  analyze_experiment.py:544:    expected_steps = get_expected_steps(test_set_path)
+  analyze_experiment.py:545:    if expected_steps:
+> analyze_experiment.py:546:        raters_present = list(set(r["rater"] for r in rows_for_analysis))
+  analyze_experiment.py:547:        arms_present = [arm_a, arm_b]
+  analyze_experiment.py:548:        # 只校验 test set 中的 case（如果提供了 splits）
+> analyze_experiment.py:549:        if splits and tier >= 1:
+  analyze_experiment.py:550:            expected_steps = {k: v for k, v in expected_steps.items()
+  analyze_experiment.py:551:                            if k in test_ids}
+  analyze_experiment.py:552:        missing_grid = validate_grid(rows_for_analysis, expected_steps,
+> analyze_experiment.py:553:                                     arms_present, raters_present)
+  analyze_experiment.py:554:        if missing_grid:
+  analyze_experiment.py:555:            result["error"] = (
+  analyze_experiment.py:556:                f"网格校验失败: {len(missing_grid)} 个预期项缺失。"
+  analyze_experiment.py:557:                f"示例: {missing_grid[:5]}。"
+> analyze_experiment.py:558:                f"请确保 scoresheet 包含所有 case × arm × rater × step 组合。"
+  analyze_experiment.py:559:            )
+  analyze_experiment.py:560:            result["missing_grid"] = missing_grid[:20]
+  analyze_experiment.py:566:
+  analyze_experiment.py:567:    # ---- 描述性统计 ----
+> analyze_experiment.py:568:    desc = descriptive_stats(rows_for_analysis, arm_a, arm_b, rater_primary)
+  analyze_experiment.py:569:    result["descriptive"] = desc
+  analyze_experiment.py:570:
+  analyze_experiment.py:571:    # ---- κ + CI ----
+> analyze_experiment.py:572:    raters_in_data = set(r["rater"] for r in rows_for_analysis)
+> analyze_experiment.py:573:    if rater_secondary in raters_in_data:
+  analyze_experiment.py:574:        kappas = compute_all_kappas_with_ci(
+> analyze_experiment.py:575:            rows_for_analysis, rater_primary, rater_secondary
+  analyze_experiment.py:576:        )
+  analyze_experiment.py:577:        result["kappa"] = kappas
+  analyze_experiment.py:597:
+  analyze_experiment.py:598:    # ---- correctness_rate ----
+> analyze_experiment.py:599:    corr_a = compute_correctness_rate(rows_for_analysis, arm_a, rater_primary)
+> analyze_experiment.py:600:    corr_b = compute_correctness_rate(rows_for_analysis, arm_b, rater_primary)
+  analyze_experiment.py:601:    common_corr = sorted(set(corr_a.keys()) & set(corr_b.keys()))
+  analyze_experiment.py:602:    if common_corr:
+  analyze_experiment.py:615:        }
+  analyze_experiment.py:616:
+> analyze_experiment.py:617:    # ---- Tier 1: 推断统计 ----
+> analyze_experiment.py:618:    if tier >= 1:
+  analyze_experiment.py:619:        all_deltas = [desc["per_case"][c]["delta"] for c in desc["per_case"]]
+  analyze_experiment.py:620:        # Sign test (更稳健的主检验)
+  analyze_experiment.py:639:                           if r["case_id"] in cat_cases]
+  analyze_experiment.py:640:                if cat_rows:
+> analyze_experiment.py:641:                    d = descriptive_stats(cat_rows, arm_a, arm_b, rater_primary)
+  analyze_experiment.py:642:                    stratified[cat] = {
+  analyze_experiment.py:643:                        "n_pairs": d["n_pairs"],
+  analyze_experiment.py:660:    print("=" * 60)
+  analyze_experiment.py:661:    print("  实验分析报告")
+> analyze_experiment.py:662:    print(f"  Tier: {result['meta']['tier']}")
+  analyze_experiment.py:663:    print(f"  分析时间: {result['meta']['analyzed_at'][:19]}")
+  analyze_experiment.py:664:    print("=" * 60)
+  analyze_experiment.py:699:                  f"Δ: {cr['median_delta']:+.3f}")
+  analyze_experiment.py:700:
+> analyze_experiment.py:701:    # Sign test (Tier 1 primary)
+  analyze_experiment.py:702:    if "sign_test" in result:
+  analyze_experiment.py:703:        st = result["sign_test"]
+  analyze_experiment.py:737:    if "kappa_summary" in result:
+  analyze_experiment.py:738:        print(f"  2. κ ≥ 0.6:    {'[PASS]' if result['kappa_summary']['pass_threshold_0_6']
+ else '[FAIL]'}")
+> analyze_experiment.py:739:    if result["meta"]["tier"] >= 1:
+  analyze_experiment.py:740:        threshold = 0.15
+  analyze_experiment.py:741:        above_threshold = abs(desc['median_delta']) >= threshold
+  analyze_experiment.py:753:
+  analyze_experiment.py:754:def main():
+> analyze_experiment.py:755:    parser = argparse.ArgumentParser(
+  analyze_experiment.py:756:        description="实验分析脚本 — 读取双评分者 scoresheet.csv，输出配对比较和 κ。",
+  analyze_experiment.py:757:    )
+  analyze_experiment.py:758:    parser.add_argument("scoresheet", help="scoresheet.csv 路径")
+> analyze_experiment.py:759:    parser.add_argument("--tier", "-t", type=int, default=0, choices=[0, 1],
+  analyze_experiment.py:760:                        help="分析层级: 0=仅描述性, 1=含 Wilcoxon+bootstrap+sign_test+κ (默认: 0)")
+  analyze_experiment.py:761:    parser.add_argument("--test-set", default=None,
+> analyze_experiment.py:762:                        help="test_set.json 路径（Tier 1 必需：提供 split 和 expected_steps）")
+  analyze_experiment.py:763:    parser.add_argument("--arm-a", default="A", help="A 组标签 (默认: A)")
+  analyze_experiment.py:764:    parser.add_argument("--arm-b", default="B", help="B 组标签 (默认: B)")
+> analyze_experiment.py:765:    parser.add_argument("--rater-primary", default="rater_human",
+> analyze_experiment.py:766:                        help="主评分者标签 (默认: rater_human)")
+> analyze_experiment.py:767:    parser.add_argument("--rater-secondary", default="rater_codex",
+> analyze_experiment.py:768:                        help="第二评分者标签 (默认: rater_codex)")
+  analyze_experiment.py:769:    parser.add_argument("--categories", nargs="*", default=None,
+  analyze_experiment.py:770:                        help="分层分析的类别列表 (如: off_by_one null_pointer)")
+  analyze_experiment.py:775:    args = parser.parse_args()
+  analyze_experiment.py:776:
+> analyze_experiment.py:777:    # Tier 1 强制要求 --test-set
+> analyze_experiment.py:778:    if args.tier >= 1 and not args.test_set:
+> analyze_experiment.py:779:        print("错误: Tier 1 需要 --test-set 参数来过滤 train/test split")
+> analyze_experiment.py:780:        print("用法: python analyze_experiment.py scores.csv --tier 1 --test-set test_set.jso
+n")
+  analyze_experiment.py:781:        sys.exit(1)
+  analyze_experiment.py:782:
+  analyze_experiment.py:794:    print(f"加载 {len(rows)} 条评分记录")
+  analyze_experiment.py:795:    print(f"  Arms: {set(r['prompt_arm'] for r in rows)}")
+> analyze_experiment.py:796:    print(f"  Raters: {set(r['rater'] for r in rows)}")
+  analyze_experiment.py:797:    print(f"  Steps: {len(set(r['step'] for r in rows))}")
+  analyze_experiment.py:798:
+  analyze_experiment.py:799:    # 分析
+  analyze_experiment.py:800:    result = analyze(
+> analyze_experiment.py:801:        rows, tier=args.tier,
+  analyze_experiment.py:802:        arm_a=args.arm_a, arm_b=args.arm_b,
+> analyze_experiment.py:803:        rater_primary=args.rater_primary,
+> analyze_experiment.py:804:        rater_secondary=args.rater_secondary,
+  analyze_experiment.py:805:        test_set_path=args.test_set,
+  analyze_experiment.py:806:        categories=args.categories,
+  analyze_experiment.py:841:        "",
+  analyze_experiment.py:842:        f"> 分析时间: {result['meta']['analyzed_at'][:19]}",
+> analyze_experiment.py:843:        f"> Tier: {result['meta']['tier']}",
+  analyze_experiment.py:844:        f"> 配对数: {desc['n_pairs']}",
+  analyze_experiment.py:845:        "",
+
+
+
+codex
+关键文本现在可读。接下来我会跑 C1 的复现命令，并检查源复盘文件是否在当前仓库或被忽略文件中；如果源文件不在工作区，只能基于当前文件的自称来源和可见证据说明限制。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'examples/minimal/scoresheet.csv' | ForEach-Object { '{0,4}: {1}' -f "'$i, $_; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'methodology/lessons-learned.md' | ForEach-Object { if("'$i -ge 39 -and $i -le 52){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg --files -uu | rg 'retrospect_a2_a3_combined|retrospect|combined|a2_a3'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'sop.md' | ForEach-Object { if(("'$i -ge 55 -and $i -le 76) -or ($i -ge 160 -and $i -le 181)){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'examples/a3-action-routing/README.md' | ForEach-Object { if("'$i -ge 62 -and $i -le 68){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+ succeeded in 200ms:
+   1: case_id,prompt_arm,rater,step,presence,correctness,note
+   2: toy_001,A,rater_human,step_check_config,1,1,
+   3: toy_001,A,rater_human,step_validate_input,1,1,
+   4: toy_001,A,rater_codex,step_check_config,1,1,
+   5: toy_001,A,rater_codex,step_validate_input,1,0,"rater_codex disagreed"
+   6: toy_001,B,rater_human,step_check_config,1,1,
+   7: toy_001,B,rater_human,step_validate_input,1,1,
+   8: toy_001,B,rater_codex,step_check_config,1,1,
+   9: toy_001,B,rater_codex,step_validate_input,1,1,
+  10: toy_002,A,rater_human,step_check_config,0,0,"missed entirely"
+  11: toy_002,A,rater_human,step_validate_input,1,1,
+  12: toy_002,A,rater_codex,step_check_config,1,1,
+  13: toy_002,A,rater_codex,step_validate_input,1,1,
+  14: toy_002,B,rater_human,step_check_config,1,1,
+  15: toy_002,B,rater_human,step_validate_input,1,0,
+  16: toy_002,B,rater_codex,step_check_config,1,1,
+  17: toy_002,B,rater_codex,step_validate_input,1,1,
+
+ succeeded in 216ms:
+  39: 以下缺失模式是 A2+A3 复盘经 Codex GPT-5.5 魔鬼代言人式对抗验证后识别的——不是"实验做错了什么"，而是"系统性盲点：下一次实验应该补什么"。
+  40: 
+  41: | 编号 | 模式 | 定义（源报告原文） |
+  42: |------|------|---------|
+  43: | **PM-1** | 模型-温度组合作为普适混淆变量 | 两个实验均仅用 GPT-5.5 temp=0——格式效应的阴性结论不能推广到其他模型/温度。**经 Qwen 跨模型复现部分缓解**（A2 方向一致，Δ=−0.014），但审查行为/方法论传递/等价性验证等维度仍仅 GPT-5.5 单点 |
+  44: | **PM-2** | 实验者方法论成熟度作为跨实验的向上偏误 | A2 和 A3 的实验者（同一个人/团队）在两实验中方法论成熟度持续提升——A3 的设计质量高于 A2。这对"跨实验模式"声称构成混淆：观察到的改进是方法学成熟还是真有跨域规律？ |
+  45: | **PM-3** | 探索性 vs 确认性框架的持续模糊 | Tier 0 本质是探索性（生成假设），Tier 1 是确认性（检验假设）——但实验报告未明确区分两者的推断逻辑和结论语言 |
+  46: | **PM-4** | 测试集规模×效应量检测的灵敏度关系 | 未分析测试集规模和项目区分度对统计功效的联合影响——只知道"n=4 不够"，但不知道"需要多少" |
+  47: | **PM-5** | 评分/分析工具自身的实现有效性需要预审 | A3 的评分 bug（acceptable_paths 双重使用 + meta action 惩罚）在收集后才被发现——评分脚本应该和实验设计一样经过预审 |
+  48: | **PM-6** | 独立审查自身的误判风险未被充分讨论 | 复盘经 10 轮异后端审查——但审查者之间的分歧、审查衰减、审查者的系统性盲点本身未被分析。审查不是神的视角 |
+  49: 
+  50: *来源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（经 Codex GPT-5.5 R1+R2 闭合验证）*
+  51: 
+  52: ---
+
+2026-07-01T09:06:49.983546Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.3 seconds
+Output:
+
+ exited 1 in 289ms:
+2026-07-01T09:06:49.997017Z ERROR codex_core::tools::router: error=Exit code: 1
+Wall time: 0.2 seconds
+Output:
+
+ exited 1 in 248ms:
+ succeeded in 185ms:
+  62: ## 关键教训
+  63: 
+  64: 1. **不是所有实验都能检验假设**：当实验设计无法创造检测空间时，继续追加样本是浪费——诚实地闭合比"做出显著结果"更有价值
+  65: 2. **尸检比结果更重要**：A3 的价值不在 Δ=0，而在识别出 4 个根因（天花板 / DV 选择 / GT 缺失 / underpowered）
+  66: 3. **Pilot 的止损价值**：A3 v2 设计经审查发现 DV 退化——如果 v2 被执行了，浪费的是 5 倍的 API 调用 + 评分 + 审查时间
+  67: 
+  68: ---
+
+ succeeded in 198ms:
+  55: 
+  56: ---
+  57: 
+  58: ## §3 工程门 vs 科学门
+  59: 
+  60: 对照实验有两道独立门——混淆两者是实验设计最常见的错误。
+  61: 
+  62: ### 工程门（Engineering Gate）
+  63: 
+  64: **判什么**: 工具链是否可用？  
+  65: **通过标准**: 数据收集无异常 + 评分脚本运行正确 + manifest 完整性校验通过  
+  66: **失败后**: 修复工具链 → 重新收集（工程门失败不影响科学结论——这是管道问题，不是假设问题）
+  67: 
+  68: ### 科学门（Science Gate）
+  69: 
+  70: **判什么**: 假设是否被支持？  
+  71: **通过标准**: 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 + 评分者一致性达标（Cohen's κ ≥ 0.4 或 discordant 率 < 25%）（四项 **全部**）  
+  72: **失败后**: 诚实记录——阴性结果 ≠ 实验失败。A2/A3 科学门全部 FAIL，但仍然产出了有价值的阴性证据和方法论资产
+  73: 
+  74: > **关键教训**：**工程门 PASS + 科学门 FAIL = 有效阴性证据**。成熟度标注为 [E-]（ceiling-limited）而非 [E]，但仍然是可发表的诚实结论。
+  75: 
+  76: ---
+ 160: **处理**: 诚实标注 [E-] ceiling-limited —— 这是有效结论，不是失败
+ 161: 
+ 162: ### 8.2 IV 污染
+ 163: **现象**: 对照组的 prompt 信息量不等价 → 检测到的是信息量效应，不是格式效应  
+ 164: **检测**: CK4 INVENTORY 等价协议  
+ 165: **处理**: 修正 prompt 直到等价 → 重新冻结
+ 166: 
+ 167: ### 8.3 评分者分歧
+ 168: **现象**: 两个 LLM 评分者对同一 case 给出不同评分  
+ 169: **检测**: Cohen's κ < 0.4 或 discordant 率高  
+ 170: **处理**: 采用保守评分策略（取较低分）；已知局限——LLM-LLM 评分 ≠ 人类评分准确性
+ 171: 
+ 172: ### 8.4 HARKing
+ 173: **现象**: 看到结果后调整假设  
+ 174: **检测**: .lock 文件的 git commit 时间戳在实验执行之前  
+ 175: **处理**: 预注册锁 + 科学门四项全 PASS 才能声明"支持 H1"
+ 176: 
+ 177: ### 8.5 DV 退化（A3v2 教训）
+ 178: **现象**: 实验迭代中 DV 选择逐步退化——从最初的构造效度关切，到后续版本中退化为"能拿到数据就行"  
+ 179: **检测**（A3v2 审查发现的四个设计门禁，Codex + Qwen 双后端共识）：
+ 180: 1. **构造效度门**：DV 是否真正测量了假设指定的构念？（A3v2: accuracy 退化为0/1，丢失了路由决策的"质量"维度）
+ 181: 2. **格式×数量混淆门**：A/B 组 prompt 的格式差异是否与信息量差异正交？（A3v2: 声明式格式天然产生更多结构化字段，格式和信息量不可分）
+
+codex
+C1 的命令返回码是 1，不是通过状态；我会再用 UTF-8 输出和 stderr 合并跑一次，确认是分析逻辑报错还是 Windows 控制台编码导致的运行失败。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$env:PYTHONIOENCODING='"'utf-8'; python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0 2>&1; Write-Output \"EXIT="'$LASTEXITCODE"' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'examples/a2-prep-exec-post/README.md' | ForEach-Object { if("'$i -ge 30 -and $i -le 50){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'requirements.txt' | ForEach-Object { '{0,4}: {1}' -f "'$i, $_; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'examples/a3-action-routing/README.md' | ForEach-Object { if("'$i -ge 68 -and $i -le 75){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'sop.md' | ForEach-Object { if("'$i -ge 180 -and $i -le 184){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+ succeeded in 172ms:
+  30: 
+  31: ### 工程门: PASS ✅
+  32: 数据收集正常、评分脚本正确、manifest 完整。
+  33: 
+  34: ### 科学门: FAIL ❌
+  35: 
+  36: > **注**：以下数字均为 test-set-only（n_test=12/臂）。源实验使用 train/test 分层分割，train 仅用于 prompt 迭代，test 用于假设检验。
+  37: 
+  38: | 门 | 结果 |
+  39: |----|------|
+  40: | 统计显著 | FAIL（n_nonzero=4 < 5，Wilcoxon 功效不足） |
+  41: | 效应量 | Δ=0.019（远低于最小兴趣阈值） |
+  42: | 方向一致 | FAIL（A=0.954 > B=0.935，方向与 H1 相反） |
+  43: | 评分者一致性 | FAIL（κ 未达阈值，exec_severity 维度不一致率 37.5%） |
+  44: 
+  45: **整体**: 格式效应在 GPT-5.5 temp=0 代码审查域不可检测。成熟度 [E-] ceiling-limited。
+  46: 
+  47: ### Qwen 跨模型复现
+  48: - Qwen3.7-Max 复现：A=0.806, B=0.792, Δ=−0.014
+  49: - 方向一致（均为阴性），presence 天花板复现
+  50: 
+
+ succeeded in 173ms:
+   1: scipy>=1.10
+
+ succeeded in 293ms:
+EXIT=9009
+
+ succeeded in 175ms:
+  68: ---
+  69: 
+  70: ## 数据文件
+  71: 
+  72: Pilot 阶段评分数据（15 cases × 2 arms）保留在源仓库 `tests/pocketflow_assets/a3_action_routing/pilot/scores/`。当前公开版本不直接纳入——A3 的定位是反例案例，教学重点在尸检分析和闭合决策过程，而非数据复现。如需完整数据可查阅源仓库。
+  73: 
+  74: ---
+  75: 
+
+ succeeded in 172ms:
+ 180: 1. **构造效度门**：DV 是否真正测量了假设指定的构念？（A3v2: accuracy 退化为0/1，丢失了路由决策的"质量"维度）
+ 181: 2. **格式×数量混淆门**：A/B 组 prompt 的格式差异是否与信息量差异正交？（A3v2: 声明式格式天然产生更多结构化字段，格式和信息量不可分）
+ 182: 3. **天花板逃脱门**：新的实验设计是否创造了比上一轮更大的检测空间？（A3v2: DV 退化后检测空间反而更小）
+ 183: 4. **效应量可解释门**：如果检测到 Δ，它是什么意思？（A3v2: 无法区分"格式效应"和"声明式格式附带的结构信息效应"）
+ 184: 
+
+codex
+`python` 在这个环境里没有解析到可执行文件（`EXIT=9009`），所以我不能把它当成脚本自身崩溃来判 C1。接下来我会查可用 Python 启动器，用实际解释器再跑同一脚本。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Command python -ErrorAction SilentlyContinue | Format-List *' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Command py -ErrorAction SilentlyContinue | Format-List *' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'where.exe python 2>$null; Write-Output "where_python_exit=$LASTEXITCODE"' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'Get-Command python3 -ErrorAction SilentlyContinue | Format-List *' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'where.exe py 2>$null; Write-Output "where_py_exit=$LASTEXITCODE"' in <project>
+ succeeded in 235ms:
+
+
+HelpUri            : 
+FileVersionInfo    : File:             <user-home>\AppData\Local\Microsoft\WindowsApps\python.exe
+                     InternalName:     
+                     OriginalFilename: 
+                     FileVersion:      
+                     FileDescription:  
+                     Product:          
+                     ProductVersion:   
+                     Debug:            False
+                     Patched:          False
+                     PreRelease:       False
+                     PrivateBuild:     False
+                     SpecialBuild:     False
+                     Language:         
+                     
+Path               : <user-home>\AppData\Local\Microsoft\WindowsApps\python.exe
+Extension          : .exe
+Definition         : <user-home>\AppData\Local\Microsoft\WindowsApps\python.exe
+Source             : <user-home>\AppData\Local\Microsoft\WindowsApps\python.exe
+Version            : 0.0.0.0
+Visibility         : Public
+OutputType         : {System.String}
+Name               : python.exe
+CommandType        : Application
+ModuleName         : 
+Module             : 
+RemotingCapability : PowerShell
+Parameters         : 
+ParameterSets      : 
+
+
+
+
+ succeeded in 238ms:
+
+
+HelpUri            : 
+FileVersionInfo    : File:             <user-home>\AppData\Local\Programs\Python\Launcher\py.exe
+                     InternalName:     Python Launcher
+                     OriginalFilename: py.exe
+                     FileVersion:      3.14.4
+                     FileDescription:  Python
+                     Product:          Python
+                     ProductVersion:   3.14.4
+                     Debug:            False
+                     Patched:          False
+                     PreRelease:       False
+                     PrivateBuild:     False
+                     SpecialBuild:     False
+                     Language:         Language Neutral
+                     
+Path               : <user-home>\AppData\Local\Programs\Python\Launcher\py.exe
+Extension          : .exe
+Definition         : <user-home>\AppData\Local\Programs\Python\Launcher\py.exe
+Source             : <user-home>\AppData\Local\Programs\Python\Launcher\py.exe
+Version            : 3.14.4150.1013
+Visibility         : Public
+OutputType         : {System.String}
+Name               : py.exe
+CommandType        : Application
+ModuleName         : 
+Module             : 
+RemotingCapability : PowerShell
+Parameters         : 
+ParameterSets      : 
+
+
+
+
+ succeeded in 237ms:
+
+
+HelpUri            : 
+FileVersionInfo    : File:             <user-home>\AppData\Local\Microsoft\WindowsApps\python3.exe
+                     InternalName:     
+                     OriginalFilename: 
+                     FileVersion:      
+                     FileDescription:  
+                     Product:          
+                     ProductVersion:   
+                     Debug:            False
+                     Patched:          False
+                     PreRelease:       False
+                     PrivateBuild:     False
+                     SpecialBuild:     False
+                     Language:         
+                     
+Path               : <user-home>\AppData\Local\Microsoft\WindowsApps\python3.exe
+Extension          : .exe
+Definition         : <user-home>\AppData\Local\Microsoft\WindowsApps\python3.exe
+Source             : <user-home>\AppData\Local\Microsoft\WindowsApps\python3.exe
+Version            : 0.0.0.0
+Visibility         : Public
+OutputType         : {System.String}
+Name               : python3.exe
+CommandType        : Application
+ModuleName         : 
+Module             : 
+RemotingCapability : PowerShell
+Parameters         : 
+ParameterSets      : 
+
+
+
+
+ succeeded in 262ms:
+<user-home>\AppData\Local\Programs\Python\Launcher\py.exe
+where_py_exit=0
+
+ succeeded in 266ms:
+<user-home>\AppData\Local\Microsoft\WindowsApps\python.exe
+E:\1\python3.12.7\python.exe
+E:\1\python3.6.8\python.exe
+E:\workspace\python\python.exe
+where_python_exit=0
+
+codex
+当前机器的 `python` 是 Windows Store alias，不能代表仓库命令本身。为了判定修复是否解决数据/脚本问题，我会用已安装的 `py` 启动器执行同一脚本路径和参数。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$env:PYTHONIOENCODING='"'utf-8'; py analyze_experiment.py examples/minimal/scoresheet.csv --tier 0 2>&1; Write-Output \"EXIT="'$LASTEXITCODE"' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'py -0p' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'analyze_experiment.py' | ForEach-Object { if("'$i -ge 754 -and $i -le 768){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'analyze_experiment.py' | ForEach-Object { if("'$i -ge 500 -and $i -le 504){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+ succeeded in 169ms:
+ -V:3.14.0 *      E:\1\python\python.exe
+ -V:3.14          E:\workspace\python\python.exe
+ -V:3.12          E:\1\python3.12.7\python.exe
+ -V:3.7           E:\1\python3.7.0\python.exe
+ -V:3.6           E:\1\python3.6.8\python.exe
+
+ succeeded in 197ms:
+ 754: def main():
+ 755:     parser = argparse.ArgumentParser(
+ 756:         description="实验分析脚本 — 读取双评分者 scoresheet.csv，输出配对比较和 κ。",
+ 757:     )
+ 758:     parser.add_argument("scoresheet", help="scoresheet.csv 路径")
+ 759:     parser.add_argument("--tier", "-t", type=int, default=0, choices=[0, 1],
+ 760:                         help="分析层级: 0=仅描述性, 1=含 Wilcoxon+bootstrap+sign_test+κ (默认: 0)")
+ 761:     parser.add_argument("--test-set", default=None,
+ 762:                         help="test_set.json 路径（Tier 1 必需：提供 split 和 expected_steps）")
+ 763:     parser.add_argument("--arm-a", default="A", help="A 组标签 (默认: A)")
+ 764:     parser.add_argument("--arm-b", default="B", help="B 组标签 (默认: B)")
+ 765:     parser.add_argument("--rater-primary", default="rater_human",
+ 766:                         help="主评分者标签 (默认: rater_human)")
+ 767:     parser.add_argument("--rater-secondary", default="rater_codex",
+ 768:                         help="第二评分者标签 (默认: rater_codex)")
+
+ succeeded in 192ms:
+ 500: def analyze(rows: list[dict], tier: int = 0,
+ 501:             arm_a: str = "A", arm_b: str = "B",
+ 502:             rater_primary: str = "rater_human",
+ 503:             rater_secondary: str = "rater_codex",
+ 504:             test_set_path: Optional[str] = None,
+
+ succeeded in 258ms:
+EXIT=101
+py : Unable to create process using 'E:\1\python\python.exe analyze_experiment.py examples/minimal/scoresheet.csv --tie
+r 0': ???????????
+At line:2 char:32
++ ... NG='utf-8'; py analyze_experiment.py examples/minimal/scoresheet.csv  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Unable to creat...0': ???????????:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+
+codex
+`py` 默认指向一个不可创建进程的 3.14 路径；可用解释器列表里有 3.12。我会固定 `py -3.12` 复跑，以排除启动器默认配置问题。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$env:PYTHONIOENCODING='"'utf-8'; py -3.12 analyze_experiment.py examples/minimal/scoresheet.csv --tier 0 2>&1; Write-Output \"EXIT="'$LASTEXITCODE"' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "E:\\1\\python3.12.7\\python.exe --version" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$env:PYTHONIOENCODING='"'utf-8'; E:\\1\\python3.12.7\\python.exe analyze_experiment.py examples/minimal/scoresheet.csv --tier 0 2>&1; Write-Output \"EXIT="'$LASTEXITCODE"' in <project>
+ succeeded in 128ms:
+Python 3.12.7
+
+ succeeded in 260ms:
+加载 16 条评分记录
+  Arms: {'A', 'B'}
+  Raters: {'rater_codex', 'rater_human'}
+  Steps: 2
+
+============================================================
+  实验分析报告
+  Tier: 0
+  分析时间: 2026-07-01T09:07:48
+============================================================
+
+  配对样本数: 2
+  A 组平均 coverage: 0.750
+  B 组平均 coverage: 1.000
+  中位数 Δ: +0.250
+  方向: 1 例 B 更优 / 0 例 A 更优 / 1 例持平
+
+  Per-case:
+  Case                        A        B        Δ
+  --------------------------------------------
+  toy_001                 1.000    1.000   +0.000
+  toy_002                 0.500    1.000   +0.500
+
+  Cohen's κ (评分者间信度):
+  步骤数: 2, 有效 κ 数: 1, 不可估计: 1
+  平均 κ: 0.000
+  备注: 有 undefined κ (degenerate marginals)，已从 pass_threshold 中排除
+  κ ≥ 0.6: [FAIL] — rubric 需重设计或 undefined κ 需人工审查
+
+  Correctness rate (次因变量):
+  A 组: 1.000  B 组: 0.750  Δ: -0.250
+
+  ────────────────────────────────────────────────────────────
+  判定逻辑（对照 §9 分析计划）:
+  1. 方向一致性: [PASS]
+  2. κ ≥ 0.6:    [FAIL]
+
+  JSON 已保存: examples\minimal\analysis_scoresheet.json
+EXIT=0
+
+ succeeded in 206ms:
+加载 16 条评分记录
+  Arms: {'A', 'B'}
+  Raters: {'rater_human', 'rater_codex'}
+  Steps: 2
+
+============================================================
+  实验分析报告
+  Tier: 0
+  分析时间: 2026-07-01T09:07:49
+============================================================
+
+  配对样本数: 2
+  A 组平均 coverage: 0.750
+  B 组平均 coverage: 1.000
+  中位数 Δ: +0.250
+  方向: 1 例 B 更优 / 0 例 A 更优 / 1 例持平
+
+  Per-case:
+  Case                        A        B        Δ
+  --------------------------------------------
+  toy_001                 1.000    1.000   +0.000
+  toy_002                 0.500    1.000   +0.500
+
+  Cohen's κ (评分者间信度):
+  步骤数: 2, 有效 κ 数: 1, 不可估计: 1
+  平均 κ: 0.000
+  备注: 有 undefined κ (degenerate marginals)，已从 pass_threshold 中排除
+  κ ≥ 0.6: [FAIL] — rubric 需重设计或 undefined κ 需人工审查
+
+  Correctness rate (次因变量):
+  A 组: 1.000  B 组: 0.750  Δ: -0.250
+
+  ────────────────────────────────────────────────────────────
+  判定逻辑（对照 §9 分析计划）:
+  1. 方向一致性: [PASS]
+  2. κ ≥ 0.6:    [FAIL]
+
+  JSON 已保存: examples\minimal\analysis_scoresheet.json
+EXIT=0
+
+codex
+脚本验证成功，但运行时生成了 `examples/minimal/analysis_scoresheet.json`。我会检查它是否是本次新增产物；如果是，我会清理掉，避免审查过程改动工作区。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git ls-files --error-unmatch examples/minimal/analysis_scoresheet.json 2>$null; Write-Output "tracked_exit=$LASTEXITCODE"' in <project>
+ succeeded in 138ms:
+?? _reviews/codex_r2_output.txt
+?? _reviews/prompts/codex_r2_prompt.md
+?? examples/minimal/analysis_scoresheet.json
+
+ succeeded in 169ms:
+tracked_exit=1
+
+codex
+`analysis_scoresheet.json` 是本次运行新增且未跟踪；另外两个 `_reviews` 文件是已有未跟踪项，我不会碰。现在只清理我刚生成的分析输出。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Remove-Item -LiteralPath 'examples/minimal/analysis_scoresheet.json'" in <project>
+ succeeded in 127ms:
+codex
+我还会做两项收尾核对：确认清理后工作区没有我留下的新文件，并用搜索确认 README 是否仍提到 `scoresheet.csv`、依赖声明是否和实际 import 对齐。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n \"scoresheet\\.csv|scoresheet\" examples/a3-action-routing/README.md examples/a2-prep-exec-post/README.md requirements.txt analyze_experiment.py" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg -n "''^import |''^from " analyze_experiment.py' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'examples/a2-prep-exec-post/README.md' | ForEach-Object { if("'$i -ge 70 -and $i -le 78){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+ succeeded in 152ms:
+30:import argparse
+31:import csv
+32:import json
+33:import statistics
+34:import sys
+35:from collections import defaultdict
+36:from datetime import datetime, timezone
+37:from pathlib import Path
+38:from typing import Optional
+
+ succeeded in 165ms:
+examples/a2-prep-exec-post/README.md:65:- [`scoresheet.csv`](scoresheet.csv) — 双评分者评分数据
+examples/a2-prep-exec-post/README.md:71:python analyze_experiment.py scoresheet.csv --tier 0
+examples/a2-prep-exec-post/README.md:72:python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
+analyze_experiment.py:5:读取双评分者多标签打分 (scoresheet.csv)，输出配对比较、效应量、Cohen's κ。
+analyze_experiment.py:9:    python analyze_experiment.py scores/scoresheet.csv --tier 0
+analyze_experiment.py:12:    python analyze_experiment.py scores/scoresheet.csv --tier 1
+analyze_experiment.py:15:    python analyze_experiment.py scores/scoresheet.csv --tier 1 -o analysis/analysis_output.json
+analyze_experiment.py:17:输入格式 (scoresheet.csv):
+analyze_experiment.py:45:def load_scoresheet(path: str) -> list[dict]:
+analyze_experiment.py:558:                f"请确保 scoresheet 包含所有 case × arm × rater × step 组合。"
+analyze_experiment.py:756:        description="实验分析脚本 — 读取双评分者 scoresheet.csv，输出配对比较和 κ。",
+analyze_experiment.py:758:    parser.add_argument("scoresheet", help="scoresheet.csv 路径")
+analyze_experiment.py:784:    path = Path(args.scoresheet)
+analyze_experiment.py:789:    rows = load_scoresheet(str(path))
+analyze_experiment.py:791:        print("错误: scoresheet 为空")
+
+ succeeded in 177ms:
+?? _reviews/codex_r2_output.txt
+?? _reviews/prompts/codex_r2_prompt.md
+
+ succeeded in 180ms:
+  70: ```bash
+  71: python analyze_experiment.py scoresheet.csv --tier 0
+  72: python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
+  73: ```
+  74: 
+  75: ---
+  76: 
+  77: *原始实验执行: 2026-06-17 ~ 2026-06-20 · 源仓库: prompt-tdd*
+
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'rg -n "scipy|numpy|pandas|matplotlib|statsmodels" analyze_experiment.py requirements.txt -S' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'analyze_experiment.py' | ForEach-Object { if("'$i -ge 170 -and $i -le 220){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath 'examples/a3-action-routing' -Force | Select-Object Name,Length,Mode | Format-Table -AutoSize" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath 'examples/a2-prep-exec-post' -Force | Select-Object Name,Length,Mode | Format-Table -AutoSize" in <project>
+ succeeded in 160ms:
+requirements.txt:1:scipy>=1.10
+analyze_experiment.py:26:    pip install numpy scipy
+analyze_experiment.py:172:    """配对 Wilcoxon signed-rank 检验。需要 scipy。"""
+analyze_experiment.py:174:        from scipy.stats import wilcoxon
+analyze_experiment.py:186:        # scipy 的 wilcoxon 可能返回多种格式
+analyze_experiment.py:198:            "error": "scipy 未安装。安装: pip install scipy",
+
+ succeeded in 194ms:
+ 170: 
+ 171: def wilcoxon_signed_rank(deltas: list[float]) -> dict:
+ 172:     """配对 Wilcoxon signed-rank 检验。需要 scipy。"""
+ 173:     try:
+ 174:         from scipy.stats import wilcoxon
+ 175:         # 过滤 delta=0 的 tied pairs
+ 176:         nonzero = [d for d in deltas if d != 0]
+ 177:         if len(nonzero) < 5:
+ 178:             return {
+ 179:                 "test": "Wilcoxon signed-rank",
+ 180:                 "statistic": None,
+ 181:                 "p_value": None,
+ 182:                 "n_nonzero": len(nonzero),
+ 183:                 "warning": "非零差值对 < 5，统计功效不足，仅报告描述性结果",
+ 184:             }
+ 185:         stat, p = wilcoxon(nonzero)
+ 186:         # scipy 的 wilcoxon 可能返回多种格式
+ 187:         if hasattr(p, 'pvalue'):
+ 188:             p = p.pvalue
+ 189:         return {
+ 190:             "test": "Wilcoxon signed-rank",
+ 191:             "statistic": float(stat) if hasattr(stat, '__float__') else stat,
+ 192:             "p_value": float(p) if hasattr(p, '__float__') else p,
+ 193:             "n_nonzero": len(nonzero),
+ 194:         }
+ 195:     except ImportError:
+ 196:         return {
+ 197:             "test": "Wilcoxon signed-rank",
+ 198:             "error": "scipy 未安装。安装: pip install scipy",
+ 199:         }
+ 200: 
+ 201: 
+ 202: def bootstrap_median_ci(deltas: list[float], n_bootstrap: int = 10000,
+ 203:                         ci_level: float = 0.95) -> dict:
+ 204:     """Bootstrap 中位数差值置信区间。"""
+ 205:     import random
+ 206:     random.seed(42)
+ 207: 
+ 208:     n = len(deltas)
+ 209:     if n < 5:
+ 210:         return {"error": "样本量 < 5，不执行 bootstrap"}
+ 211: 
+ 212:     medians = []
+ 213:     for _ in range(n_bootstrap):
+ 214:         sample = [random.choice(deltas) for _ in range(n)]
+ 215:         medians.append(statistics.median(sample))
+ 216: 
+ 217:     medians.sort()
+ 218:     alpha = (1 - ci_level) / 2
+ 219:     lo_idx = int(alpha * n_bootstrap)
+ 220:     hi_idx = int((1 - alpha) * n_bootstrap)
+
+ succeeded in 207ms:
+
+Name      Length Mode  
+----      ------ ----  
+README.md   3224 -a----
+
+
+
+ succeeded in 195ms:
+
+Name           Length Mode  
+----           ------ ----  
+prompt_A.md       481 -a----
+prompt_B.md       485 -a----
+README.md        2755 -a----
+scoresheet.csv  49449 -a----
+test_set.json   39690 -a----
+
+
+
+codex
+C2 需要源报告 §4.3 的原文。当前仓库没有 `retrospect_a2_a3_combined.md` 文件名命中；我会在所有文本里搜 PM 编号和 §4.3，看是否源摘录被放进审查输出或其他文件。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n -uu \"PM-1|PM-2|PM-3|PM-4|PM-5|PM-6|模型-温度|实验者方法论|探索性 vs|测试集规模|评分/分析工具|独立审查自身|§4\\.3|4\\.3\"" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath '_reviews/codex_r2_output.txt' | Select-Object -First 200" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Get-Content -Encoding UTF8 -LiteralPath '_reviews/qwen_crosscheck_v0.1_output.txt' | Select-Object -First 220" in <project>
+ succeeded in 166ms:
+en\sop.md:96:### 4.3 Operation
+.qwen\skills\auto-skill-derivative-repo-review\SKILL.md:39:| **Naming drift** | Labels/IDs the derivative reuses (e.g. `PM-1`, `CK-4`, section numbers) | Derivative renumbers source's `PM-1..PM-6` to mean different things — reader cross-referencing the source gets confused |
+.qwen\skills\auto-skill-derivative-repo-review\SKILL.md:88:- Numbered lists (PM-1..N, CK-1..N, MF-1..N) — does the derivative's item N mean the same as source's item N?
+.qwen\skills\auto-skill-derivative-repo-review\SKILL.md:89:- Section references (`see §4.3`) — does the derivative's §4.3 match the source's §4.3 content?
+en\methodology\lessons-learned.md:37:## Six Missing Patterns (PM-1~PM-6, from Adversarial Validation in Source Retrospective §4.3)
+en\methodology\lessons-learned.md:43:| **PM-1** | Model-temperature combination as a universal confounder | Both experiments used only GPT-5.5 temp=0, so the negative conclusion about format effects cannot be generalized to other models/temperatures. **Partially mitigated through Qwen cross-model replication** (A2 direction consistent, Δ=−0.014), but review behavior, methodology transfer, equivalence validation, and other dimensions remain single-point GPT-5.5 only |
+en\methodology\lessons-learned.md:44:| **PM-2** | Experimenter methodology maturity as an upward cross-experiment bias | The experimenter in A2 and A3 (the same person/team) continuously improved in methodology maturity across the two experiments, and A3's design quality was higher than A2's. This confounds claims about "cross-experiment patterns": is the observed improvement due to methodological maturity, or is there a real cross-domain regularity? |
+en\methodology\lessons-learned.md:45:| **PM-3** | Persistent ambiguity between exploratory and confirmatory frames | Tier 0 is essentially exploratory (generating hypotheses), while Tier 1 is confirmatory (testing hypotheses), but the experiment reports did not clearly distinguish their inferential logic or conclusion language |
+en\methodology\lessons-learned.md:46:| **PM-4** | Sensitivity relationship between test-set size and effect-size detection | The joint impact of test-set size and item discrimination on statistical power was not analyzed. We only know that "n=4 is not enough," but not "how much is needed" |
+en\methodology\lessons-learned.md:47:| **PM-5** | Implementation validity of the scoring/analysis tools requires pre-review | A3's scoring bug (double use of acceptable_paths + meta action penalty) was discovered only after collection. The scoring script should undergo pre-review just like the experiment design |
+en\methodology\lessons-learned.md:48:| **PM-6** | Misjudgment risk in independent review itself was not sufficiently discussed | The retrospective went through 10 rounds of cross-backend review, but disagreements among reviewers, review decay, and reviewers' own systematic blind spots were not analyzed. Review is not a God's-eye view |
+en\methodology\lessons-learned.md:50:*Source: retrospect_a2_a3_combined.md §4.3 + §9.1-9.4 (validated through Codex GPT-5.5 R1+R2 closure)*
+methodology\lessons-learned.md:37:## 六个缺失模式（PM-1~PM-6，来自源复盘 §4.3 对抗验证）
+methodology\lessons-learned.md:43:| **PM-1** | 模型-温度组合作为普适混淆变量 | 两个实验均仅用 GPT-5.5 temp=0——格式效应的阴性结论不能推广到其他模型/温度。**经 Qwen 跨模型复现部分缓解**（A2 方向一致，Δ=−0.014），但审查行为/方法论传递/等价性验证等维度仍仅 GPT-5.5 单点 |
+methodology\lessons-learned.md:44:| **PM-2** | 实验者方法论成熟度作为跨实验的向上偏误 | A2 和 A3 的实验者（同一个人/团队）在两实验中方法论成熟度持续提升——A3 的设计质量高于 A2。这对"跨实验模式"声称构成混淆：观察到的改进是方法学成熟还是真有跨域规律？ |
+methodology\lessons-learned.md:45:| **PM-3** | 探索性 vs 确认性框架的持续模糊 | Tier 0 本质是探索性（生成假设），Tier 1 是确认性（检验假设）——但实验报告未明确区分两者的推断逻辑和结论语言 |
+methodology\lessons-learned.md:46:| **PM-4** | 测试集规模×效应量检测的灵敏度关系 | 未分析测试集规模和项目区分度对统计功效的联合影响——只知道"n=4 不够"，但不知道"需要多少" |
+methodology\lessons-learned.md:47:| **PM-5** | 评分/分析工具自身的实现有效性需要预审 | A3 的评分 bug（acceptable_paths 双重使用 + meta action 惩罚）在收集后才被发现——评分脚本应该和实验设计一样经过预审 |
+methodology\lessons-learned.md:48:| **PM-6** | 独立审查自身的误判风险未被充分讨论 | 复盘经 10 轮异后端审查——但审查者之间的分歧、审查衰减、审查者的系统性盲点本身未被分析。审查不是神的视角 |
+methodology\lessons-learned.md:50:*来源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（经 Codex GPT-5.5 R1+R2 闭合验证）*
+_reviews\qwen_crosscheck_v0.1_output.txt:35:**核心问题 2 个 CRITICAL**：① quick-start 命令因 rater 默认值与 minimal CSV 不匹配会 `ZeroDivisionError` 崩溃；② `lessons-learned.md` 的 PM-1~PM-6 编号与源 retrospect §4.3 **定义完全不同**（重写了一套），读者交叉阅读会陷入命名混乱。
+_reviews\prompts\codex_r2_prompt.md:13:- C2: methodology/lessons-learned.md 的 PM-1~PM-6 是否与源报告 retrospect_a2_a3_combined.md §4.3 一致（不再是用错的编号定义）？
+_reviews\codex_r2_output.txt:26:- C2: methodology/lessons-learned.md 的 PM-1~PM-6 是否与源报告 retrospect_a2_a3_combined.md §4.3 一致（不再是用错的编号定义）？
+_reviews\codex_r2_output.txt:112:## 鍏釜缂哄け妯″紡锛圥M-1~PM-6锛屾潵鑷簮澶嶇洏 搂4.3 瀵规姉楠岃瘉锛?
+_reviews\codex_r2_output.txt:116:| **PM-1** | 妯″瀷-娓╁害缁勫悎浣滀负鏅€傛贩娣嗗彉閲?| 涓や釜瀹為獙鍧囦粎鐢?GPT-5.5 temp=0鈥斺€旀牸寮忔晥搴旂殑闃存€х粨璁轰笉鑳芥帹骞垮埌鍏朵粬妯″瀷/娓╁害銆?*缁?Qwen 璺ㄦā鍨嬪鐜伴儴鍒嗙紦瑙?*锛圓2 鏂瑰悜涓€鑷达紝螖=鈭?.014锛夛紝浣嗗鏌ヨ涓?鏂规硶璁轰紶閫?绛変环鎬ч獙璇佺瓑缁村害浠嶄粎 GPT-5.5 鍗曠偣 |
+_reviews\codex_r2_output.txt:117:| **PM-2** | 瀹為獙鑰呮柟娉曡鎴愮啛搴︿綔涓鸿法瀹為獙鐨勫悜涓婂亸璇?| A2 鍜?A3 鐨勫疄楠岃€咃紙鍚屼竴涓汉/鍥㈤槦锛夊湪涓ゅ疄楠屼腑鏂规硶璁烘垚鐔熷害鎸佺画鎻愬崌鈥斺€擜3 鐨勮璁¤川閲忛珮浜?A2銆傝繖瀵?璺ㄥ疄楠屾ā寮?澹扮О鏋勬垚娣锋穯锛氳瀵熷埌鐨勬敼杩涙槸鏂规硶瀛︽垚鐔熻繕鏄湡鏈夎法鍩熻寰嬶紵 |
+_reviews\codex_r2_output.txt:118:| **PM-3** | 鎺㈢储鎬?vs 纭鎬ф鏋剁殑鎸佺画妯＄硦 | Tier 0 鏈川鏄帰绱㈡€э紙鐢熸垚鍋囪锛夛紝Tier 1 鏄‘璁ゆ€э紙妫€楠屽亣璁撅級鈥斺€斾絾瀹為獙鎶ュ憡鏈槑纭尯鍒嗕袱鑰呯殑鎺ㄦ柇閫昏緫鍜岀粨璁鸿瑷€ |
+_reviews\codex_r2_output.txt:119:| **PM-4** | 娴嬭瘯闆嗚妯∶楁晥搴旈噺妫€娴嬬殑鐏垫晱搴﹀叧绯?| 鏈垎鏋愭祴璇曢泦瑙勬ā鍜岄」鐩尯鍒嗗害瀵圭粺璁″姛鏁堢殑鑱斿悎褰卞搷鈥斺€斿彧鐭ラ亾"n=4 涓嶅"锛屼絾涓嶇煡閬?闇€瑕佸灏? |
+_reviews\codex_r2_output.txt:120:| **PM-5** | 璇勫垎/鍒嗘瀽宸ュ叿鑷韩鐨勫疄鐜版湁鏁堟€ч渶瑕侀瀹?| A3 鐨勮瘎鍒?bug锛坅cceptable_paths 鍙岄噸浣跨敤 + meta action 鎯╃綒锛夊湪鏀堕泦鍚庢墠琚彂鐜扳€斺€旇瘎鍒嗚剼鏈簲璇ュ拰瀹為獙璁捐涓€鏍风粡杩囬瀹?|
+_reviews\codex_r2_output.txt:121:| **PM-6** | 鐙珛瀹℃煡鑷韩鐨勮鍒ら闄╂湭琚厖鍒嗚璁?| 澶嶇洏缁?10 杞紓鍚庣瀹℃煡鈥斺€斾絾瀹℃煡鑰呬箣闂寸殑鍒嗘銆佸鏌ヨ“鍑忋€佸鏌ヨ€呯殑绯荤粺鎬х洸鐐规湰韬湭琚垎鏋愩€傚鏌ヤ笉鏄鐨勮瑙?|
+_reviews\codex_r2_output.txt:123:*鏉ユ簮锛歳etrospect_a2_a3_combined.md 搂4.3 + 搂9.1-9.4锛堢粡 Codex GPT-5.5 R1+R2 闂悎楠岃瘉锛?
+_reviews\codex_r2_output.txt:347:### 4.3 鎿嶄綔
+_reviews\codex_r2_output.txt:474:## 六个缺失模式（PM-1~PM-6，来自源复盘 §4.3 对抗验证）
+_reviews\codex_r2_output.txt:480:| **PM-1** | 模型-温度组合作为普适混淆变量 | 两个实验均仅用 GPT-5.5 temp=0——格式效应的阴性结论不能推广到其他模型/温度。**经 Qwen 跨模型复现部分缓解**（A2 方向一致，Δ=−0.014），但审查行为/方法论传递/等价性验证等维度仍仅 GPT-5.5 单点 |
+_reviews\codex_r2_output.txt:481:| **PM-2** | 实验者方法论成熟度作为跨实验的向上偏误 | A2 和 A3 的实验者（同一个人/团队）在两实验中方法论成熟度持续提升——A3 的设计质量高于 A2。这对"跨实验模式"声称构成混淆：观察到的改进是方法学成熟还是真有跨域规律？ |
+_reviews\codex_r2_output.txt:482:| **PM-3** | 探索性 vs 确认性框架的持续模糊 | Tier 0 本质是探索性（生成假设），Tier 1 是确认性（检验假设）——但实验报告未明确区分两者的推断逻辑和结论语言 |
+_reviews\codex_r2_output.txt:483:| **PM-4** | 测试集规模×效应量检测的灵敏度关系 | 未分析测试集规模和项目区分度对统计功效的联合影响——只知道"n=4 不够"，但不知道"需要多少" |
+_reviews\codex_r2_output.txt:484:| **PM-5** | 评分/分析工具自身的实现有效性需要预审 | A3 的评分 bug（acceptable_paths 双重使用 + meta action 惩罚）在收集后才被发现——评分脚本应该和实验设计一样经过预审 |
+_reviews\codex_r2_output.txt:485:| **PM-6** | 独立审查自身的误判风险未被充分讨论 | 复盘经 10 轮异后端审查——但审查者之间的分歧、审查衰减、审查者的系统性盲点本身未被分析。审查不是神的视角 |
+_reviews\codex_r2_output.txt:487:*来源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（经 Codex GPT-5.5 R1+R2 闭合验证）*
+_reviews\codex_r2_output.txt:715:### 4.3 操作
+_reviews\codex_r2_output.txt:1224:  43: | **PM-1** | 模型-温度组合作为普适混淆变量 | 两个实验均仅用 GPT-5.5 temp=0——格式效应的阴性结论不能推广到其他模型/温度。**经 Qwen 跨模型复现部分缓解**（A2 方向一致，Δ=−0.014），但审查行为/方法论传递/等价性验证等维度仍仅 GPT-5.5 单点 |
+_reviews\codex_r2_output.txt:1225:  44: | **PM-2** | 实验者方法论成熟度作为跨实验的向上偏误 | A2 和 A3 的实验者（同一个人/团队）在两实验中方法论成熟度持续提升——A3 的设计质量高于 A2。这对"跨实验模式"声称构成混淆：观察到的改进是方法学成熟还是真有跨域规律？ |
+_reviews\codex_r2_output.txt:1226:  45: | **PM-3** | 探索性 vs 确认性框架的持续模糊 | Tier 0 本质是探索性（生成假设），Tier 1 是确认性（检验假设）——但实验报告未明确区分两者的推断逻辑和结论语言 |
+_reviews\codex_r2_output.txt:1227:  46: | **PM-4** | 测试集规模×效应量检测的灵敏度关系 | 未分析测试集规模和项目区分度对统计功效的联合影响——只知道"n=4 不够"，但不知道"需要多少" |
+_reviews\codex_r2_output.txt:1228:  47: | **PM-5** | 评分/分析工具自身的实现有效性需要预审 | A3 的评分 bug（acceptable_paths 双重使用 + meta action 惩罚）在收集后才被发现——评分脚本应该和实验设计一样经过预审 |
+_reviews\codex_r2_output.txt:1229:  48: | **PM-6** | 独立审查自身的误判风险未被充分讨论 | 复盘经 10 轮异后端审查——但审查者之间的分歧、审查衰减、审查者的系统性盲点本身未被分析。审查不是神的视角 |
+_reviews\codex_r2_output.txt:1231:  50: *来源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（经 Codex GPT-5.5 R1+R2 闭合验证）*
+_reviews\codex_r2_output.txt:1795:C2 需要源报告 §4.3 的原文。当前仓库没有 `retrospect_a2_a3_combined.md` 文件名命中；我会在所有文本里搜 PM 编号和 §4.3，看是否源摘录被放进审查输出或其他文件。
+_reviews\codex_r2_output.txt:1797:"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "rg -n -uu \"PM-1|PM-2|PM-3|PM-4|PM-5|PM-6|模型-温度|实验者方法论|探索性 vs|测试集规模|评分/分析工具|独立审查自身|§4\\.3|4\\.3\"" in <project>
+zh-Hant\sop.md:96:### 4.3 操作
+sop.md:96:### 4.3 操作
+zh-Hant\methodology\lessons-learned.md:37:## 六個缺失模式（PM-1~PM-6，來自原始復盤 §4.3 對抗驗證）
+zh-Hant\methodology\lessons-learned.md:43:| **PM-1** | 模型-溫度組合作為普適混淆變數 | 兩個實驗均僅用 GPT-5.5 temp=0——格式效應的陰性結論不能推廣到其他模型/溫度。**經 Qwen 跨模型復現部分緩解**（A2 方向一致，Δ=−0.014），但審查行為/方法論傳遞/等價性驗證等維度仍僅 GPT-5.5 單點 |
+zh-Hant\methodology\lessons-learned.md:44:| **PM-2** | 實驗者方法論成熟度作為跨實驗的向上偏誤 | A2 和 A3 的實驗者（同一個人/團隊）在兩實驗中方法論成熟度持續提升——A3 的設計品質高於 A2。這對"跨實驗模式"聲稱構成混淆：觀察到的改進是方法學成熟還是真有跨域規律？ |
+zh-Hant\methodology\lessons-learned.md:45:| **PM-3** | 探索性 vs 確認性框架的持續模糊 | Tier 0 本質是探索性（生成假設），Tier 1 是確認性（檢驗假設）——但實驗報告未明確區分兩者的推斷邏輯和結論語言 |
+zh-Hant\methodology\lessons-learned.md:46:| **PM-4** | 測試集規模×效應量檢測的靈敏度關係 | 未分析測試集規模和專案區分度對統計功效的聯合影響——只知道"n=4 不夠"，但不知道"需要多少" |
+zh-Hant\methodology\lessons-learned.md:47:| **PM-5** | 評分/分析工具自身的實現有效性需要預審 | A3 的評分 bug（acceptable_paths 雙重使用 + meta action 懲罰）在收集後才被發現——評分腳本應該和實驗設計一樣經過預審 |
+zh-Hant\methodology\lessons-learned.md:48:| **PM-6** | 獨立審查自身的誤判風險未被充分討論 | 復盤經 10 輪異後端審查——但審查者之間的分歧、審查衰減、審查者的系統性盲點本身未被分析。審查不是神的視角 |
+zh-Hant\methodology\lessons-learned.md:50:*來源：retrospect_a2_a3_combined.md §4.3 + §9.1-9.4（經 Codex GPT-5.5 R1+R2 閉合驗證）*
+
+ succeeded in 191ms:
+Warning: model.generationConfig.reasoning is ignored for provider model "qwen3.7-max" from modelProviders.openai. Move this field to modelProviders.openai[].generationConfig for that model if you want it to apply.
+Warning: running headless with --yolo / approval-mode=yolo and no sandbox. All tool calls (shell, write, edit) auto-execute at this process's privilege level. Enable a sandbox via --sandbox / QWEN_SANDBOX, or set QWEN_CODE_SUPPRESS_YOLO_WARNING=1 to silence this notice.
+<user-home>\AppData\Roaming\npm\node_modules\@qwen-code\qwen-code\node_modules\@lydell\node-pty-win32-x64\lib\conpty_console_list_agent.js:13
+var consoleProcessList = getConsoleProcessList(shellPid);
+                         ^
+
+Error: AttachConsole failed
+    at Object.<anonymous> (<user-home>\AppData\Roaming\npm\node_modules\@qwen-code\qwen-code\node_modules\@lydell\node-pty-win32-x64\lib\conpty_console_list_agent.js:13:26)
+    at Module._compile (node:internal/modules/cjs/loader:1830:14)
+    at Object..js (node:internal/modules/cjs/loader:1961:10)
+    at Module.load (node:internal/modules/cjs/loader:1553:32)
+    at Module._load (node:internal/modules/cjs/loader:1355:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.15.0
+<user-home>\AppData\Roaming\npm\node_modules\@qwen-code\qwen-code\node_modules\@lydell\node-pty-win32-x64\lib\conpty_console_list_agent.js:13
+var consoleProcessList = getConsoleProcessList(shellPid);
+                         ^
+
+Error: AttachConsole failed
+    at Object.<anonymous> (<user-home>\AppData\Roaming\npm\node_modules\@qwen-code\qwen-code\node_modules\@lydell\node-pty-win32-x64\lib\conpty_console_list_agent.js:13:26)
+    at Module._compile (node:internal/modules/cjs/loader:1830:14)
+    at Object..js (node:internal/modules/cjs/loader:1961:10)
+    at Module.load (node:internal/modules/cjs/loader:1553:32)
+    at Module._load (node:internal/modules/cjs/loader:1355:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v24.15.0
+审查完成。终判：**Major**。
+
+**核心问题 2 个 CRITICAL**：① quick-start 命令因 rater 默认值与 minimal CSV 不匹配会 `ZeroDivisionError` 崩溃；② `lessons-learned.md` 的 PM-1~PM-6 编号与源 retrospect §4.3 **定义完全不同**（重写了一套），读者交叉阅读会陷入命名混乱。
+
+**3 个 MAJOR**：A2 结果表数字未标注为 test-set-only（scope 错配）；sop.md 科学门三项 vs 源报告四项（缺 κ 门槛）且漏掉 A3v2 四门禁；`requirements.txt` 声明了代码不用的 pandas 且 A3 目录缺 README 声称存在的 scoresheet.csv。
+
+修复 P0+P1 项（约半天工作量）后可升级到 Keep 级对外发布。当前状态直接发布会让第一印象毁在"quick-start 跑不通"和"PM 编号对不上源项目"上。
+
+ succeeded in 204ms:
+Reading prompt from stdin...
+OpenAI Codex v0.142.2
+--------
+workdir: <project>
+model: gpt-5.5
+provider: packycode
+approval: never
+sandbox: danger-full-access
+reasoning effort: xhigh
+reasoning summaries: none
+session id: 019f1ced-9191-7551-a298-4a9505e567d1
+--------
+user
+你是独立审查者，对以下修复进行 R2 重审。
+
+## R1 回顾
+
+Qwen3-Max 审查 prompt-tdd-methodology v0.1-methodology。终判 Major。发现 5 项（CRITICAL×2, MAJOR×3）。
+
+## R2 任务
+
+验证以下 5 项是否已修复。每项只判：已修复/未修复/部分修复。给具体证据。
+
+CRITICAL:
+- C1: `python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0` 是否不再崩溃？minimal CSV 的 rater 名是否匹配脚本默认值（rater_human/rater_codex）？
+- C2: methodology/lessons-learned.md 的 PM-1~PM-6 是否与源报告 retrospect_a2_a3_combined.md §4.3 一致（不再是用错的编号定义）？
+
+MAJOR:
+- M1: A2 案例 README 结果数字是否标注了 test-set-only scope？
+- M2: sop.md 科学门是否从"三项"改为"四项"（加了 κ）？是否新增了 A3v2 四门禁（§8.5）？
+- M3: requirements.txt 是否只声明实际使用的依赖（scipy）？A3 README 是否不再声称有 scoresheet.csv？
+
+## 输出
+
+```
+C1: [已修复/未修复] 证据: ...
+C2: ...
+M1: ...
+M2: ...
+M3: ...
+
+R2 终判: [PASS / FAIL_WITH_CAVEATS / FAIL]
+```
+
+请先读取当前版本的以下文件：
+- examples/minimal/scoresheet.csv
+- methodology/lessons-learned.md
+- examples/a2-prep-exec-post/README.md
+- sop.md
+- requirements.txt
+- examples/a3-action-routing/README.md
+
+独立审查者后端：请自报模型名称。
+
+codex
+我会按你列的文件逐项读取当前工作区内容，然后实际跑一次 `analyze_experiment.py` 的 minimal 命令来验证 C1 行为。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/minimal/scoresheet.csv'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'methodology/lessons-learned.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/a2-prep-exec-post/README.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'sop.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'requirements.txt'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-Content -LiteralPath 'examples/a3-action-routing/README.md'" in <project>
+ succeeded in 216ms:
+case_id,prompt_arm,rater,step,presence,correctness,note
+toy_001,A,rater_human,step_check_config,1,1,
+toy_001,A,rater_human,step_validate_input,1,1,
+toy_001,A,rater_codex,step_check_config,1,1,
+toy_001,A,rater_codex,step_validate_input,1,0,"rater_codex disagreed"
+toy_001,B,rater_human,step_check_config,1,1,
+toy_001,B,rater_human,step_validate_input,1,1,
+toy_001,B,rater_codex,step_check_config,1,1,
+toy_001,B,rater_codex,step_validate_input,1,1,
+toy_002,A,rater_human,step_check_config,0,0,"missed entirely"
+toy_002,A,rater_human,step_validate_input,1,1,
+toy_002,A,rater_codex,step_check_config,1,1,
+toy_002,A,rater_codex,step_validate_input,1,1,
+toy_002,B,rater_human,step_check_config,1,1,
+toy_002,B,rater_human,step_validate_input,1,0,
+toy_002,B,rater_codex,step_check_config,1,1,
+toy_002,B,rater_codex,step_validate_input,1,1,
+
+ succeeded in 223ms:
+# 鏍稿績鏁欒锛氫袱娆￠槾鎬у疄楠岀殑鏂规硶璁虹Н绱?
+> 鎻愮偧鑷?`retrospect_a2_a3_combined.md`锛?0KB锛?7 鑺傦級鈫?~5KB 鏍稿績鏁欒
+
+---
+
+## 涓変釜璺ㄥ疄楠屾ā寮?
+### P1: 澶╄姳鏉挎晥搴旀槸 prompt 瀹為獙鐨勬矇榛樻潃鎵?
+**瑙傚療**: A2锛堜唬鐮佸鏌ワ級鍜?A3锛堣矾鐢卞喅绛栵級閮藉湪 GPT-5.5 temp=0 涓嬮亣鍒板ぉ鑺辨澘鈥斺€旀ā鍨嬭〃鐜板お濂斤紝鏁堝簲閲忔棤娉曟娴嬨€?
+**鏈哄埗**: 褰?baseline 鍑嗙‘鐜?> 0.9 鏃讹紝螖 鐨勬娴嬬┖闂磋鍘嬬缉鍒?< 0.1銆傞渶瑕佽繙瓒呭父瑙勭殑鏍锋湰閲忔垨鏇寸矖绯欑殑 DV 鎵嶆湁缁熻鏄捐憲鎬р€斺€斾絾鏇寸矖绯欑殑 DV 鏈韩浼氫涪澶变俊鎭€?
+**鍏抽敭鏁版嵁**: A2 correctness_rate A=0.954, B=0.935, 螖=0.019, n_nonzero=4<5锛堢瀛﹂棬 FAIL锛夈€侫3 涓や釜瀹為獙鍧?螖=0, discordant 鐜?0%銆?
+**鏁欒**: 瀹為獙璁捐闃舵蹇呭仛 ceiling probe锛圕K6锛夈€傚鏋滄帰娴嬫樉绀哄ぉ鑺辨澘涓嶅彲鎵撶牬锛岃皟鏁?DV 鎴栦换鍔″煙鈥斺€斾笉瑕佹寚鏈?澶ф牱鏈氨鑳芥娴嬪埌"銆?
+### P2: IV 姹℃煋姣旂粺璁℃柟娉曢敊璇洿鍗遍櫓
+
+**瑙傚療**: 瀵圭収瀹為獙鐨勬牳蹇冨▉鑳佷笉鏄粺璁℃柟娉曢€夋嫨锛圵ilcoxon vs t-test锛夛紝鑰屾槸 IV锛坧rompt 鏍煎紡锛夎淇℃伅閲忓樊寮傛薄鏌撱€?
+**A2 鍏抽敭鍙戠幇**: B 缁勶紙prep/exec/post 鍒嗘锛夊疄闄呭寘鍚簡 A 缁勶紙涓€浣撳紡缂栧彿鍒楄〃锛夋病鏈夌殑妫€鏌ョ淮搴︹€斺€斾笉鏄洜涓烘牸寮忎笉鍚岋紝鑰屾槸鍥犱负淇℃伅閲忎笉绛変环銆?
+**鏁欒**: CK4 INVENTORY 绛変环鍗忚涓嶆槸鍙€夋鏌モ€斺€斿畠鏄槻姝?娴嬮噺浜嗛敊璇殑涓滆タ"鐨勫敮涓€鎵嬫銆傚鏋滀袱缁?prompt 鐨勪骇鍑烘竻鍗曚笉绛変环锛屽疄楠岀粨璁烘棤鏁堬紝鏃犺 p 鍊煎灏戙€?
+### P3: 闃存€х粨鏋?鈮?瀹為獙澶辫触
+
+**瑙傚療**: A2 鍜?A3 绉戝闂ㄥ叏閮?FAIL鈥斺€斾絾浜у嚭浜?21 涓柟娉曡鐗囨銆? 涓疄楠岃璁℃ā鏉裤€佷竴濂楀彲澶嶇敤鐨勫垎鏋愮绾裤€?
+**鏁欒**: 闃存€у疄楠岀殑浠峰€间笉鍦?鏀寔 H1"锛岃€屽湪锛?a) 鎺掗櫎浜嗙壒瀹氭潯浠朵笅鐨勬牸寮忔晥搴斿瓨鍦ㄦ€э紱(b) 鏆撮湶浜嗗疄楠岃璁＄殑绯荤粺鎬х洸鐐癸紙澶╄姳鏉裤€丏V 閫夋嫨銆両V 姹℃煋锛夛紱(c) 绉疮浜?濡備綍涓嶅仛涓€涓敊璇疄楠?鐨勬搷浣滅煡璇嗐€?
+**璇氬疄鏍囨敞**: 涓や釜瀹為獙鎴愮啛搴﹀潎鏍?[E-]锛坈eiling-limited锛夛紝涓嶆槸 [E]鈥斺€斾絾浠嶇劧鏄彲寮曠敤鐨勬湁鏁堣瘉鎹€?
+---
+
+## 鍏釜缂哄け妯″紡锛圥M-1~PM-6锛屾潵鑷簮澶嶇洏 搂4.3 瀵规姉楠岃瘉锛?
+浠ヤ笅缂哄け妯″紡鏄?A2+A3 澶嶇洏缁?Codex GPT-5.5 榄旈浠ｈ█浜哄紡瀵规姉楠岃瘉鍚庤瘑鍒殑鈥斺€斾笉鏄?瀹為獙鍋氶敊浜嗕粈涔?锛岃€屾槸"绯荤粺鎬х洸鐐癸細涓嬩竴娆″疄楠屽簲璇ヨˉ浠€涔?銆?
+| 缂栧彿 | 妯″紡 | 瀹氫箟锛堟簮鎶ュ憡鍘熸枃锛?|
+|------|------|---------|
+| **PM-1** | 妯″瀷-娓╁害缁勫悎浣滀负鏅€傛贩娣嗗彉閲?| 涓や釜瀹為獙鍧囦粎鐢?GPT-5.5 temp=0鈥斺€旀牸寮忔晥搴旂殑闃存€х粨璁轰笉鑳芥帹骞垮埌鍏朵粬妯″瀷/娓╁害銆?*缁?Qwen 璺ㄦā鍨嬪鐜伴儴鍒嗙紦瑙?*锛圓2 鏂瑰悜涓€鑷达紝螖=鈭?.014锛夛紝浣嗗鏌ヨ涓?鏂规硶璁轰紶閫?绛変环鎬ч獙璇佺瓑缁村害浠嶄粎 GPT-5.5 鍗曠偣 |
+| **PM-2** | 瀹為獙鑰呮柟娉曡鎴愮啛搴︿綔涓鸿法瀹為獙鐨勫悜涓婂亸璇?| A2 鍜?A3 鐨勫疄楠岃€咃紙鍚屼竴涓汉/鍥㈤槦锛夊湪涓ゅ疄楠屼腑鏂规硶璁烘垚鐔熷害鎸佺画鎻愬崌鈥斺€擜3 鐨勮璁¤川閲忛珮浜?A2銆傝繖瀵?璺ㄥ疄楠屾ā寮?澹扮О鏋勬垚娣锋穯锛氳瀵熷埌鐨勬敼杩涙槸鏂规硶瀛︽垚鐔熻繕鏄湡鏈夎法鍩熻寰嬶紵 |
+| **PM-3** | 鎺㈢储鎬?vs 纭鎬ф鏋剁殑鎸佺画妯＄硦 | Tier 0 鏈川鏄帰绱㈡€э紙鐢熸垚鍋囪锛夛紝Tier 1 鏄‘璁ゆ€э紙妫€楠屽亣璁撅級鈥斺€斾絾瀹為獙鎶ュ憡鏈槑纭尯鍒嗕袱鑰呯殑鎺ㄦ柇閫昏緫鍜岀粨璁鸿瑷€ |
+| **PM-4** | 娴嬭瘯闆嗚妯∶楁晥搴旈噺妫€娴嬬殑鐏垫晱搴﹀叧绯?| 鏈垎鏋愭祴璇曢泦瑙勬ā鍜岄」鐩尯鍒嗗害瀵圭粺璁″姛鏁堢殑鑱斿悎褰卞搷鈥斺€斿彧鐭ラ亾"n=4 涓嶅"锛屼絾涓嶇煡閬?闇€瑕佸灏? |
+| **PM-5** | 璇勫垎/鍒嗘瀽宸ュ叿鑷韩鐨勫疄鐜版湁鏁堟€ч渶瑕侀瀹?| A3 鐨勮瘎鍒?bug锛坅cceptable_paths 鍙岄噸浣跨敤 + meta action 鎯╃綒锛夊湪鏀堕泦鍚庢墠琚彂鐜扳€斺€旇瘎鍒嗚剼鏈簲璇ュ拰瀹為獙璁捐涓€鏍风粡杩囬瀹?|
+| **PM-6** | 鐙珛瀹℃煡鑷韩鐨勮鍒ら闄╂湭琚厖鍒嗚璁?| 澶嶇洏缁?10 杞紓鍚庣瀹℃煡鈥斺€斾絾瀹℃煡鑰呬箣闂寸殑鍒嗘銆佸鏌ヨ“鍑忋€佸鏌ヨ€呯殑绯荤粺鎬х洸鐐规湰韬湭琚垎鏋愩€傚鏌ヤ笉鏄鐨勮瑙?|
+
+*鏉ユ簮锛歳etrospect_a2_a3_combined.md 搂4.3 + 搂9.1-9.4锛堢粡 Codex GPT-5.5 R1+R2 闂悎楠岃瘉锛?
+
+---
+
+*鏉ユ簮锛歱rompt-tdd A2+A3 娣卞害澶嶇洏鎶ュ憡 v1.2锛堢粡 Codex GPT-5.5 R1+R2 闂悎锛?
+
+ succeeded in 239ms:
+scipy>=1.10
+
+ succeeded in 247ms:
+# A3: 澹版槑寮?vs NL 璺敱鎻忚堪瀵圭収瀹為獙
+
+> **瑙掕壊**: **鍙嶄緥妗堜緥**鈥斺€斿浣曡瘹瀹為棴鍚堜竴涓棤娉曠户缁Θ鍑轰俊鍙风殑瀹為獙  
+> **鐘舵€?*: CLOSED [E-]锛堝疄楠岃璁℃湭鑳芥楠屽亣璁撅紝鑰岄潪鍋囪琚瘉浼級  
+> **瀹℃煡**: 10 杞紙Codex GPT-5.5 脳5 + Qwen3.7-Max 脳3 + 鍚堝苟/瀵归綈 脳1 + 鍜ㄨ 脳1锛夛紝0 鏈棴鍚堝彂鐜?
+---
+
+## 鈿狅笍 璇诲墠椤荤煡
+
+A3 鐨勫案妫€缁撹鏄細**涓嶆槸鍋囪琚瘉浼紝鑰屾槸瀹為獙璁捐鏈兘妫€楠屽亣璁?*銆?
+- 澶╄姳鏉挎晥搴旓紙GPT-5.5 鍦ㄨ矾鐢变换鍔′笂鎺ヨ繎瀹岀編锛?- 鏍锋湰閲忎笉瓒筹紙Pilot 15 cases锛?5% 缃俊涓婄晫 ~18%锛?- GT 瀹氫箟浜夎锛?姝ｇ‘璺敱"鐨勬搷浣滃寲缂轰箯澶栭儴閿氱偣锛?- DV 閫€鍖栵紙浜屽垎绫?accuracy 瀵规牸寮忔晥搴斾笉鏁忔劅锛?
+A3 鐨?*鏁欏浠峰€?*涓嶅湪浜?璇佹槑浜嗕粈涔?锛岃€屽湪浜庡睍绀轰簡涓€涓疄楠屽湪浠€涔堟椂鍊欏簲璇ラ棴鍚堛€佸浣曡瘹瀹炶褰曢棴鍚堝師鍥犮€佷互鍙婂浣曚粠"澶辫触"涓彁鍙栨柟娉曡璧勪骇銆?
+---
+
+## 瀹為獙璁捐
+
+| 鍙傛暟 | 鍊?|
+|------|-----|
+| 浠诲姟鍩?| Agent 璺敱鍐崇瓥 |
+| 鐮旂┒闂 | 澹版槑寮忕粨鏋勫寲璺敱鎻忚堪鏄惁浼樹簬 NL 绱у噾鎻忚堪锛?|
+| A 缁勶紙瀵圭収锛?| NL 绱у噾璺敱鎻忚堪锛堥暱搴︽帶鍒讹級 |
+| B 缁勶紙瀹為獙锛?| 澹版槑寮忕粨鏋勫寲璺敱鎻忚堪 |
+| 涓?DV | strict accuracy锛?/1锛屽惈 meta action 璞佸厤锛?|
+| 妯″瀷 | GPT-5.5 temp=0 (Codex CLI) |
+
+### 瀹為獙鍘嗙▼
+
+| 闃舵 | 鏍锋湰 | 缁撴灉 | 鍐崇瓥 |
+|------|------|------|------|
+| v1 | n=10/鑷傦紝6 actions | 螖=0 | 鍔?Hard Mode锛堝鍔犳涔夛級 |
+| Hard Mode | n=10/鑷?| 螖=0 | Discordant 鐜?= 0% |
+| Pilot | 15 cases锛?5 actions | 螖=0/30 calls | 璇勪及涓夋柟妗堝悗閫夋嫨闂悎 |
+
+### A3 v2 璁捐锛堟湭鎵ц锛?缁?Codex + Qwen 鍙屽悗绔鏌ュ彂鐜?DV 閫€鍖?+ 鏍煎紡脳鏁伴噺娣锋穯锛屼笉鎵ц銆?
+---
+
+## 缁撴灉
+
+### 鏍稿績鏁版嵁
+- 涓変釜闃舵 螖=0锛宒iscordant 鐜?= 0%
+- Pilot 95% 缃俊涓婄晫 ~18%锛圧ule of 3锛?- 璇勫垎 bug锛坅cceptable_paths 鍙岄噸浣跨敤 + meta action 鎯╃綒锛夆啋 淇鍚庝笉褰卞搷缁撹
+
+### 绉戝闂? FAIL
+
+鍘熷洜涓嶆槸"H1 琚瘉浼?锛岃€屾槸"瀹為獙璁捐鏈兘鍒涢€犳娴?H1 鐨勬潯浠?锛?1. 澶╄姳鏉垮お楂樷€斺€擥PT-5.5 鍦ㄨ矾鐢变换鍔′笂鎺ヨ繎瀹岀編
+2. DV 涓嶆晱鎰熲€斺€斾簩鍒嗙被 accuracy 鏃犳硶鍖哄垎鏍煎紡鏁堝簲
+3. GT 鏃犲閮ㄩ敋鐐光€斺€?姝ｇ‘璺敱"鐢卞疄楠岃€呭畾涔夛紝娌℃湁鐙珛楠岃瘉
+
+---
+
+## 鍏抽敭鏁欒
+
+1. **涓嶆槸鎵€鏈夊疄楠岄兘鑳芥楠屽亣璁?*锛氬綋瀹為獙璁捐鏃犳硶鍒涢€犳娴嬬┖闂存椂锛岀户缁拷鍔犳牱鏈槸娴垂鈥斺€旇瘹瀹炲湴闂悎姣?鍋氬嚭鏄捐憲缁撴灉"鏇存湁浠峰€?2. **灏告姣旂粨鏋滄洿閲嶈**锛欰3 鐨勪环鍊间笉鍦?螖=0锛岃€屽湪璇嗗埆鍑?4 涓牴鍥狅紙澶╄姳鏉?/ DV 閫夋嫨 / GT 缂哄け / underpowered锛?3. **Pilot 鐨勬鎹熶环鍊?*锛欰3 v2 璁捐缁忓鏌ュ彂鐜?DV 閫€鍖栤€斺€斿鏋?v2 琚墽琛屼簡锛屾氮璐圭殑鏄?5 鍊嶇殑 API 璋冪敤 + 璇勫垎 + 瀹℃煡鏃堕棿
+
+---
+
+## 鏁版嵁鏂囦欢
+
+Pilot 闃舵璇勫垎鏁版嵁锛?5 cases 脳 2 arms锛変繚鐣欏湪婧愪粨搴?`tests/pocketflow_assets/a3_action_routing/pilot/scores/`銆傚綋鍓嶅叕寮€鐗堟湰涓嶇洿鎺ョ撼鍏モ€斺€擜3 鐨勫畾浣嶆槸鍙嶄緥妗堜緥锛屾暀瀛﹂噸鐐瑰湪灏告鍒嗘瀽鍜岄棴鍚堝喅绛栬繃绋嬶紝鑰岄潪鏁版嵁澶嶇幇銆傚闇€瀹屾暣鏁版嵁鍙煡闃呮簮浠撳簱銆?
+---
+
+*鍘熷瀹為獙鎵ц: 2026-06-19 ~ 2026-06-20 路 婧愪粨搴? prompt-tdd*  
+*A3 灏告鎶ュ憡: `methodology_extraction/autopsy_a3.md`*
+
+ succeeded in 254ms:
+# A2: prep/exec/post 鍒嗘 prompt 瀵圭収瀹為獙
+
+> **瑙掕壊**: **涓绘渚?*鈥斺€斿睍绀哄畬鏁寸殑瀵圭収瀹為獙绠＄嚎  
+
+codex
+仓库内未包含源复盘文件本体，只能搜到当前派生文件和 R1/R2 审查记录。我会在上级项目目录里按文件名查一次，确认是否有可直接比对的 `retrospect_a2_a3_combined.md`。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath 'E:\\workspace\\projects' -Recurse -Force -Filter 'retrospect_a2_a3_combined.md' -ErrorAction SilentlyContinue | Select-Object FullName,Length | Format-Table -AutoSize" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Get-ChildItem -LiteralPath 'E:\\workspace' -Recurse -Force -Filter 'retrospect_a2_a3_combined.md' -ErrorAction SilentlyContinue | Select-Object FullName,Length | Format-Table -AutoSize" in <project>
+ succeeded in 443ms:
+
+FullName                                                                             Length
+--------                                                                             ------
+<source-repo>\methodology_extraction\retrospect_a2_a3_combined.md  95238
+
+
+
+ succeeded in 1838ms:
+
+FullName                                                                             Length
+--------                                                                             ------
+<source-repo>\methodology_extraction\retrospect_a2_a3_combined.md  95238
+
+
+
+codex
+找到源文件：`<source-repo>\methodology_extraction\retrospect_a2_a3_combined.md`。我会读取它的 §4.3，直接对照当前 PM-1~PM-6。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; rg -n "''^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3|PM-1|PM-2|PM-3|PM-4|PM-5|PM-6|缺失模式|对抗验证\" 'E:\\workspace\\projects\\prompt-tdd\\methodology_extraction\\retrospect_a2_a3_combined.md'" in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; Select-String -Path 'E:\\workspace\\projects\\prompt-tdd\\methodology_extraction\\retrospect_a2_a3_combined.md' -Pattern '"'^### 4'"\\.3|"'^## 4'"\\.3|"'^#.*4'"\\.3' -Context 0,80" in <project>
+ succeeded in 131ms:
+14:| **对抗验证状态** | 已完成——10个跨实验模式经魔鬼代言人式逐条审查，PX-4和PX-10被推翻，其余8个强度修订（多数降级），6个缺失模式被识别（PM-1至PM-6）。**Codex GPT-5.5异后端独立审查已完成**（2026-06-20，判词FAIL_WITH_CAVEATS，7M+5m发现已修正）。**Qwen跨模型复现证据已写入v1.2**（2026-06-21——PM-1部分缓解，PX-10强度C→C+，§7.6 P1→P0，§9.1重写） |
+44:- 10个跨实验涌现模式（经对抗验证，2个被推翻，8个修订保留）
+45:- 对抗验证6个缺失模式（PM-1至PM-6）
+53:- **§4** 是本次复盘的核心增量——跨实验涌现模式及其对抗验证结果，包含已被推翻的模式和缺失模式的诚实记录
+138:对抗验证揭示：A2的DV切换成功和A3的DV切换失败不完全是"DV类型（连续vs二分类）"的问题。A2的代码审查任务天然具有多个可分解的评估维度（presence_coverage/correctness_rate/severity_accuracy），而A3的路由决策任务的"任务可供性"（affordance）更窄——不是"二分类DV"没有替代方案，而是"路由决策任务"没有第二个有意义的评估维度。如果A3的任务是情感分类（同样是二分类DV），就可以引入logit空间距离、置信度校准误差等替代连续DV。
+144:**[E] 单模型+单温度的强大混淆（PM-1，缺失模式——经Qwen跨模型复现部分缓解）**
+146:这是对抗验证识别的缺失模式中最严重的一个。A2和A3原均仅使用GPT-5.5 temp=0。**Qwen qwen3.7-max跨模型复现（2026-06-20）**为A2的格式效应方向（Δ=−0.014一致）和presence天花板（两臂均1.000）提供了第二模型数据点——部分缓解但未消除此局限：
+156:两个实验均缺失事前效能分析。但对抗验证迫使区分了两种不同的情况：
+172:对抗验证提出了一个重要替代解释：盲点可能源于"设计者角色"（对自身prompt措辞的过度熟悉）而非"同后端"（用相同模型）。如果是角色盲点而非后端盲点，那么解决方案是"任何非设计者的审查"（无论后端），而非必须是"异后端审查"。这一角色vs后端的分离在两个实验中未被测试。
+184:对抗验证对37.5%这个数字的一个关键限定：代码严重程度判断本身就具有主观性，在没有该领域典型不一致率基准的情况下，37.5%是否"异常高"不可知。评分者间不一致率的"异常"判定需要领域基准。
+190:此缺陷与PX-4（原声称的"测试集构建缺陷作为隐性天花板推手"）应该区分对待：A2的反编造测试是测试集有效但揭示了模型编造行为——测试集设计正确。A3的关键词重合是测试集无效且给出了误导性的高分——测试集设计错误。两者性质相反，不应合并为单一模式（PX-4已在对抗验证中被推翻）。
+194:A3从v1 (6 actions, block格式) 到v2 Pilot (15 actions, 更长prompt) 的设计演化中，v2审查发现的37.5%为v1不可预见。对抗验证对此提出了三个重要限定：
+204:两个实验均出现GT相关争议，但性质不同——对抗验证要求拆分：
+219:对抗验证建议PT-M1的迁移条件修正为：
+230:对抗验证揭示了两个实验中"预注册脆弱性"的两种不同性质：
+239:## §4 跨实验涌现模式（经对抗验证）
+241:本节报告10个原始声称的跨实验模式经对抗验证后的状态。2个被推翻，8个修订保留。6个缺失模式被识别（PM-1至PM-6）。每个模式的呈现包含：原始声称、对抗挑战摘要、修订后声称、修订后强度、边界条件。
+383:### 4.3 缺失模式（4个，对抗验证识别）
+385:#### PM-1: 模型-温度组合作为普适混淆变量（经Qwen复现部分缓解）
+391:**Qwen复现缓解（2026-06-21）**：Qwen qwen3.7-max在A2上的跨模型复现提供了格式效应方向和presence天花板的第二模型数据点——这两个维度现从单点升级为两点。但审查行为/方法论传递/等价性验证等其他维度仍仅GPT-5.5单点，PM-1在这些维度上未缓解。
+398:#### PM-2: 实验者方法论成熟度作为跨实验的向上偏误
+406:#### PM-3: 探索性vs确认性框架的持续模糊
+419:#### PM-4: 测试集规模×效应量检测的灵敏度关系
+427:#### PM-5: 评分/分析工具自身的实现有效性需要预审
+435:#### PM-6: 独立审查自身的误判风险未被充分讨论
+550:**二级洞察**（A3暴露，对抗验证深化）：方法论基础设施的跨域迁移存在静默断裂机制。PT-M1在A2中成功（连续→连续DV切换），在A3中静默失效（任务可供性窄时切换不可用）。断裂不是因为PT-M1"错误"，而是因为其知识表示不完整——当前的方法论片段模板仅描述"问题识别条件"（何时警惕X），未独立描述"解决方案适用条件"（Y方案在什么前提下可用）和"已知反例/失效模式"（Y方案在什么情况下不可用）。A3设计者识别了天花板风险但选用了无效缓解方案（Hard Mode）——因为在二分类DV的路由任务中，PT-M1的标准解决方案（切换替代DV）不可行，而模板未警告这一点。
+597:以下建议基于A2+A3复盘的全部发现（含对抗验证修订），按AI协作框架的章节和优先级组织。
+738:   - **探索性vs确认性框架分离**（PM-3）：Tier 0明确标注为"探索性"（不预注册，方法论片段提取为目标）+ Tier 1明确标注为"确认性"（预注册，假设检验为目标），两者使用不同的效能标准和结论语言
+739:   - **项目区分度预检验**（PM-4）：Tier 0阶段报告天花板/地板项目的比例，作为Tier 1的"有效样本量"估计
+745:**优先级**：P1（建议——PM-1经Qwen跨模型复现部分缓解但未消除；格式效应方向证据从单点升级为两点，其他声称仍仅GPT-5.5单点）
+774:MF-1至MF-7均标注了证据等级（B+到B-的范围分布合理），且证据等级的升降能反映对抗验证后的修订方向。A（强证据）、B（中等但有限定）、C（弱/单例）、D（推翻）的四级分层在本次复盘中有区分力。
+784:PX-10被推翻的核心原因是"正交任务域"和"正交DV类型"的声称被对抗验证证伪——代码审查和路由决策共享深层任务结构，accuracy和correctness_rate数学同源。框架当前缺乏对"什么构成真正的跨域三角验证"的形式标准。建议增加：
+789:**[I] 对抗验证作为复盘质量门的必要性被本次复盘证实**
+791:10个原始模式中2个被推翻（PX-4, PX-10）、8个被实质性修订（均降级）、6个缺失模式被识别（PM-1至PM-6）——如果没有对抗验证步骤，这28项修订不会被捕捉，复盘报告将包含多项过度声称和分类错误。对抗验证的ROI在本次复盘中被实证验证为极高。
+793:建议：将"复盘报告在定稿前须经对抗验证（魔鬼代言人+缺失模式搜索）"加入框架§7.4深度复盘模板作为强制步骤。
+799:### 9.1 模型-温度组合的推广限制（PM-1，经Qwen跨模型复现部分缓解）
+819:### 9.2 单团队实验者效应（PM-2）
+826:### 9.3 探索性vs确认性框架模糊（PM-3）
+830:### 9.4 测试集规模×区分度的未分析（PM-4）
+847:- 对抗验证虽然由同一模型（DeepSeek-V4-Pro）以"魔鬼代言人"角度执行，但这是同后端自我批判，不能替代异后端独立审查
+898:4. **跨模型验证**（P1——A2维度已完成Qwen复现）：Qwen qwen3.7-max跨模型复现已于2026-06-20完成——A2格式效应阴性方向一致（Δ=−0.014）+ presence天花板复现，PM-1部分缓解。剩余：(a) A3维度的跨模型复现（路由决策域），(b) ≥1个弱模型（非前沿能力级别）的验证，(c) 非中文/非零温度条件的测试。详见`tests/pocketflow_assets/a2_prep_exec_post/qwen_replication_report.md`
+899:5. **实验者效应分离**（P2——依赖实验设计创新）：设计一个"新实验者对照"来分离方法论片段迁移vs实验者经验增长——这是解决PM-2的唯一路径
+907:| A2+A3 | 跨实验综合JSON + 对抗验证JSON（本报告输入材料来源） | 本报告为联合复盘产出 |
+913:**生成**：DeepSeek-V4-Pro (via Claude Code CLI)，2026-06-20。本报告由DeepSeek-V4-Pro在Claude Code CLI会话中基于A2分析、A3分析、跨实验综合和对抗验证四个输入材料生成。报告的结构组织、模式合成、方法论片段提取和框架写回建议均由同一模型完成。
+921:根据本报告自身方法论标准（MF-3: 多轮异后端独立审查），当前审查密度=2轮异后端（GPT-5.5）+ 1轮同后端对抗验证（DeepSeek-V4-Pro魔鬼代言人模式），满足最低2轮异后端要求。报告中跨模型推广性声称在被≥1个弱模型验证前仍为临时。
+
+ succeeded in 240ms:
+
+> <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:383:### 4.3 缺失模式（4个，对抗验证识别）
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:384:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:385:#### PM-1: 模型-温度组合作为普适混淆变量（经
+Qwen复现部分缓解）
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:386:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:387:**描述**：所有10个声称的跨实验模式均可能与GPT-
+5.5 temp=0这个特定模型-温度组合混淆。A2和A3没有包含任何跨模型对照（Claude/Gemini/弱模型），因此无法分离"这是对照实验方法论的普适模式"和"这是GPT-5.5 temp=0的具体表现"。例如：
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:388:- PX-2（审查幂律）可能因为GPT-5.5作为审查者
+的审查深度有上限
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:389:- PX-10（阴性收敛）纯粹是GPT-5.5的指令遵循
+天花板
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:390:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:391:**Qwen复现缓解（2026-06-21）**：Qwe
+n qwen3.7-max在A2上的跨模型复现提供了格式效应方向和presence天花板的第二模型数据点——这两个维度现从单点升级为两点。但审查行为/方法论传递/等价性验证等其他维度仍仅GPT-5.5单点，PM-1在这些维度上未缓解。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:392:- PX-1（天花板效应）可能在其他模型上不存在——弱模
+型可能有更低的"天花板"
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:393:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:394:**重要性**：极高——GPT-5.5 temp=0是A
+2和A3的唯一实验模型，所有模式均可能受其污染。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:395:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:396:**建议**：在所有10个模式的边界条件中增加"未排除G
+PT-5.5特定性的替代解释"。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:397:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:398:#### PM-2: 实验者方法论成熟度作为跨实验的向上
+偏误
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:399:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:400:**描述**：A2→A3的实验质量提升（初始设计更完善、
+审查更高效）可能不是方法论基础设施累积的证据，而是实验者在两个实验之间变得更有经验。如果换一个没有A2经验的新实验者来设计A3，初始设计质量可能和A2一样低——这将证伪PX-3的方法论片段迁移价值声称。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:401:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:402:**重要性**：高——影响PX-2（审查效率提升可能来自
+经验而非审查饱和）和PX-3（方法论产出可能绑定于实验者而非可迁移片段）。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:403:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:404:**建议**：PX-2和PX-3须标注"未排除实验者经验
+增长的替代解释"。未来实验应尝试引入"新实验者对照"（让无A2经验的人设计类似实验）来分离经验vs片段迁移。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:405:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:406:#### PM-3: 探索性vs确认性框架的持续模糊
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:407:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:408:**描述**：两个实验在整个生命周期中持续在"探索性"和
+"确认性"框架之间摇摆。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:409:- A2标为Tier 0(探索)+Tier 1(确认)，
+但当Tier 0发现天花板后进行DV切换——这是探索性分析
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:410:- A3在Tier 0发现天花板后引入Hard Mode
+——这也是探索性
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:411:- 但预注册锁和假设检验框架又暗示了确认性框架
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:412:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:413:这种模糊性反映了LLM对照实验的根本困境：需要探索性分析
+来理解现象，也需要确认性框架来保证结论信度。两个实验采用"模糊的中间地带"——这可能是阴性实验的方法论价值高于结论价值的深层原因：探索性分析产出的方法论知识比确认性假设检验结论更可靠。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:414:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:415:**重要性**：高——可能解释为什么A2和A3的"方法论
+价值"始终高于"结论价值"：因为两个实验实质上是探索性研究方法论的工具，而非确认性检验假设的工具，但被后者框架所约束。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:416:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:417:**建议**：未来实验设计应明确区分"探索性阶段"（不预
+注册，方法论片段提取为目标）和"确认性阶段"（预注册，假设检验为目标），而非在同一个实验中同时做两者。参见§7框架写回建议。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:418:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:419:#### PM-4: 测试集规模×效应量检测的灵敏度关系
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:420:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:421:**描述**：A2 n=24和A3 n=20的测试集不仅
+名义样本量小，而且项目的**区分度**（discrimination）未被分析。如果测试集中大部分项目对所有prompt变体都太容易或太难（即项目没有区分度），即使n很大也无法检测效应。两个实验在报告天花板效应后，均未分析"多少项目是区分
+性的（非天花板/地板）"——测试集的"有效样本量"（区分性项目数）可能远小于名义样本量。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:422:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:423:**重要性**：中——与PX-9（效能分析缺失）互补，但
+更具体地关注测试集项目质量而非仅样本量。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:424:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:425:**建议**：测试集冻结前须包含"项目区分度预检验"——
+检测每个测试用例在候选prompt变体上的期望区分度。Tier 0（描述性）阶段应报告天花板/地板项目的比例，作为"有效样本量"的估计。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:426:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:427:#### PM-5: 评分/分析工具自身的实现有效性需要
+预审
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:428:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:429:**描述**：两个实验均出现评分或分析脚本的实现层面bu
+g，而非GT定义或rubric设计问题。A2的severity rubric迭代涉及评分逻辑反复修正；A3的acceptable_paths双重使用和meta action结构性惩罚是评分脚本实现bug——与GT定义（A3 GT争议）和r
+ubric设计（A2 exec_severity不一致）性质不同。这构成一个独立的失败模式类别：**measurement implementation validity**（测量工具的实现有效性），应区别于GT定义问题和评分信度问题。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:430:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:431:**重要性**：中——A3 Pilot评分bug（acc
+eptable_paths双重使用+meta action惩罚）在收集后才被发现，修正后pilot accuracy 0.800→1.000。虽不改变discordant=0%核心结论，但影响了对pilot结果的第一次解读。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:432:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:433:**建议**：实验启动前须由异后端审查者独立审查评分/分
+析脚本的逻辑——不仅是审查GT和rubric设计。此项可纳入MF-4（INVENTORY等价验证）的检查范围或作为独立预审步骤。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:434:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:435:#### PM-6: 独立审查自身的误判风险未被充分讨论
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:436:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:437:**描述**：报告强调独立审查的致命缺陷捕获能力（PX-
+2），但对审查false positive/误判风险着墨不够。A3 R10 Qwen审查建议"英文"语言标注——后经核实为误判（实验实际为中文）。这提示：审查发现不能直接当事实采纳，需仲裁流程。独立审查的收益被充分讨论，但其误判率和对设计
+者的误导风险（采纳错误建议→引入新缺陷）未被系统估计。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:438:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:439:**重要性**：中——与PX-2（审查收益递减）互补——
+审查不仅有边际收益递减，还有非零的误判成本。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:440:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:441:**建议**：在框架的审查治理章节增加"审查发现的证据化
+仲裁"步骤——审查发现需经设计者确认或反驳后方可纳入修正，不可自动采纳。此建议与MF-3（审查收益管理）的第5条"事后记录审查频谱"互补。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:442:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:443:---
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:444:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:445:## §5 可迁移方法论片段（≥5个，6核心字段格式）
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:446:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:447:按方法论提取框架v0.1的6字段格式提取。每个片段标注标
+签（[S]/[E]/[I]/[Sp]）和证据等级。
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:448:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:449:### MF-1: 对照实验天花板效应的预注册应对方案 
+[I]
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:450:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:451:| 字段 | 内容 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:452:|------|------|
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:453:| **片段ID** | MF-1 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:454:| **名称** | 对照实验主因变量天花板效应的分层应
+对方案 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:455:| **类别** | 实验设计——因变量选择 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:456:| **核心问题** | 对照实验的Tier 0（小样本
+探索阶段）中发现主因变量在实验条件下无方差（天花板/地板效应），导致Tier 1（确认性推理阶段）无法检测处理效应 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:457:| **问题识别条件** | (1) Tier 0中两臂
+因变量的均值均接近理论上限（天花板）或下限（地板）；(2) 因变量的组内方差趋近于零；(3) 分布统计量（如Cohen's κ）因边际分布退化而不可估计。小样本(n<20)Tier 0的检测须辅以置信区间——仅凭"两臂均为满分"判断天花板
+在n=8-10时信度不足 |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:458:| **解决方案适用条件** | (1) 任务存在≥2个
+正交评估维度（非DV类型连续/二分——阻断条件是"任务仅有一个有意义的评估维度"）；(2) 替代维度在实验条件下有足够的期望方差（须在Tier 0中预检验，不可假设）；(3) 替代维度的测量误差在可接受范围内；(4) 替代维度的测量不引入
+新的处理混淆（如替代DV更偏向实验组或对照组的prompt结构） |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:459:| **已知反例/失效模式** | (a) 当任务可供性
+仅有1个有意义的评估维度时（如A3的路由决策），切换策略不可用——须降级实验为描述性或引入辅助连续指标（如反应时/置信度/logit空间距离，但temp=0下logprobs不可用）；(b) 即使任务有≥2个维度，替代DV可能同样遭遇天花
+板（A2的correctness_rate切换成功可能受益于偶然方差——单一成功案例不构成可靠性证据）；(c) 仅增加任务难度（Hard Mode）而不切换DV类型是无效缓解——天花板被"位移"而非"解决" |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:460:| **证据等级与来源** | B+（A2直接验证：连续
+DV间切换成功；A3反向验证：在任务可供性窄时切换失败。但A2是单一成功案例，A3的失败可能部分归因于GPT-5.5特定性）。来源：A2 Tier 0→Tier 1 + A3 Tier 0→Hard Mode→Pilot |
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:461:
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:462:### MF-2: 双LLM异后端盲评协议 [S]
+  <source-repo>\methodology_extraction\retrospect_a2_a3_combined.md:463:
+
+
+
+codex
+为了更贴近 C1 的字面命令，我会把可用的 Python 3.12 临时放到本次进程 PATH 首位，再用 `python analyze_experiment.py ...` 原命令跑一次。这个不改系统配置。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '$env:PYTHONIOENCODING='"'utf-8'; "'$env:PATH='"'E:\\1\\python3.12.7;' + "'$env:PATH; python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0 2>&1; Write-Output "EXIT=$LASTEXITCODE"' in <project>
+ succeeded in 201ms:
+加载 16 条评分记录
+  Arms: {'B', 'A'}
+  Raters: {'rater_human', 'rater_codex'}
+  Steps: 2
+
+============================================================
+  实验分析报告
+  Tier: 0
+  分析时间: 2026-07-01T09:09:41
+============================================================
+
+  配对样本数: 2
+  A 组平均 coverage: 0.750
+  B 组平均 coverage: 1.000
+  中位数 Δ: +0.250
+  方向: 1 例 B 更优 / 0 例 A 更优 / 1 例持平
+
+  Per-case:
+  Case                        A        B        Δ
+  --------------------------------------------
+  toy_001                 1.000    1.000   +0.000
+  toy_002                 0.500    1.000   +0.500
+
+  Cohen's κ (评分者间信度):
+  步骤数: 2, 有效 κ 数: 1, 不可估计: 1
+  平均 κ: 0.000
+  备注: 有 undefined κ (degenerate marginals)，已从 pass_threshold 中排除
+  κ ≥ 0.6: [FAIL] — rubric 需重设计或 undefined κ 需人工审查
+
+  Correctness rate (次因变量):
+  A 组: 1.000  B 组: 0.750  Δ: -0.250
+
+  ────────────────────────────────────────────────────────────
+  判定逻辑（对照 §9 分析计划）:
+  1. 方向一致性: [PASS]
+  2. κ ≥ 0.6:    [FAIL]
+
+  JSON 已保存: examples\minimal\analysis_scoresheet.json
+EXIT=0
+
+codex
+原命令在临时 PATH 下返回 `EXIT=0`，再次生成了同一个分析 JSON；我会清掉这个运行产物。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Remove-Item -LiteralPath 'examples/minimal/analysis_scoresheet.json'" in <project>
+ succeeded in 127ms:
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command 'git status --short' in <project>
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command "Test-Path -LiteralPath 'examples/minimal/analysis_scoresheet.json'" in <project>
+ succeeded in 139ms:
+?? _reviews/codex_r2_output.txt
+?? _reviews/prompts/codex_r2_prompt.md
+
+ succeeded in 140ms:
+False
+
+codex
+我发现 M2 需要细看：`sop.md` 的 §3 已写成四项，但 §2.2 的管线表可能仍保留“三项”。我会用全文搜索确认是否存在残留不一致。
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; rg -n "三项|四项|评分者一致|Cohen|κ|科学门判决" sop.md' in <project>
+ succeeded in 111ms:
+53:| 4. 统计推断 | `analyze_experiment.py --tier 1 --test-set test_set.json` | Wilcoxon + bootstrap CI + Cohen's κ |
+54:| 5. 科学门判决 | 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 | 三项全 PASS → 支持 H1; 任一 FAIL → 不支持 |
+71:**通过标准**: 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 + 评分者一致性达标（Cohen's κ ≥ 0.4 或 discordant 率 < 25%）（四项 **全部**）  
+169:**检测**: Cohen's κ < 0.4 或 discordant 率高  
+175:**处理**: 预注册锁 + 科学门四项全 PASS 才能声明"支持 H1"
+185:**处理**: 四项门禁任一不通过→不执行实验。A3v2 因四门全 FAIL 被截停——这是成功的设计审查，不是失败的实验。
+
+exec
+"C:\\windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" -Command '[Console]::OutputEncoding = [System.Text.Encoding]::UTF8; $i=1; Get-Content -Encoding UTF8 -LiteralPath '"'sop.md' | ForEach-Object { if("'$i -ge 45 -and $i -le 55){ '"'{0,4}: {1}' -f "'$i, $_ }; $i++ }' in <project>
+ succeeded in 135ms:
+  45: 
+  46: **前置条件**: Tier 0 工程门 PASS + CK1-CK3 全部通过。
+  47: 
+  48: | 步骤 | 操作 | 关键约束 |
+  49: |------|------|---------|
+  50: | 1. 大样本收集 | n ≥ 功效分析指定值 | raw_outputs/ 只增不覆盖 |
+  51: | 2. 双 LLM 异后端盲评 | 评分者 A（作者模型）+ 评分者 B（不同后端） | 评分者 B 不接触 A 的评分、作者自评、材料来源 |
+  52: | 3. 解盲 + 合并 | 合并 A/B 评分者，对齐 case_id | 评分前不告知分组 |
+  53: | 4. 统计推断 | `analyze_experiment.py --tier 1 --test-set test_set.json` | Wilcoxon + bootstrap CI + Cohen's κ |
+  54: | 5. 科学门判决 | 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 | 三项全 PASS → 支持 H1; 任一 FAIL → 不支持 |
+  55: 
+
+codex
+独立审查者后端：Codex (GPT-5)
+
+```text
+C1: 已修复 证据: minimal CSV 第2-17行 rater 仅为 rater_human/rater_codex，匹配 analyze_experiment.py 默认值；用可用 Python 3.12 执行原命令返回 EXIT=0，加载16条记录并生成 Tier 0 报告，无崩溃。
+
+C2: 已修复 证据: 源报告 §4.3 的 PM-1~PM-6 标题分别在源文件行385/398/406/419/427/435；methodology/lessons-learned.md 第43-48行对应同一组 PM 编号与定义，不再是错配编号。
+
+M1: 已修复 证据: examples/a2-prep-exec-post/README.md 第36行明确“以下数字均为 test-set-only（n_test=12/臂）”，第40-43行结果表在该注释下。
+
+M2: 部分修复 证据: sop.md 第71行科学门已写为四项并加入 κ/discordant 标准；第177-185行新增 A3v2 §8.5 四门禁。但第54行仍残留“统计显著 + 效应量 + 方向一致 | 三项全 PASS”，未同步加入 κ。
+
+M3: 已修复 证据: requirements.txt 仅声明 scipy>=1.10；analyze_experiment.py 实际第三方依赖为 scipy.stats.wilcoxon；A3 README 第70-72行说明当前公开版本不直接纳入评分数据，且全文不再声称存在 scoresheet.csv。
+
+R2 终判: FAIL_WITH_CAVEATS
+```
+tokens used
+143,088
+独立审查者后端：Codex (GPT-5)
+
+```text
+C1: 已修复 证据: minimal CSV 第2-17行 rater 仅为 rater_human/rater_codex，匹配 analyze_experiment.py 默认值；用可用 Python 3.12 执行原命令返回 EXIT=0，加载16条记录并生成 Tier 0 报告，无崩溃。
+
+C2: 已修复 证据: 源报告 §4.3 的 PM-1~PM-6 标题分别在源文件行385/398/406/419/427/435；methodology/lessons-learned.md 第43-48行对应同一组 PM 编号与定义，不再是错配编号。
+
+M1: 已修复 证据: examples/a2-prep-exec-post/README.md 第36行明确“以下数字均为 test-set-only（n_test=12/臂）”，第40-43行结果表在该注释下。
+
+M2: 部分修复 证据: sop.md 第71行科学门已写为四项并加入 κ/discordant 标准；第177-185行新增 A3v2 §8.5 四门禁。但第54行仍残留“统计显著 + 效应量 + 方向一致 | 三项全 PASS”，未同步加入 κ。
+
+M3: 已修复 证据: requirements.txt 仅声明 scipy>=1.10；analyze_experiment.py 实际第三方依赖为 scipy.stats.wilcoxon；A3 README 第70-72行说明当前公开版本不直接纳入评分数据，且全文不再声称存在 scoresheet.csv。
+
+R2 终判: FAIL_WITH_CAVEATS
+```

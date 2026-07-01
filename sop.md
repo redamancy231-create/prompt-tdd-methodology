@@ -51,7 +51,7 @@
 | 2. 双 LLM 异后端盲评 | 评分者 A（作者模型）+ 评分者 B（不同后端） | 评分者 B 不接触 A 的评分、作者自评、材料来源 |
 | 3. 解盲 + 合并 | 合并 A/B 评分者，对齐 case_id | 评分前不告知分组 |
 | 4. 统计推断 | `analyze_experiment.py --tier 1 --test-set test_set.json` | Wilcoxon + bootstrap CI + Cohen's κ |
-| 5. 科学门判决 | 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 | 三项全 PASS → 支持 H1; 任一 FAIL → 不支持 |
+| 5. 科学门判决 | 统计显著 + 效应量 ≥ 最小兴趣阈值 + 方向一致 + 评分者一致性（κ ≥ 0.4） | 四项全 PASS → 支持 H1; 任一 FAIL → 不支持 |
 
 ---
 
