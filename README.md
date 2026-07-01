@@ -103,6 +103,15 @@ prompt-tdd-methodology/
 
 ---
 
+## 相关项目
+
+| 项目 | 关系 |
+|------|------|
+| [**AI协作项目全生命周期框架**](https://github.com/redamancy231-create/ai-collaboration-framework) | **上游集成层**——A2/A3 实验结论已写回 §4.1.1 + §6.3.1-6.3.2；框架 CK1-CK6 检查清单提炼自本手册 |
+| [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **同级工具**——本手册的两个案例实验均使用独立审查 SOP 完成 17+ 轮异后端审查闭合 |
+
+---
+
 ## 许可与引用
 
 CC BY 4.0。v0.1-methodology。
