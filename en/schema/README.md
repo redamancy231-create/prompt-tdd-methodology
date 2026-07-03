@@ -29,7 +29,7 @@ Test case definition. Frozen input for the controlled experiment.
     }
   ],
   "metadata": {
-    "domain": "代码审查 | 路由决策 | ...",
+    "domain": "Code review | Routing decision | ...",
     "model": "GPT-5.5",
     "temperature": 0,
     "date": "YYYY-MM-DD"
@@ -44,3 +44,5 @@ Metadata file frozen before experiment execution. Contains:
 - `hypothesis`: hypothesis statement
 - `analysis_plan`: analysis plan (test method, effect size threshold, stopping rule)
 - `test_set_sha256`: SHA256 hash of test_set.json; cannot be modified after git commit
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

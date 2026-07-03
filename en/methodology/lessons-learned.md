@@ -52,3 +52,5 @@ The following missing patterns were identified after the A2+A3 retrospective und
 ---
 
 *Source: prompt-tdd A2+A3 deep retrospective report v1.2 (closed through Codex GPT-5.5 R1+R2)*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

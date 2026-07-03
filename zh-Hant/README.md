@@ -15,8 +15,8 @@
 Amanda Askell（Anthropic）："一個好的 system prompt 背後，那個無聊但關鍵的秘密是測試驅動開發。"
 
 ```
-不是:  写 prompt → 发现失败 → 加规则 → 规则打架 → 再加...
-而是:  写测试 → 找能通过的 prompt → 发现新失败 → 加入测试集 → 重复
+不是： 寫 prompt → 發現失敗 → 加規則 → 規則打架 → 再加...
+而是： 寫測試 → 找能通過的 prompt → 發現新失敗 → 加入測試集 → 重複
 ```
 
 ---
@@ -37,13 +37,13 @@ Amanda Askell（Anthropic）："一個好的 system prompt 背後，那個無聊
 
 ```mermaid
 flowchart LR
-    subgraph PREP["准备阶段"]
-        D1["实验设计<br/>CK1-CK6"] --> D2["测试用例<br/>train/test"] --> D3["预注册<br/>.lock 冻结"]
+    subgraph PREP["準備階段"]
+        D1["實驗設計<br/>CK1-CK6"] --> D2["測試用例<br/>train/test"] --> D3["預註冊<br/>.lock 凍結"]
     end
-    subgraph EXEC["执行阶段"]
-        C1["Tier 0<br/>小样本验证"] -->|工程门 PASS| C2["Tier 1<br/>推断统计"]
+    subgraph EXEC["執行階段"]
+        C1["Tier 0<br/>小樣本驗證"] -->|工程門 PASS| C2["Tier 1<br/>推斷統計"]
     end
-    PREP --> EXEC --> REVIEW["审查闭合"] --> GRADE["成熟度标注<br/>[Sp]→[E]→[F]"]
+    PREP --> EXEC --> REVIEW["審查閉合"] --> GRADE["成熟度標註<br/>[Sp]→[E]→[F]"]
 ```
 
 ### 兩個真實案例
@@ -74,20 +74,20 @@ python analyze_experiment.py examples/minimal/scoresheet.csv --tier 0
 
 ```
 prompt-tdd-methodology/
-├── README.md              ← 你在这里
-├── sop.md                 ← 对照实验设计 SOP（CK1-CK6 + Tier 0→1）
-├── analyze_experiment.py  ← 分析脚本（CSV→统计→报告）
-├── schema/                ← 数据契约
+├── README.md              ← 你在這裡
+├── sop.md                 ← 對照實驗設計 SOP（CK1-CK6 + Tier 0→1）
+├── analyze_experiment.py  ← 分析腳本（CSV→統計→報告）
+├── schema/                ← 資料契約
 ├── examples/
 │   ├── minimal/           ←   4-case 玩具（30秒跑通）
 │   ├── a2-prep-exec-post/ ←   主案例
 │   └── a3-action-routing/ ←   反例案例
 ├── methodology/
-│   ├── lessons-learned.md ←   核心教训（~5KB）
-│   ├── glossary.md        ←   术语表
-│   └── checklists.md      ←   启动前检查表
+│   ├── lessons-learned.md ←   核心教訓（~5KB）
+│   ├── glossary.md        ←   術語表
+│   └── checklists.md      ←   啟動前檢查表
 └── appendix/
-    └── a1-summary.md      ←   A1 为什么没纳入
+    └── a1-summary.md      ←   A1 為什麼沒納入
 ```
 
 ---
@@ -109,6 +109,7 @@ prompt-tdd-methodology/
 |------|------|
 | [**AI協作專案全生命週期框架**](https://github.com/redamancy231-create/ai-collaboration-framework) | **上游整合層**——A2/A3 實驗結論已寫回 §4.1.1 + §6.3.1-6.3.2；框架 CK1-CK6 檢查清單提煉自本手冊 |
 | [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **同級工具**——本手冊的兩個案例實驗均使用獨立審查 SOP 完成 17+ 輪異後端審查閉合 |
+| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **同級專案**——將多模型協作方法論應用於完整學術生產場景的八階段流水線演示（含 playbook 可復用） |
 
 ---
 
@@ -116,4 +117,4 @@ prompt-tdd-methodology/
 
 CC BY 4.0。v0.1-methodology。
 
-*生成模型：DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01*
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

@@ -20,3 +20,5 @@
 | **HARKing** | Hypothesizing After Results are Known | Adjusting the hypothesis after seeing the results: the opposite of a pre-registration lock |
 | **Cohen's κ** | Cohen's Kappa | Inter-rater reliability metric used to detect LLM-LLM scoring disagreement |
 | **ceiling probe** | Ceiling Probe | Pre-experiment ceiling probe: embed anti-fabrication/extreme test cases to evaluate detection space |
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

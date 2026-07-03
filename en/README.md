@@ -15,8 +15,8 @@
 Amanda Askell (Anthropic): "Behind a good system prompt, the boring but crucial secret is test-driven development."
 
 ```
-不是:  写 prompt → 发现失败 → 加规则 → 规则打架 → 再加...
-而是:  写测试 → 找能通过的 prompt → 发现新失败 → 加入测试集 → 重复
+Not:  write prompt → find failure → add rule → rules conflict → add more...
+But:  write tests → find prompt that passes → discover new failure → add to test set → repeat
 ```
 
 ---
@@ -74,20 +74,20 @@ After it runs successfully, read the [SOP](sop.md) + [checklist](methodology/che
 
 ```
 prompt-tdd-methodology/
-├── README.md              ← 你在这里
-├── sop.md                 ← 对照实验设计 SOP（CK1-CK6 + Tier 0→1）
-├── analyze_experiment.py  ← 分析脚本（CSV→统计→报告）
-├── schema/                ← 数据契约
+├── README.md              ← You are here
+├── sop.md                 ← Controlled Experiment Design SOP (CK1-CK6 + Tier 0→1)
+├── analyze_experiment.py  ← Analysis script (CSV→statistics→report)
+├── schema/                ← Data contract
 ├── examples/
-│   ├── minimal/           ←   4-case 玩具（30秒跑通）
-│   ├── a2-prep-exec-post/ ←   主案例
-│   └── a3-action-routing/ ←   反例案例
+│   ├── minimal/           ←   4-case toy (runs in 30s)
+│   ├── a2-prep-exec-post/ ←   Main case
+│   └── a3-action-routing/ ←   Counterexample case
 ├── methodology/
-│   ├── lessons-learned.md ←   核心教训（~5KB）
-│   ├── glossary.md        ←   术语表
-│   └── checklists.md      ←   启动前检查表
+│   ├── lessons-learned.md ←   Core lessons (~5KB)
+│   ├── glossary.md        ←   Glossary
+│   └── checklists.md      ←   Pre-flight checklist
 └── appendix/
-    └── a1-summary.md      ←   A1 为什么没纳入
+    └── a1-summary.md      ←   Why A1 was not included
 ```
 
 ---
@@ -109,6 +109,7 @@ prompt-tdd-methodology/
 |------|------|
 | [**AI Collaboration Project Full Lifecycle Framework**](https://github.com/redamancy231-create/ai-collaboration-framework) | **Upstream integration layer**: A2/A3 experiment conclusions have been written back to §4.1.1 + §6.3.1-6.3.2; the framework's CK1-CK6 checklist was extracted from this manual |
 | [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **Peer toolkit**: both case experiments in this manual used the independent review SOP to complete 17+ rounds of cross-backend review closure |
+| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **Peer project**: a demonstration of an eight-stage pipeline applying multi-model collaboration methodology to a complete academic production scenario (includes reusable playbook) |
 
 ---
 
@@ -116,4 +117,4 @@ prompt-tdd-methodology/
 
 CC BY 4.0. v0.1-methodology.
 
-*Generated model: DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01*
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

@@ -84,11 +84,11 @@ To prevent post hoc hypothesis adjustment (HARKing: Hypothesizing After Results 
 ### 4.2 Lock Contents
 
 ```yaml
-hypothesis: "<H0/H1 声明>"
+hypothesis: "<H0/H1 statement>"
 analysis_plan:
   test_method: "Wilcoxon signed-rank | sign test | ..."
-  effect_size_threshold: <最小兴趣效应量>
-  stopping_rule: "<停止规则>"
+  effect_size_threshold: <minimum effect size of interest>
+  stopping_rule: "<stopping rule>"
 test_set_sha256: "<SHA256 hash of test_set.json>"
 lock_date: "<ISO 8601>"
 ```
@@ -188,3 +188,5 @@ The two prompt arms in a controlled experiment differ in content. But how do we 
 
 *Generated model: DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01*  
 *Methodology source: prompt-tdd A2+A3 experiments (17+ rounds of cross-backend review)*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

@@ -75,3 +75,5 @@ Pilot-stage scoring data (15 cases × 2 arms) is retained in the source reposito
 
 *Original experiment execution: 2026-06-19 ~ 2026-06-20 · Source repository: prompt-tdd*  
 *A3 autopsy report: `methodology_extraction/autopsy_a3.md`*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

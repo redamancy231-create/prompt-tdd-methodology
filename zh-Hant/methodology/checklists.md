@@ -75,3 +75,5 @@
 ---
 
 *檢查清單來源：prompt-tdd A2+A3 實驗的實戰方法論*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

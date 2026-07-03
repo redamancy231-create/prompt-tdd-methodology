@@ -29,7 +29,7 @@
     }
   ],
   "metadata": {
-    "domain": "代码审查 | 路由决策 | ...",
+    "domain": "程式碼審查 | 路由決策 | ...",
     "model": "GPT-5.5",
     "temperature": 0,
     "date": "YYYY-MM-DD"
@@ -44,3 +44,5 @@
 - `hypothesis`: 假設宣告
 - `analysis_plan`: 分析計劃（檢驗方法、效應量閾值、停止規則）
 - `test_set_sha256`: test_set.json 的 SHA256 hash——git commit 後不可修改
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

@@ -75,3 +75,5 @@
 ---
 
 *Checklist source: practical methodology from the prompt-tdd A2+A3 experiments*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

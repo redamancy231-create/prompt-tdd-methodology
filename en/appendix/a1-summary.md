@@ -37,3 +37,5 @@ These assets are not included in the current release. A1's experiment conclusion
 ---
 
 *Source: prompt-tdd project_status.md + A1 closure report (2026-06-22)*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*

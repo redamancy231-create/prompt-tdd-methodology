@@ -52,3 +52,5 @@
 ---
 
 *來源：prompt-tdd A2+A3 深度復盤報告 v1.2（經 Codex GPT-5.5 R1+R2 閉合）*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

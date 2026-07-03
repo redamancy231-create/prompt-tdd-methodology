@@ -37,3 +37,5 @@ A1 的完整資產保留在來源倉庫中：
 ---
 
 *來源：prompt-tdd project_status.md + A1 closure report（2026-06-22）*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

@@ -75,3 +75,5 @@ Pilot 階段評分資料（15 cases × 2 arms）保留在來源倉庫 `tests/poc
 
 *原始實驗執行: 2026-06-19 ~ 2026-06-20 · 來源倉庫: prompt-tdd*  
 *A3 屍檢報告: `methodology_extraction/autopsy_a3.md`*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

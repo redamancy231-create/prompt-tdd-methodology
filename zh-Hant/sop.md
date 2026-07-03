@@ -84,11 +84,11 @@
 ### 4.2 鎖內容
 
 ```yaml
-hypothesis: "<H0/H1 声明>"
+hypothesis: "<H0/H1 聲明>"
 analysis_plan:
   test_method: "Wilcoxon signed-rank | sign test | ..."
-  effect_size_threshold: <最小兴趣效应量>
-  stopping_rule: "<停止规则>"
+  effect_size_threshold: <最小興趣效應量>
+  stopping_rule: "<停止規則>"
 test_set_sha256: "<SHA256 hash of test_set.json>"
 lock_date: "<ISO 8601>"
 ```
@@ -188,3 +188,5 @@ lock_date: "<ISO 8601>"
 
 *生成模型：DeepSeek-V4-Pro (via Claude Code CLI) · 2026-07-01*  
 *方法論來源：prompt-tdd A2+A3 實驗（17+ 輪異後端審查）*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

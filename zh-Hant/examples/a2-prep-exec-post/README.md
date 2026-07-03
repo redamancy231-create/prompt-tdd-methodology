@@ -75,3 +75,5 @@ python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
 ---
 
 *原始實驗執行: 2026-06-17 ~ 2026-06-20 · 來源倉庫: prompt-tdd*
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

@@ -20,3 +20,5 @@
 | **HARKing** | Hypothesizing After Results are Known | 看到結果後調整假設——預註冊鎖的對立面 |
 | **Cohen's κ** | Cohen's Kappa | 評分者間一致性指標——用於檢測 LLM-LLM 評分分歧 |
 | **ceiling probe** | Ceiling Probe | 實驗前探測天花板——嵌入反編造/極端測試用例評估檢測空間 |
+
+*正體中文：OpenCC 轉換 + GPT-5.5 (via Codex CLI) 潤色 · 2026-07-01*

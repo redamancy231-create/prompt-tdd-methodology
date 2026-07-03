@@ -75,3 +75,5 @@ python analyze_experiment.py scoresheet.csv --tier 1 --test-set test_set.json
 ---
 
 *Original experiment execution: 2026-06-17 ~ 2026-06-20 · Source repository: prompt-tdd*
+
+*English translation: GPT-5.5 (via Codex CLI) · 2026-07-01*
