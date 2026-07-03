@@ -1,0 +1,131 @@
+{
+  "test_set_id": "A3_Tier0_2026-06-19",
+  "version": "1.0",
+  "n_cases": 10,
+  "categories": [
+    "single_intent_clear",
+    "boundary_overlap",
+    "conditional_priority",
+    "implicit_intent",
+    "exception_exclusion",
+    "distractor_overlap"
+  ],
+  "available_actions": [
+    "web_search",
+    "code_execute",
+    "file_operation",
+    "data_analysis",
+    "knowledge_qa",
+    "api_call"
+  ],
+  "cases": [
+    {
+      "id": "route_001",
+      "category": "single_intent_clear",
+      "difficulty": "low",
+      "query": "法国的首都是什么？",
+      "context": "用户在进行地理知识问答，不需要任何外部工具。",
+      "expected_action": "knowledge_qa",
+      "distractor_actions": [],
+      "ambiguity_note": "无歧义——纯概念/定义类知识问答，不涉及实时信息或计算，应直接使用 knowledge_qa。"
+    },
+    {
+      "id": "route_002",
+      "category": "single_intent_clear",
+      "difficulty": "low",
+      "query": "帮我写一个快速排序的 Python 函数，要求原地排序。",
+      "context": "用户明确要求编写代码。",
+      "expected_action": "code_execute",
+      "distractor_actions": [],
+      "ambiguity_note": "无歧义——用户显式要求'写一个函数'，属于代码编写任务。"
+    },
+    {
+      "id": "route_003",
+      "category": "boundary_overlap",
+      "difficulty": "medium",
+      "query": "2024年全球GDP排名前十的国家是哪些？",
+      "context": "用户询问经济数据。该数据可能随时间变化，需要最新信息。",
+      "expected_action": "web_search",
+      "distractor_actions": ["knowledge_qa"],
+      "ambiguity_note": "边界：GDP排名是事实数据，但2024年的排名需要最新信息。NL描述中'事实查询需互联网验证'与'纯知识问答'的边界模糊——模型可能认为2024年GDP数据属于'已知事实'而选 knowledge_qa。"
+    },
+    {
+      "id": "route_004",
+      "category": "boundary_overlap",
+      "difficulty": "medium",
+      "query": "读取 data.csv 文件，对销售额列做统计分析，包括均值、中位数、标准差。",
+      "context": "用户需要读取文件并分析数据。",
+      "expected_action": "data_analysis",
+      "distractor_actions": ["file_operation", "code_execute"],
+      "ambiguity_note": "边界：涉及'读取文件'(→file_operation)和'统计分析'(→data_analysis)。NL描述中需要回溯比较两个段落的适用范围。根据 excludes 规则，'读取文件后数据分析 → data_analysis'。"
+    },
+    {
+      "id": "route_005",
+      "category": "conditional_priority",
+      "difficulty": "high",
+      "query": "调用 Twitter API v2 获取 @OpenAI 最近的 10 条推文内容。",
+      "context": "用户指定了具体的外部服务 API。",
+      "expected_action": "api_call",
+      "distractor_actions": ["web_search"],
+      "ambiguity_note": "优先级冲突：'获取推文内容'表面看是获取信息(→web_search, priority=2)，但用户指定了'Twitter API v2'(→api_call, priority=2)。同优先级时规则为'指定具体API/服务 → api_call'。NL段落中将此规则嵌入在优先级段落的中间位置，容易被忽略。"
+    },
+    {
+      "id": "route_006",
+      "category": "conditional_priority",
+      "difficulty": "high",
+      "query": "计算 (12345 × 67890) ÷ 15 的结果，并验证是否为整数。",
+      "context": "用户要求纯数学计算。",
+      "expected_action": "code_execute",
+      "distractor_actions": ["data_analysis", "knowledge_qa"],
+      "ambiguity_note": "优先级冲突：涉及'计算'(→code_execute 或 data_analysis)。根据 excludes 规则，data_analysis 排除'简单数学计算 → code_execute'。NL描述中此排除规则埋在 data_analysis 段落中间，不如声明式格式的 excludes 字段显眼。"
+    },
+    {
+      "id": "route_007",
+      "category": "implicit_intent",
+      "difficulty": "medium",
+      "query": "我想知道现在外面多少度。",
+      "context": "用户想知道当前的室外温度——隐式需要实时天气数据。",
+      "expected_action": "web_search",
+      "distractor_actions": ["knowledge_qa", "api_call"],
+      "ambiguity_note": "隐式意图：用户没有说'搜索'或'查询天气'，只是说'想知道'。NL描述中需要模型推断'现在外面多少度'隐含了'需要实时数据'(→web_search)。声明式格式中'天气'在 web_search 的 matches 字段中显式列出。"
+    },
+    {
+      "id": "route_008",
+      "category": "implicit_intent",
+      "difficulty": "medium",
+      "query": "这个 JSON 配置文件看起来有问题，帮我看看哪里不对。",
+      "context": "用户怀疑配置文件有错误，隐式需要读取文件内容并分析。",
+      "expected_action": "file_operation",
+      "distractor_actions": ["knowledge_qa", "code_execute"],
+      "ambiguity_note": "隐式意图：用户没有说'读取文件'，但'看看哪里不对'隐含了需要先读取文件内容。NL描述中 file_operation 的'读取文件内容'适用于此场景，但模型可能跳过文件操作直接给建议(→knowledge_qa)。声明式格式中'读取文件'在 matches 首项。"
+    },
+    {
+      "id": "route_009",
+      "category": "exception_exclusion",
+      "difficulty": "high",
+      "query": "我收集了100个国家的GDP和人口数据，想看看它们之间有没有相关性，散点图最好。",
+      "context": "用户有大量数据需要统计分析和可视化，但数据已经在上下文/消息中描述，不需要搜索。",
+      "expected_action": "data_analysis",
+      "distractor_actions": ["web_search", "code_execute"],
+      "ambiguity_note": "排除例外：'GDP和人口数据'可能触发 web_search（matches 中有'事实查询'），但 excludes 规则将'纯数据查询无分析'排除。此处用户明确要'相关性分析'+'散点图'，应走 data_analysis。NL描述中 exclude 逻辑散布在两个段落中，需跨段落推理。"
+    },
+    {
+      "id": "route_010",
+      "category": "distractor_overlap",
+      "difficulty": "medium",
+      "query": "请帮我搜索最新的 Python 数据分析教程，然后保存到 tutorial_links.txt 文件中。",
+      "context": "用户请求包含多个动作词：搜索、分析、保存文件。需要判断主意图。",
+      "expected_action": "web_search",
+      "distractor_actions": ["file_operation", "data_analysis"],
+      "ambiguity_note": "干扰词重叠：'搜索'+'数据分析'+'保存文件'三个关键词分别对应三个 action。但主意图是搜索教程（→web_search），保存结果是次要步骤。声明式格式中 priority 规则帮助决策（web_search priority=2 > file_operation priority=4）。NL格式中需要模型自行判断主次。"
+    }
+  ],
+  "metadata": {
+    "generated_by": "DeepSeek-V4-Pro (via Claude Code CLI)",
+    "date": "2026-06-19",
+    "design_doc": "design/a3_experiment_design.md",
+    "source_asset": "PocketFlow_Full_Analysis.md §8.1 A3",
+    "migrated_from": "prompt-tdd/tests/pocketflow_assets/a3_action_routing/test_set.json",
+    "migrated_at": "2026-07-03"
+  }
+}

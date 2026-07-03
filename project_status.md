@@ -13,11 +13,11 @@
 ## Next Steps
 
 - 写介绍文章 → P2 → 无依赖
-- 补全缺失的数据文件（A2 prompt文件已纳入，A3 scoresheet 保留在源仓库） → P2 → 无依赖
+- ~~补全缺失的数据文件（A2 prompt文件已纳入，A3 scoresheet 保留在源仓库）~~ → ✅ 2026-07-03 已完成（A3 从源仓库迁移 prompt_A.md/prompt_B.md/test_set.json/scoresheet.csv）
 
 ## 会话备注（2026-07-03，DeepSeek-V4-Pro via Claude Code CLI）
 
-翻译校对闭合：en/ + zh-Hant/ README 补回「相关项目」表漏译的 M&A Case Study Pipeline 行（HIGH），Mermaid 节点标签/概念框/目录树/ YAML 占位符/JSON 示例值本地化修复。provenance 脚注修正为 GPT-5.5。
+翻译校对闭合：en/ + zh-Hant/ README 补回「相关项目」表漏译的 M&A Case Study Pipeline 行（HIGH），Mermaid 节点标签/概念框/目录树/ YAML 占位符/JSON 示例值本地化修复。provenance 脚注修正为 GPT-5.5。校对在 Kimi Code CLI 交互模式下完成（交互模式是 Kimi CLI 唯一稳定调用方式）。
 
 ## 会话备注（2026-07-01，DeepSeek-V4-Pro via Claude Code CLI）
 
