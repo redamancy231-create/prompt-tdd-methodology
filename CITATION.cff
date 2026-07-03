@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this methodology in your academic work, please cite it as follows."
+title: "Prompt-TDD · Prompt对照实验方法论案例手册"
+authors:
+  - family-names: "Acerolaorion"
+type: software
+abstract: "A methodology casebook for controlled prompt engineering experiments. Two real experiments with complete data, both yielding negative results honestly reported. Includes experiment design SOP, analysis toolkit, and lessons from 17+ rounds of multi-model review."
+keywords:
+  - "prompt engineering"
+  - "controlled experiment"
+  - "methodology"
+  - "negative results"
+  - "experiment design"
+  - "LLM"
+license: CC-BY-4.0
+version: 0.1.0
+date-released: "2026-07-01"
+repository-code: "https://github.com/redamancy231-create/prompt-tdd-methodology"
+url: "https://github.com/redamancy231-create/prompt-tdd-methodology"
