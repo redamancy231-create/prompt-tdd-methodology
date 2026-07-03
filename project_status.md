@@ -1,13 +1,13 @@
 ## 项目状态: prompt-tdd-methodology
 
-- 当前阶段: v0.1-methodology（已发布，经 Qwen R1 + Codex R2 审查闭合）
+- 当前阶段: v0.1.0（GitHub 页面全面优化，经 Qwen R1 + Codex R2 审查闭合）
 - 本轮完成:
-  1. 从 prompt-tdd 项目提取对照实验方法论为独立案例手册
-  2. Qwen3-Max R1(Major,2CRITICAL+3MAJOR)→修复→Codex R2(FAIL_WITH_CAVEATS→M2残留修正→闭合)
-  3. 三语言翻译（en + zh-Hant，Codex GPT-5.5）
-  4. Mermaid 实验管线图 + 交叉链接三个仓库
-- 发现的问题:
-  - C2(PM 编号与源报告完全不同)暴露了精简复盘的忠实度风险
+  1. GitHub 页面全面优化（Topics 12+prompt-tdd/Discussions 启用/Description 双语精简/LICENSE 完整法律文本/CITATION.cff 创建+name修正+去自我评价）
+  2. Release v0.1.0 创建（结构化中英双语 notes + Related Projects）
+  3. CONTRIBUTING.md + 2 Issue Forms
+  4. Social Preview 自定义图片（1280×640，实验管线 Mermaid 图）
+  5. Codex GPT-5.5 独立审查→措辞建议全部采纳
+- 发现的问题: 无
 
 ## Next Steps
 
