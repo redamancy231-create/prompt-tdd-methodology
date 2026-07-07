@@ -2,6 +2,10 @@
 
 > **English**: A methodology casebook for controlled prompt engineering experiments. Two real experiments with complete data, both yielding negative results honestly reported. Includes experiment design SOP, analysis toolkit, and lessons from 17+ rounds of multi-model review. **CC BY 4.0**.
 
+[![中文](https://img.shields.io/badge/lang-中文-red)]()
+[![English](https://img.shields.io/badge/lang-English-blue)](./en/README.md)
+[![正體中文](https://img.shields.io/badge/lang-正體中文-green)](./zh-Hant/README.md)
+
 **语言**：简体中文（原文） · [English](en/README.md) · [正體中文](zh-Hant/README.md)  
 **定位**：方法论案例手册 (methodology casebook) — **v0.1-methodology**  
 **来源**：提炼自 prompt-tdd 项目（2026-06-17 ~ 2026-06-22）
