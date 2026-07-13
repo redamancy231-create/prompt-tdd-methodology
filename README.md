@@ -14,6 +14,8 @@
 
 ---
 
+> 🧪 2个真实对照实验（均阴性诚实公开）| 17+轮多后端审查 | SOP + 分析工具包 + 完整数据 | git clone 即用
+
 ## 核心理念
 
 Amanda Askell（Anthropic）："一个好的 system prompt 背后，那个无聊但关键的秘密是测试驱动开发。"
