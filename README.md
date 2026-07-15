@@ -117,7 +117,8 @@ prompt-tdd-methodology/
 | [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **同级工具**——本手册的两个案例实验均使用独立审查 SOP 完成 17+ 轮异后端审查闭合 |
 | [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **同级项目**——将多模型协作方法论应用于完整学术生产场景的八阶段流水线演示（含 playbook 可复用） |
 | [**ETF Pattern Match — pybind11**](https://github.com/redamancy231-create/etf-pattern-match-pybind11) | **同级项目**——pybind11/C++20 加速的量化策略重构；同样强调多后端审查闭合和工程方法的可复现性 |
-| [**DOCX Pipeline**](https://github.com/redamancy231-create/docx-pipeline) | **同级项目**——Markdown → 中文 DOCX 泛化管道；经 3 轮 GPT-5.6-Sol 异后端独立审查闭合（29 问题全修复，17 测试通过） |
+| [**DOCX Pipeline**](https://github.com/redamancy231-create/docx-pipeline) | **同级项目**——Markdown → 中文 DOCX 泛化管道；经 3 轮 GPT-5.6-Sol 异后端独立审查闭合 |
+| [**Claude Skills**](https://github.com/redamancy231-create/claude-skills) | **同级项目**——3 个实战验证的 Claude Code Skill；本手册的对照实验协议在设计上与之互补 |
 
 ---
 
