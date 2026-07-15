@@ -1,14 +1,22 @@
 # Prompt-TDD · Prompt 對照實驗方法論案例手冊
 
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
 > **English**: A methodology casebook for controlled prompt engineering experiments. Two real experiments with complete data, both yielding negative results honestly reported. Includes experiment design SOP, analysis toolkit, and lessons from 17+ rounds of multi-model review. **CC BY 4.0**.
 
 **語言**：簡體中文（原文）  
 **定位**：方法論案例手冊 (methodology casebook) — **v0.1-methodology**  
 **來源**：提煉自 prompt-tdd 專案（2026-06-17 ~ 2026-06-22）
 
+[![简体中文](https://img.shields.io/badge/lang-简体中文-red)](../README.md)
+[![English](https://img.shields.io/badge/lang-English-blue)](../en/README.md)
+[![正體中文](https://img.shields.io/badge/lang-正體中文-green)]()
+
 > **這**不是 pip install 的工具庫。這是一本**如何做 prompt 對照實驗**的操作手冊，附帶兩個真實案例的完整資料、程式碼和失敗分析。
 
 ---
+
+> 🧪 2個真實對照實驗（均陰性誠實公開）| 17+輪多後端審查 | SOP + 分析工具包 + 完整資料 | git clone 即用
 
 ## 核心理念
 
@@ -109,7 +117,10 @@ prompt-tdd-methodology/
 |------|------|
 | [**AI協作專案全生命週期框架**](https://github.com/redamancy231-create/ai-collaboration-framework) | **上游整合層**——A2/A3 實驗結論已寫回 §4.1.1 + §6.3.1-6.3.2；框架 CK1-CK6 檢查清單提煉自本手冊 |
 | [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **同級工具**——本手冊的兩個案例實驗均使用獨立審查 SOP 完成 17+ 輪異後端審查閉合 |
-| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **同級專案**——將多模型協作方法論應用於完整學術生產場景的八階段流水線演示（含 playbook 可復用） |
+| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **同級專案**——將多模型協作方法論應用於完整學術生產場景的八階段流水線演示（含 playbook 可複用） |
+| [**ETF Pattern Match — pybind11**](https://github.com/redamancy231-create/etf-pattern-match-pybind11) | **同級專案**——pybind11/C++20 加速的量化策略重構；同樣強調多後端審查閉合和工程方法的可重現性 |
+| [**DOCX Pipeline**](https://github.com/redamancy231-create/docx-pipeline) | **同級專案**——Markdown → 中文 DOCX 泛化管道；經 3 輪 GPT-5.6-Sol 異後端獨立審查閉合 |
+| [**Claude Skills**](https://github.com/redamancy231-create/claude-skills) | **同級專案**——3 個實戰驗證的 Claude Code Skill；本手冊的對照實驗協定在設計上與之互補 |
 
 ---
 

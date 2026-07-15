@@ -1,5 +1,7 @@
 # Prompt-TDD · Prompt 对照实验方法论案例手册
 
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
 > **English**: A methodology casebook for controlled prompt engineering experiments. Two real experiments with complete data, both yielding negative results honestly reported. Includes experiment design SOP, analysis toolkit, and lessons from 17+ rounds of multi-model review. **CC BY 4.0**.
 
 [![中文](https://img.shields.io/badge/lang-中文-red)]()

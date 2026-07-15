@@ -1,14 +1,22 @@
 # Prompt-TDD · Prompt Controlled Experiment Methodology Casebook
 
+[![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by/4.0/)
+
 > **English**: A methodology casebook for controlled prompt engineering experiments. Two real experiments with complete data, both yielding negative results honestly reported. Includes experiment design SOP, analysis toolkit, and lessons from 17+ rounds of multi-model review. **CC BY 4.0**.
 
 **Language**: Simplified Chinese (original)  
 **Positioning**: methodology casebook — **v0.1-methodology**  
 **Source**: Extracted from the prompt-tdd project (2026-06-17 ~ 2026-06-22)
 
+[![简体中文](https://img.shields.io/badge/lang-简体中文-red)](../README.md)
+[![English](https://img.shields.io/badge/lang-English-blue)]()
+[![正體中文](https://img.shields.io/badge/lang-正體中文-green)](../zh-Hant/README.md)
+
 > **This** is not a `pip install` toolkit. It is an operations manual for **how to run prompt controlled experiments**, with complete data, code, and failure analysis from two real cases.
 
 ---
+
+> 🧪 2 real controlled experiments (both negative, honestly reported) | 17+ rounds of multi-backend review | SOP + analysis toolkit + complete data | git clone ready
 
 ## Core Idea
 
@@ -107,9 +115,12 @@ prompt-tdd-methodology/
 
 | Project | Relationship |
 |------|------|
-| [**AI Collaboration Project Full Lifecycle Framework**](https://github.com/redamancy231-create/ai-collaboration-framework) | **Upstream integration layer**: A2/A3 experiment conclusions have been written back to §4.1.1 + §6.3.1-6.3.2; the framework's CK1-CK6 checklist was extracted from this manual |
-| [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **Peer toolkit**: both case experiments in this manual used the independent review SOP to complete 17+ rounds of cross-backend review closure |
-| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **Peer project**: a demonstration of an eight-stage pipeline applying multi-model collaboration methodology to a complete academic production scenario (includes reusable playbook) |
+| [**AI Collaboration Framework**](https://github.com/redamancy231-create/ai-collaboration-framework) | **Upstream integration layer** — A2/A3 experiment conclusions written back to §4.1.1 + §6.3.1-6.3.2; the framework's CK1-CK6 checklist is distilled from this manual |
+| [**Independent Review Toolkit**](https://github.com/redamancy231-create/independent-review-toolkit) | **Sibling tool** — Both case experiments in this manual used the independent review SOP across 17+ rounds of cross-backend review |
+| [**M&A Case Study Pipeline**](https://github.com/redamancy231-create/ma-case-study-pipeline) | **Sibling project** — An eight-stage pipeline demonstrating multi-model collaboration methodology applied to a complete academic production scenario (with reusable playbook) |
+| [**ETF Pattern Match — pybind11**](https://github.com/redamancy231-create/etf-pattern-match-pybind11) | **Sibling project** — pybind11/C++20 accelerated quantitative strategy refactoring; similarly emphasizes multi-backend review closure and engineering reproducibility |
+| [**DOCX Pipeline**](https://github.com/redamancy231-create/docx-pipeline) | **Sibling project** — Markdown → Chinese DOCX pipeline; closed after 3 rounds of GPT-5.6-Sol cross-backend independent review |
+| [**Claude Skills**](https://github.com/redamancy231-create/claude-skills) | **Sibling project** — 3 battle-tested Claude Code Skills; this manual's experiment protocol is complementary by design |
 
 ---
 
