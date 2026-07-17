@@ -9,3 +9,7 @@ Thumbs.db
 # Python
 __pycache__/
 *.pyc
+
+# Internal review artifacts (not for release)
+_reviews/
+.qwen/
