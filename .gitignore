@@ -13,3 +13,4 @@ __pycache__/
 # Internal review artifacts (not for release)
 _reviews/
 .qwen/
+project_status.md
