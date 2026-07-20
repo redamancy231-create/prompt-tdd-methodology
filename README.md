@@ -121,6 +121,7 @@ prompt-tdd-methodology/
 | [**ETF Pattern Match — pybind11**](https://github.com/redamancy231-create/etf-pattern-match-pybind11) | **同级项目**——pybind11/C++20 加速的量化策略重构；同样强调多后端审查闭合和工程方法的可复现性 |
 | [**DOCX Pipeline**](https://github.com/redamancy231-create/docx-pipeline) | **同级项目**——Markdown → 中文 DOCX 泛化管道；经 3 轮 GPT-5.6-Sol 异后端独立审查闭合 |
 | [**Claude Skills**](https://github.com/redamancy231-create/claude-skills) | **同级项目**——3 个实战验证的 Claude Code Skill；本手册的对照实验协议在设计上与之互补 |
+| [**Methodology Handbook**](https://github.com/redamancy231-create/methodology-handbook) | **同级项目**——50 条 AI 协作踩坑速查手册；本手册的实验设计教训是该手册多个条目的实证来源 |
 
 ---
 
